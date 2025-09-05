@@ -1,12 +1,12 @@
 services:
   - type: web
-    name: ahoy-flask
+    name: ahoy-super-autumn
     env: python
     plan: free
     buildCommand: "pip install -r requirements.txt"
     startCommand: "python run.py"
     envVars:
       - key: FLASK_DEBUG
-        value: false
-      - key: PORT
-        value: 10000
+        value: "false"
+      - key: SECRET_KEY
+        value: "your-production-secret-key-change-this"
