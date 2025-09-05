@@ -79,8 +79,11 @@ def new_event():
             'date': request.form['date'],
             'time': request.form.get('time', ''),
             'venue': request.form.get('venue', ''),
+            'venue_address': request.form.get('venue_address', ''),
+            'event_type': request.form.get('event_type', 'cabaret'),
+            'status': request.form.get('status', 'upcoming'),
             'description': request.form.get('description', ''),
-            'type': request.form.get('type', 'show')
+            'photos': []
         }
         
         events = load_events()
@@ -107,8 +110,10 @@ def edit_event(event_id):
             'date': request.form['date'],
             'time': request.form.get('time', ''),
             'venue': request.form.get('venue', ''),
-            'description': request.form.get('description', ''),
-            'type': request.form.get('type', 'show')
+            'venue_address': request.form.get('venue_address', ''),
+            'event_type': request.form.get('event_type', 'cabaret'),
+            'status': request.form.get('status', 'upcoming'),
+            'description': request.form.get('description', '')
         })
         
         save_events(events)

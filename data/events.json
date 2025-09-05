@@ -1,76 +1,76 @@
 {
   "events": [
     {
-      "id": "2025-09-24T19:00:00",
-      "title": "Poets and Friends",
-      "date": "2025-09-24",
-      "time": "7pm",
+      "id": "2025-05-21T20:00:00",
+      "title": "Poets and Friends #2",
+      "date": "2025-05-21",
+      "time": "8:00 PM",
       "venue": "Koffee?",
-      "description": "An evening of poetry and music with local New Haven artists",
-      "type": "show"
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "poetry",
+      "status": "upcoming",
+      "description": "Live poetry and music at our favorite local spot",
+      "photos": []
     },
     {
-      "id": "2025-09-29T19:00:00",
+      "id": "2025-04-16T19:00:00",
       "title": "Poets and Friends",
-      "date": "2025-09-29",
-      "time": "7pm", 
+      "date": "2025-04-16",
+      "time": "7:00 PM",
       "venue": "Koffee?",
-      "description": "Weekly poetry meetup",
-      "type": "show"
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "poetry",
+      "status": "past",
+      "description": "Spring poetry gathering with local New Haven artists",
+      "photos": []
+    },
+    {
+      "id": "2025-02-22T19:00:00",
+      "title": "Ahoy Cabaret #2",
+      "date": "2025-02-22",
+      "time": "7:00 PM",
+      "venue": "East Haven",
+      "venue_address": "East Haven, CT",
+      "event_type": "cabaret",
+      "status": "past",
+      "description": "Second installment of our popular cabaret series",
+      "photos": []
+    },
+    {
+      "id": "2024-12-15T20:00:00",
+      "title": "Ahoy Cabaret #1",
+      "date": "2024-12-15",
+      "time": "8:00 PM",
+      "venue": "Beach Haven",
+      "venue_address": "Beach Haven, CT",
+      "event_type": "cabaret",
+      "status": "past",
+      "description": "Our first cabaret event - huge success!",
+      "photos": []
+    },
+    {
+      "id": "2025-09-24T19:00:00",
+      "title": "Poets and Friends #3",
+      "date": "2025-09-24",
+      "time": "7:00 PM",
+      "venue": "Koffee?",
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "poetry",
+      "status": "upcoming",
+      "description": "Fall poetry gathering featuring local talent",
+      "photos": []
     },
     {
       "id": "2025-10-10T21:00:00",
       "title": "Ahoy Show Jams",
       "date": "2025-10-10",
-      "time": "9pm",
+      "time": "9:00 PM",
       "venue": "Koffee?",
-      "description": "Live music showcase featuring indie artists",
-      "type": "show"
-    },
-    {
-      "id": "2025-10-15T21:00:00", 
-      "title": "Ahoy Show Jams",
-      "date": "2025-10-15",
-      "time": "9pm",
-      "venue": "Koffee?", 
-      "description": "Monthly live music event",
-      "type": "show"
-    },
-    {
-      "id": "2024-12-15T20:00:00",
-      "title": "Ahoy Cabaret #1",
-      "date": "2024-12-15", 
-      "time": "8pm",
-      "venue": "Beach Haven",
-      "description": "Our first cabaret event - huge success!",
-      "type": "show"
-    },
-    {
-      "id": "2025-02-22T19:00:00",
-      "title": "Ahoy Cabaret #2", 
-      "date": "2025-02-22",
-      "time": "7pm",
-      "venue": "East Haven",
-      "description": "Second installment of our popular cabaret series",
-      "type": "show"
-    },
-    {
-      "id": "2025-04-10T19:00:00",
-      "title": "Poets and Friends",
-      "date": "2025-04-10", 
-      "time": "7pm",
-      "venue": "Koffee?",
-      "description": "Spring poetry gathering",
-      "type": "show"
-    },
-    {
-      "id": "2025-05-10T19:00:00",
-      "title": "Poets and Friends", 
-      "date": "2025-05-10",
-      "time": "7pm",
-      "venue": "Koffee?",
-      "description": "Monthly poetry event continues",
-      "type": "show"
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "music",
+      "status": "upcoming",
+      "description": "Live music showcase featuring indie artists from New Haven",
+      "photos": []
     }
   ]
 }

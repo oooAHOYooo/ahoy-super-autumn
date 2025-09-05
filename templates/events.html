@@ -8,19 +8,35 @@
 <section class="events-section">
     <div class="container">
         <h2>Upcoming Events</h2>
+
+        <!-- Event Type Filters -->
+        <div class="event-filters">
+            <button class="filter-btn active" data-filter="all">All
+                Events</button>
+            <button class="filter-btn" data-filter="cabaret">Cabaret
+                Shows</button>
+            <button class="filter-btn" data-filter="poetry">Poets and
+                Friends</button>
+            <button class="filter-btn" data-filter="music">Music Shows</button>
+        </div>
+
         {% if upcoming %}
         <div class="events-list">
             {% for event in upcoming %}
-            <div class="event-item">
+            <div class="event-item" data-type="{{ event.event_type }}">
                 <div class="event-date">{{ event.date }}</div>
                 <div class="event-details">
                     <h3>{{ event.title }}</h3>
                     {% if event.venue %}<p class="venue">{{ event.venue }}</p>{%
                     endif %}
+                    {% if event.venue_address %}<p class="venue-address">{{
+                        event.venue_address }}</p>{% endif %}
                     {% if event.time %}<p class="time">{{ event.time }}</p>{%
                     endif %}
                     {% if event.description %}<p class="description">{{
                         event.description }}</p>{% endif %}
+                    <span class="event-type-badge">{{ event.event_type.title()
+                        }}</span>
                 </div>
             </div>
             {% endfor %}
@@ -37,16 +53,20 @@
         {% if past %}
         <div class="events-list">
             {% for event in past %}
-            <div class="event-item past">
+            <div class="event-item past" data-type="{{ event.event_type }}">
                 <div class="event-date">{{ event.date }}</div>
                 <div class="event-details">
                     <h3>{{ event.title }}</h3>
                     {% if event.venue %}<p class="venue">{{ event.venue }}</p>{%
                     endif %}
+                    {% if event.venue_address %}<p class="venue-address">{{
+                        event.venue_address }}</p>{% endif %}
                     {% if event.time %}<p class="time">{{ event.time }}</p>{%
                     endif %}
                     {% if event.description %}<p class="description">{{
                         event.description }}</p>{% endif %}
+                    <span class="event-type-badge">{{ event.event_type.title()
+                        }}</span>
                 </div>
             </div>
             {% endfor %}

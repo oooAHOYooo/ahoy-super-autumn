@@ -558,7 +558,7 @@ footer {
     background: var(--white);
     padding: 1.5rem;
     border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     gap: 1rem;
     align-items: flex-start;
@@ -607,6 +607,102 @@ footer {
 .btn-outline:hover {
     background: var(--yellow);
     color: var(--black);
+}
+
+/* Download Page Styles */
+.btn-large {
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    font-weight: bold;
+}
+
+.btn-download.disabled {
+    background: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.beta-badge {
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: 0.5rem;
+}
+
+.download-hero .hero-actions {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+/* Announcement Section */
+.announcement {
+    background: var(--yellow);
+    padding: 3rem 0;
+    text-align: center;
+}
+
+.announcement h2 {
+    color: var(--black);
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.announcement p {
+    color: var(--black);
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Event Filters */
+.event-filters {
+    display: flex;
+    gap: 1rem;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.filter-btn {
+    background: transparent;
+    border: 2px solid var(--yellow);
+    color: var(--black);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background: var(--yellow);
+    color: var(--black);
+}
+
+/* Event Type Badge */
+.event-type-badge {
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-top: 0.5rem;
+    display: inline-block;
+}
+
+/* Venue Address */
+.venue-address {
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0.25rem 0;
 }
 
 /* Responsive */
