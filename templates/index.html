@@ -10,6 +10,29 @@
     </div>
 </div>
 
+{% if latest_events %}
+<section class="latest-events">
+    <div class="container">
+        <h2>Upcoming Events</h2>
+        <div class="events-preview">
+            {% for event in latest_events %}
+            <div class="event-preview">
+                <div class="event-date">{{ event.date }}</div>
+                <div class="event-details">
+                    <h3>{{ event.title }}</h3>
+                    {% if event.venue %}<p class="venue">{{ event.venue }}</p>{% endif %}
+                    {% if event.time %}<p class="time">{{ event.time }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="events-actions">
+            <a href="/events" class="btn btn-outline">View All Events</a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
 <section class="features">
     <div class="container">
         <h2>What We Do</h2>

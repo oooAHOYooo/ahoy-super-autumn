@@ -479,8 +479,20 @@ main {
 footer {
     background: var(--yellow);
     padding: 2rem;
-    text-align: center;
     margin-top: 4rem;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+}
+
+.footer-brand {
+    text-align: left;
 }
 
 .footer-logo {
@@ -494,6 +506,107 @@ footer {
     font-size: 1rem;
     color: var(--black);
     font-weight: bold;
+}
+
+.footer-info {
+    display: flex;
+    gap: 3rem;
+}
+
+.contact-info h4,
+.social-links h4 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.contact-info p {
+    color: var(--black);
+    margin: 0.25rem 0;
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    color: var(--black);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.3s;
+}
+
+.social-link:hover {
+    opacity: 0.7;
+}
+
+/* Events Preview Styles */
+.latest-events {
+    padding: 3rem 0;
+    background: #f8f9fa;
+}
+
+.events-preview {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.event-preview {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+}
+
+.event-preview .event-date {
+    background: var(--yellow);
+    color: var(--black);
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    min-width: 80px;
+    text-align: center;
+}
+
+.event-preview .event-details h3 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.event-preview .venue,
+.event-preview .time {
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    margin: 0.25rem 0;
+}
+
+.events-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid var(--yellow);
+    color: var(--black);
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background: var(--yellow);
+    color: var(--black);
 }
 
 /* Responsive */
@@ -537,5 +650,30 @@ footer {
 
     .form-actions {
         flex-direction: column;
+    }
+
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+    }
+
+    .footer-info {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .events-preview {
+        grid-template-columns: 1fr;
+    }
+
+    .event-preview {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .event-preview .event-date {
+        min-width: auto;
+        margin-bottom: 1rem;
     }
 }

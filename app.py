@@ -48,7 +48,8 @@ def get_past_events():
 # Routes
 @app.route('/')
 def home():
-    return render_template('index.html')
+    latest_events = get_upcoming_events()[:3]  # Show next 3 events
+    return render_template('index.html', latest_events=latest_events)
 
 @app.route('/about')
 def about():
