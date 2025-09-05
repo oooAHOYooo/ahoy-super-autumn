@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}AHOY Indie Media{% endblock %}</title>
+        <link rel="stylesheet"
+            href="{{ url_for('static', filename='css/style.css') }}">
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-logo">AHOY</a>
+                <div class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/about">About</a>
+                    <a href="/events">Events</a>
+                    <a href="/download">Download</a>
+                </div>
+            </div>
+        </nav>
+
+        <main>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer>
+            <div class="footer-logo">AHOY</div>
+            <div class="footer-subtitle">INDIE MEDIA</div>
+        </footer>
+    </body>
+</html>

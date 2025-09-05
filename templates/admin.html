@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - AHOY Indie Media{% endblock %}
+
+{% block content %}
+<div class="admin-header">
+    <h1>Admin Panel</h1>
+    <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New
+        Event</a>
+</div>
+
+<section class="admin-section">
+    <div class="container">
+        <h2>Manage Events</h2>
+        {% if events %}
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Venue</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in events %}
+                    <tr>
+                        <td>{{ event.title }}</td>
+                        <td>{{ event.date }}</td>
+                        <td>{{ event.time or '-' }}</td>
+                        <td>{{ event.venue or '-' }}</td>
+                        <td class="actions">
+                            <a
+                                href="{{ url_for('edit_event', event_id=event.id) }}"
+                                class="btn btn-small">Edit</a>
+                            <form method="POST"
+                                action="{{ url_for('delete_event', event_id=event.id) }}"
+                                style="display: inline;">
+                                <button type="submit"
+                                    class="btn btn-small btn-danger"
+                                    onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No events found. <a href="{{ url_for('new_event') }}">Add your first
+                event</a>.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

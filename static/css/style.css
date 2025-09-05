@@ -1,0 +1,541 @@
+:root {
+    --yellow: #F4C430;
+    --dark-gray: #333;
+    --light-gray: #666;
+    --white: #fff;
+    --black: #000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--dark-gray);
+    background: var(--white);
+}
+
+/* Navigation */
+.navbar {
+    background: var(--yellow);
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--black);
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--black);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+}
+
+.nav-links a:hover {
+    opacity: 0.7;
+}
+
+/* Layout */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+main {
+    min-height: calc(100vh - 200px);
+}
+
+/* Hero Section */
+.hero {
+    background: var(--yellow);
+    padding: 4rem 2rem;
+    text-align: center;
+    min-height: 50vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.hero h1 {
+    font-size: 4rem;
+    font-weight: bold;
+    color: var(--black);
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.2rem;
+    color: var(--dark-gray);
+    margin-bottom: 2rem;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: 2px solid var(--black);
+    background: var(--white);
+    color: var(--black);
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.2s;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.btn:hover {
+    background: var(--black);
+    color: var(--white);
+}
+
+.btn-primary {
+    background: var(--black);
+    color: var(--white);
+}
+
+.btn-primary:hover {
+    background: var(--white);
+    color: var(--black);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: var(--black);
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+}
+
+.btn-danger {
+    border-color: #dc3545;
+    color: #dc3545;
+}
+
+.btn-danger:hover {
+    background: #dc3545;
+    color: var(--white);
+}
+
+/* Features */
+.features {
+    padding: 4rem 0;
+    background: var(--white);
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: var(--black);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature {
+    text-align: center;
+    padding: 2rem;
+    border: 2px solid var(--black);
+}
+
+.feature h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--black);
+}
+
+/* About Page */
+.about-hero {
+    background: var(--yellow);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.about-hero h1 {
+    font-size: 3rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+}
+
+.roadmap {
+    padding: 4rem 0;
+}
+
+.roadmap h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 3rem;
+    color: var(--black);
+}
+
+.roadmap-items {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.roadmap-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem;
+    margin-bottom: 1rem;
+    border: 2px solid var(--black);
+    background: var(--white);
+}
+
+.roadmap-item h3 {
+    font-size: 1.2rem;
+    color: var(--black);
+    flex: 1;
+}
+
+.timeline {
+    font-weight: bold;
+    color: var(--dark-gray);
+    font-size: 1.1rem;
+}
+
+/* Events */
+.events-header {
+    background: var(--yellow);
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.events-header h1 {
+    font-size: 3rem;
+    color: var(--black);
+}
+
+.events-section {
+    padding: 3rem 0;
+}
+
+.events-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--black);
+}
+
+.events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.event-item {
+    display: flex;
+    border: 2px solid var(--black);
+    padding: 1.5rem;
+    background: var(--white);
+}
+
+.event-item.past {
+    opacity: 0.7;
+}
+
+.event-date {
+    min-width: 120px;
+    font-weight: bold;
+    color: var(--black);
+    font-size: 1.1rem;
+}
+
+.event-details h3 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+}
+
+.event-details .venue,
+.event-details .time {
+    color: var(--light-gray);
+    margin-bottom: 0.25rem;
+}
+
+.event-details .description {
+    color: var(--dark-gray);
+    margin-top: 0.5rem;
+}
+
+/* Download Page */
+.download-hero {
+    background: var(--yellow);
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.download-hero h1 {
+    font-size: 3rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+}
+
+.download-section {
+    padding: 4rem 0;
+    text-align: center;
+}
+
+.download-section h2 {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: var(--black);
+}
+
+.download-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+}
+
+.btn-download {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+.beta-note {
+    color: var(--light-gray);
+    font-style: italic;
+    margin-top: 2rem;
+}
+
+/* Admin Panel */
+.admin-header {
+    background: var(--yellow);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-header h1 {
+    font-size: 2.5rem;
+    color: var(--black);
+}
+
+.admin-section {
+    padding: 3rem 0;
+}
+
+.admin-section h2 {
+    margin-bottom: 2rem;
+    color: var(--black);
+}
+
+.admin-table {
+    overflow-x: auto;
+}
+
+.admin-table table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid var(--black);
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--black);
+}
+
+.admin-table th {
+    background: var(--yellow);
+    font-weight: bold;
+    color: var(--black);
+}
+
+.admin-table .actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Forms */
+.form-header {
+    background: var(--yellow);
+    padding: 2rem;
+    text-align: center;
+}
+
+.form-header h1 {
+    font-size: 2.5rem;
+    color: var(--black);
+}
+
+.form-section {
+    padding: 3rem 0;
+}
+
+.event-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--black);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--black);
+    font-size: 1rem;
+    font-family: inherit;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.3);
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+/* Flash Messages */
+.flash-messages {
+    padding: 1rem 0;
+}
+
+.flash {
+    max-width: 1200px;
+    margin: 0 auto 1rem auto;
+    padding: 1rem 2rem;
+    border: 2px solid;
+    font-weight: bold;
+}
+
+.flash.success {
+    background: #d4edda;
+    border-color: #28a745;
+    color: #155724;
+}
+
+.flash.error {
+    background: #f8d7da;
+    border-color: #dc3545;
+    color: #721c24;
+}
+
+/* Footer */
+footer {
+    background: var(--yellow);
+    padding: 2rem;
+    text-align: center;
+    margin-top: 4rem;
+}
+
+.footer-logo {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--black);
+    margin-bottom: 0.5rem;
+}
+
+.footer-subtitle {
+    font-size: 1rem;
+    color: var(--black);
+    font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+    }
+
+    .roadmap-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .event-item {
+        flex-direction: column;
+    }
+
+    .event-date {
+        min-width: auto;
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-header {
+        text-align: center;
+    }
+
+    .admin-table .actions {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+}

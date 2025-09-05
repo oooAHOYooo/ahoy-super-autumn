@@ -1,0 +1,76 @@
+{
+  "events": [
+    {
+      "id": "2025-09-24T19:00:00",
+      "title": "Poets and Friends",
+      "date": "2025-09-24",
+      "time": "7pm",
+      "venue": "Koffee?",
+      "description": "An evening of poetry and music with local New Haven artists",
+      "type": "show"
+    },
+    {
+      "id": "2025-09-29T19:00:00",
+      "title": "Poets and Friends",
+      "date": "2025-09-29",
+      "time": "7pm", 
+      "venue": "Koffee?",
+      "description": "Weekly poetry meetup",
+      "type": "show"
+    },
+    {
+      "id": "2025-10-10T21:00:00",
+      "title": "Ahoy Show Jams",
+      "date": "2025-10-10",
+      "time": "9pm",
+      "venue": "Koffee?",
+      "description": "Live music showcase featuring indie artists",
+      "type": "show"
+    },
+    {
+      "id": "2025-10-15T21:00:00", 
+      "title": "Ahoy Show Jams",
+      "date": "2025-10-15",
+      "time": "9pm",
+      "venue": "Koffee?", 
+      "description": "Monthly live music event",
+      "type": "show"
+    },
+    {
+      "id": "2024-12-15T20:00:00",
+      "title": "Ahoy Cabaret #1",
+      "date": "2024-12-15", 
+      "time": "8pm",
+      "venue": "Beach Haven",
+      "description": "Our first cabaret event - huge success!",
+      "type": "show"
+    },
+    {
+      "id": "2025-02-22T19:00:00",
+      "title": "Ahoy Cabaret #2", 
+      "date": "2025-02-22",
+      "time": "7pm",
+      "venue": "East Haven",
+      "description": "Second installment of our popular cabaret series",
+      "type": "show"
+    },
+    {
+      "id": "2025-04-10T19:00:00",
+      "title": "Poets and Friends",
+      "date": "2025-04-10", 
+      "time": "7pm",
+      "venue": "Koffee?",
+      "description": "Spring poetry gathering",
+      "type": "show"
+    },
+    {
+      "id": "2025-05-10T19:00:00",
+      "title": "Poets and Friends", 
+      "date": "2025-05-10",
+      "time": "7pm",
+      "venue": "Koffee?",
+      "description": "Monthly poetry event continues",
+      "type": "show"
+    }
+  ]
+}
