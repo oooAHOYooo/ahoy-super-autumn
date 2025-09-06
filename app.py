@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 import json
 import os
+import socket
 from datetime import datetime, date
 from werkzeug.utils import secure_filename
 
@@ -21,7 +22,12 @@ def load_events():
     """Load events from JSON file"""
     try:
         with open('data/events.json', 'r') as f:
-            return json.load(f)
+            events_data = json.load(f)
+            # Add default image to events that don't have one
+            for event in events_data.get('events', []):
+                if 'image' not in event or not event['image']:
+                    event['image'] = get_default_event_image(event['event_type'])
+            return events_data
     except FileNotFoundError:
         return {"events": []}
 
@@ -30,6 +36,12 @@ def save_events(events_data):
     os.makedirs('data', exist_ok=True)
     with open('data/events.json', 'w') as f:
         json.dump(events_data, f, indent=2, cls=DateEncoder)
+
+def get_default_event_image(event_type):
+    """Get default image path based on event type"""
+    # For now, use the same image for all events
+    # Later this can be expanded to have different images per event type
+    return '/static/uploads/devPhoto_poets3.jpg'
 
 def get_upcoming_events():
     """Filter upcoming events"""
@@ -44,6 +56,17 @@ def get_past_events():
     today = datetime.now().date()
     past = [e for e in events if datetime.fromisoformat(e['date']).date() < today]
     return sorted(past, key=lambda x: x['date'], reverse=True)
+
+def find_available_port(start_port=5000, max_attempts=10):
+    """Find an available port starting from start_port"""
+    for port in range(start_port, start_port + max_attempts):
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('', port))
+                return port
+        except OSError:
+            continue
+    raise RuntimeError(f"Could not find an available port starting from {start_port}")
 
 # Routes
 @app.route('/')
@@ -83,7 +106,11 @@ def new_event():
             'event_type': request.form.get('event_type', 'cabaret'),
             'status': request.form.get('status', 'upcoming'),
             'description': request.form.get('description', ''),
-            'photos': []
+            'image': request.form.get('image', get_default_event_image(request.form.get('event_type', 'cabaret'))),
+            'photos': [],
+            'rsvp_enabled': request.form.get('rsvp_enabled', 'false') == 'true',
+            'rsvp_limit': request.form.get('rsvp_limit', ''),
+            'rsvps': []
         }
         
         events = load_events()
@@ -113,7 +140,10 @@ def edit_event(event_id):
             'venue_address': request.form.get('venue_address', ''),
             'event_type': request.form.get('event_type', 'cabaret'),
             'status': request.form.get('status', 'upcoming'),
-            'description': request.form.get('description', '')
+            'description': request.form.get('description', ''),
+            'image': request.form.get('image', get_default_event_image(request.form.get('event_type', 'cabaret'))),
+            'rsvp_enabled': request.form.get('rsvp_enabled', 'false') == 'true',
+            'rsvp_limit': request.form.get('rsvp_limit', '')
         })
         
         save_events(events)
@@ -130,8 +160,105 @@ def delete_event(event_id):
     flash('Event deleted successfully!', 'success')
     return redirect(url_for('admin'))
 
+@app.route('/newsletter', methods=['POST'])
+def newsletter_signup():
+    email = request.form.get('email')
+    if email:
+        # For now, just show a success message
+        # In a real app, you'd save this to a database
+        flash('Thanks for subscribing to our newsletter!', 'success')
+    else:
+        flash('Please enter a valid email address.', 'error')
+    
+    # Redirect back to the previous page
+    return redirect(request.referrer or url_for('home'))
+
+@app.route('/rsvp/<event_id>', methods=['POST'])
+def rsvp_event(event_id):
+    events = load_events()
+    event = next((e for e in events['events'] if e['id'] == event_id), None)
+    
+    if not event:
+        return jsonify({'success': False, 'message': 'Event not found'}), 404
+    
+    if not event.get('rsvp_enabled', False):
+        return jsonify({'success': False, 'message': 'RSVP not enabled for this event'}), 400
+    
+    # Check if RSVP limit is reached
+    rsvp_limit = event.get('rsvp_limit')
+    if rsvp_limit and len(event.get('rsvps', [])) >= int(rsvp_limit):
+        return jsonify({'success': False, 'message': 'Event is full'}), 400
+    
+    # Get RSVP data
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    guests = int(request.form.get('guests', 1))
+    
+    if not name or not email:
+        return jsonify({'success': False, 'message': 'Name and email are required'}), 400
+    
+    # Check if email already RSVP'd
+    existing_rsvp = next((r for r in event.get('rsvps', []) if r['email'] == email), None)
+    if existing_rsvp:
+        return jsonify({'success': False, 'message': 'You have already RSVP\'d for this event'}), 400
+    
+    # Add RSVP
+    rsvp_data = {
+        'id': datetime.now().isoformat(),
+        'name': name,
+        'email': email,
+        'guests': guests,
+        'rsvp_date': datetime.now().isoformat()
+    }
+    
+    if 'rsvps' not in event:
+        event['rsvps'] = []
+    event['rsvps'].append(rsvp_data)
+    
+    save_events(events)
+    
+    return jsonify({
+        'success': True, 
+        'message': f'Successfully RSVP\'d for {event["title"]}!',
+        'rsvp_count': len(event['rsvps'])
+    })
+
+@app.route('/rsvp/<event_id>/cancel', methods=['POST'])
+def cancel_rsvp(event_id):
+    events = load_events()
+    event = next((e for e in events['events'] if e['id'] == event_id), None)
+    
+    if not event:
+        return jsonify({'success': False, 'message': 'Event not found'}), 404
+    
+    email = request.form.get('email', '').strip()
+    if not email:
+        return jsonify({'success': False, 'message': 'Email is required'}), 400
+    
+    # Remove RSVP
+    event['rsvps'] = [r for r in event.get('rsvps', []) if r['email'] != email]
+    
+    save_events(events)
+    
+    return jsonify({
+        'success': True, 
+        'message': 'RSVP cancelled successfully',
+        'rsvp_count': len(event['rsvps'])
+    })
+
 if __name__ == '__main__':
     import os
-    port = int(os.environ.get('PORT', 5000))
+    # Try to use the PORT environment variable first, then find an available port
+    try:
+        port = int(os.environ.get('PORT', 5000))
+        # Test if the port is available
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.bind(('', port))
+    except (ValueError, OSError):
+        # If PORT env var is invalid or port is in use, find an available port
+        port = find_available_port()
+        print(f"Port 5000 is in use. Using port {port} instead.")
+    
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    print(f"Starting Flask app on port {port}")
     app.run(host='0.0.0.0', port=port, debug=debug)

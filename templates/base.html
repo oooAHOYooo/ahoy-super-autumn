@@ -46,6 +46,13 @@
                         <p>New Haven, CT</p>
                         <p>hello@ahoyindie.com</p>
                     </div>
+                    <div class="newsletter-signup">
+                        <h4>Stay Updated</h4>
+                        <form class="newsletter-form" action="/newsletter" method="POST">
+                            <input type="email" name="email" placeholder="Your email address" required>
+                            <button type="submit" class="btn btn-small">Subscribe</button>
+                        </form>
+                    </div>
                     <div class="social-links">
                         <h4>Follow Us</h4>
                         <div class="social-icons">
@@ -57,6 +64,49 @@
                 </div>
             </div>
         </footer>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox">
+            <div class="lightbox-content">
+                <button class="lightbox-close" id="lightbox-close">&times;</button>
+                <img class="lightbox-image" id="lightbox-image" src="" alt="">
+            </div>
+        </div>
+
+        <!-- RSVP Modal -->
+        <div class="rsvp-modal" id="rsvp-modal">
+            <div class="rsvp-modal-content">
+                <div class="rsvp-modal-header">
+                    <h3 id="rsvp-event-title">RSVP for Event</h3>
+                    <button class="rsvp-modal-close" id="rsvp-modal-close">&times;</button>
+                </div>
+                <form id="rsvp-form">
+                    <div class="form-group">
+                        <label for="rsvp-name">Name *</label>
+                        <input type="text" id="rsvp-name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rsvp-email">Email *</label>
+                        <input type="email" id="rsvp-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rsvp-guests">Number of Guests</label>
+                        <input type="number" id="rsvp-guests" name="guests" value="1" min="1" max="10">
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">RSVP</button>
+                        <button type="button" class="btn btn-secondary" id="rsvp-cancel">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Congratulations Overlay -->
+        <div class="congratulations-overlay" id="congratulations-overlay">
+            <div class="congratulations-content">
+                <div class="congratulations-details" id="congratulations-details"></div>
+            </div>
+        </div>
 
         <script>
         // Event filtering functionality
@@ -80,6 +130,165 @@
                             item.style.display = 'none';
                         }
                     });
+                });
+            });
+
+            // Event card expansion functionality
+            const eventPreviews = document.querySelectorAll('.event-preview');
+            
+            eventPreviews.forEach(card => {
+                card.addEventListener('click', function(e) {
+                    // Don't expand if clicking on image (that opens lightbox)
+                    if (e.target.classList.contains('event-image')) {
+                        return;
+                    }
+                    
+                    // Toggle expanded state
+                    const isExpanded = this.classList.contains('expanded');
+                    
+                    // Remove expanded state from all cards
+                    eventPreviews.forEach(c => c.classList.remove('expanded'));
+                    
+                    if (!isExpanded) {
+                        // Expand this card
+                        this.classList.add('expanded');
+                    }
+                });
+            });
+
+            // Lightbox functionality
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const lightboxClose = document.getElementById('lightbox-close');
+            const lightboxImages = document.querySelectorAll('[data-lightbox]');
+            
+            lightboxImages.forEach(img => {
+                img.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent card expansion
+                    lightboxImage.src = this.getAttribute('data-lightbox');
+                    lightboxImage.alt = this.alt;
+                    lightbox.classList.add('active');
+                });
+            });
+            
+            lightboxClose.addEventListener('click', function() {
+                lightbox.classList.remove('active');
+            });
+            
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    lightbox.classList.remove('active');
+                }
+            });
+            
+            // Close on escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    lightbox.classList.remove('active');
+                    eventPreviews.forEach(c => c.classList.remove('expanded'));
+                    document.getElementById('rsvp-modal').classList.remove('active');
+                }
+            });
+
+            // RSVP functionality
+            const rsvpModal = document.getElementById('rsvp-modal');
+            const rsvpForm = document.getElementById('rsvp-form');
+            const rsvpModalClose = document.getElementById('rsvp-modal-close');
+            const rsvpCancel = document.getElementById('rsvp-cancel');
+            const rsvpBtns = document.querySelectorAll('.rsvp-btn');
+            let currentEventId = null;
+
+            rsvpBtns.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation(); // Prevent card expansion
+                    currentEventId = this.getAttribute('data-event-id');
+                    const eventTitle = this.closest('.event-preview, .event-item').querySelector('h3').textContent;
+                    document.getElementById('rsvp-event-title').textContent = `RSVP for ${eventTitle}`;
+                    rsvpModal.classList.add('active');
+                });
+            });
+
+            rsvpModalClose.addEventListener('click', function() {
+                rsvpModal.classList.remove('active');
+            });
+
+            rsvpCancel.addEventListener('click', function() {
+                rsvpModal.classList.remove('active');
+            });
+
+            rsvpModal.addEventListener('click', function(e) {
+                if (e.target === rsvpModal) {
+                    rsvpModal.classList.remove('active');
+                }
+            });
+
+            rsvpForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!currentEventId) return;
+
+                const formData = new FormData(this);
+                formData.append('event_id', currentEventId);
+
+                fetch(`/rsvp/${currentEventId}`, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        rsvpModal.classList.remove('active');
+                        
+                        // Show congratulations overlay with parallax effects
+                        const congratulationsOverlay = document.getElementById('congratulations-overlay');
+                        const congratulationsDetails = document.getElementById('congratulations-details');
+                        const eventTitle = document.querySelector(`[data-event-id="${currentEventId}"]`).closest('.event-preview, .event-item').querySelector('h3').textContent;
+                        
+                        congratulationsDetails.innerHTML = `
+                            <div class="congratulations-icon">🎉</div>
+                            <div class="congratulations-title">CONGRATULATIONS!</div>
+                            <div class="congratulations-message">You're in for</div>
+                            <div class="congratulations-event">${eventTitle}</div>
+                            <div class="congratulations-count">${data.rsvp_count} RSVP${data.rsvp_count !== 1 ? 's' : ''} total</div>
+                        `;
+                        
+                        congratulationsOverlay.classList.add('active');
+                        
+                        // Auto-hide after 1.5 seconds (blink of an eye)
+                        setTimeout(() => {
+                            congratulationsOverlay.classList.remove('active');
+                        }, 1500);
+                        
+                        // Update RSVP count display - only show when there are RSVPs
+                        const rsvpBtn = document.querySelector(`[data-event-id="${currentEventId}"]`);
+                        if (rsvpBtn) {
+                            const rsvpSection = rsvpBtn.parentElement;
+                            let rsvpCount = rsvpSection.querySelector('.rsvp-count');
+                            
+                            // Only create/show count if there are actual RSVPs
+                            if (data.rsvp_count > 0) {
+                                if (!rsvpCount) {
+                                    // Create RSVP count element if it doesn't exist
+                                    rsvpCount = document.createElement('div');
+                                    rsvpCount.className = 'rsvp-count';
+                                    rsvpSection.insertBefore(rsvpCount, rsvpBtn);
+                                }
+                                rsvpCount.textContent = `${data.rsvp_count} RSVP${data.rsvp_count !== 1 ? 's' : ''}`;
+                            } else if (rsvpCount) {
+                                // Hide count if no RSVPs
+                                rsvpCount.remove();
+                            }
+                        }
+                        
+                        // Reset form
+                        this.reset();
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
                 });
             });
         });

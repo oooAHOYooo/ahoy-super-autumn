@@ -11,13 +11,6 @@
     </div>
 </div>
 
-<section class="announcement">
-    <div class="container">
-        <h2>Back in September</h2>
-        <p>We're back in September with a new season of events and performances.
-            Stay tuned for updates!</p>
-    </div>
-</section>
 
 {% if latest_events %}
 <section class="latest-events">
@@ -25,7 +18,10 @@
         <h2>Upcoming Events</h2>
         <div class="events-preview">
             {% for event in latest_events %}
-            <div class="event-preview">
+            <div class="event-preview" data-event-id="{{ event.id }}">
+                {% if event.image %}
+                <img src="{{ event.image }}" alt="{{ event.title }}" class="event-image" data-lightbox="{{ event.image }}">
+                {% endif %}
                 <div class="event-date">{{ event.date }}</div>
                 <div class="event-details">
                     <h3>{{ event.title }}</h3>
@@ -33,6 +29,19 @@
                     endif %}
                     {% if event.time %}<p class="time">{{ event.time }}</p>{%
                     endif %}
+                    {% if event.description %}<p class="description">{{ event.description }}</p>{% endif %}
+                    {% if event.rsvp_enabled %}
+                    <div class="rsvp-section">
+                        {% if event.rsvps and event.rsvps|length > 0 %}
+                        <div class="rsvp-count">
+                            {{ event.rsvps|length }} RSVP{% if event.rsvps|length != 1 %}s{% endif %}
+                        </div>
+                        {% endif %}
+                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">
+                            RSVP
+                        </button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

@@ -77,6 +77,30 @@ endblock %}
                     placeholder="Event description...">{{ event.description if event else '' }}</textarea>
             </div>
 
+            <div class="form-group">
+                <label for="image">Event Image</label>
+                <input type="text" id="image" name="image"
+                    value="{{ event.image if event else '' }}"
+                    placeholder="Image URL or leave empty for default">
+                <small>Leave empty to use the default event image. You can also provide a URL to a custom image.</small>
+            </div>
+
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="rsvp_enabled" name="rsvp_enabled" value="true"
+                        {{ 'checked' if event and event.rsvp_enabled else '' }}>
+                    Enable RSVP for this event
+                </label>
+            </div>
+
+            <div class="form-group" id="rsvp-limit-group" style="{{ 'display: block;' if event and event.rsvp_enabled else 'display: none;' }}">
+                <label for="rsvp_limit">RSVP Limit (optional)</label>
+                <input type="number" id="rsvp_limit" name="rsvp_limit"
+                    value="{{ event.rsvp_limit if event else '' }}"
+                    placeholder="Leave empty for unlimited">
+                <small>Maximum number of people who can RSVP. Leave empty for unlimited.</small>
+            </div>
+
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary">{{ 'Update' if
                     event else 'Create' }} Event</button>
@@ -86,4 +110,19 @@ endblock %}
         </form>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const rsvpCheckbox = document.getElementById('rsvp_enabled');
+    const rsvpLimitGroup = document.getElementById('rsvp-limit-group');
+    
+    rsvpCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            rsvpLimitGroup.style.display = 'block';
+        } else {
+            rsvpLimitGroup.style.display = 'none';
+        }
+    });
+});
+</script>
 {% endblock %}
