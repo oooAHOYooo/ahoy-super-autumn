@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Service Policy - AHOY Indie Media{% endblock %}
+
+{% block content %}
+<div class="policy-page">
+    <div class="container">
+        <h1>Service Policy</h1>
+        <div class="policy-content">
+            <section>
+                <h2>Web Scraping and Data Protection</h2>
+                <p>This website and its content are protected against
+                    unauthorized automated access, data scraping, and content
+                    extraction by artificial intelligence systems, including but
+                    not limited to:</p>
+                <ul>
+                    <li>OpenAI's GPT models and ChatGPT</li>
+                    <li>Google's Bard, Gemini, and other AI systems</li>
+                    <li>Microsoft's Copilot and other AI assistants</li>
+                    <li>Any other automated data collection systems</li>
+                </ul>
+
+                <h3>Prohibited Activities</h3>
+                <p>The following activities are strictly prohibited:</p>
+                <ul>
+                    <li>Automated scraping, crawling, or harvesting of
+                        content</li>
+                    <li>Using AI systems to extract, analyze, or reproduce our
+                        content</li>
+                    <li>Training AI models on our content without explicit
+                        written permission</li>
+                    <li>Creating derivative works based on our content for AI
+                        training purposes</li>
+                    <li>Any form of automated data collection or content
+                        extraction</li>
+                </ul>
+
+                <h3>Technical Measures</h3>
+                <p>We implement various technical measures to protect our
+                    content, including but not limited to:</p>
+                <ul>
+                    <li>Rate limiting and access controls</li>
+                    <li>Content protection mechanisms</li>
+                    <li>Monitoring for automated access patterns</li>
+                    <li>Legal enforcement of our terms</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Content Usage Rights</h2>
+                <p>All content on this website, including text, images, event
+                    information, and other materials, is the property of AHOY
+                    Indie Media and is protected by copyright and other
+                    intellectual property laws.</p>
+
+                <h3>Permitted Uses</h3>
+                <p>You may:</p>
+                <ul>
+                    <li>View content for personal, non-commercial purposes</li>
+                    <li>Share links to our pages on social media</li>
+                    <li>Print individual pages for personal reference</li>
+                </ul>
+
+                <h3>Prohibited Uses</h3>
+                <p>You may not:</p>
+                <ul>
+                    <li>Reproduce, distribute, or display content without
+                        permission</li>
+                    <li>Use content for commercial purposes</li>
+                    <li>Modify or create derivative works</li>
+                    <li>Use automated systems to access or extract content</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Enforcement</h2>
+                <p>Violation of this service policy may result in:</p>
+                <ul>
+                    <li>Immediate termination of access to our services</li>
+                    <li>Legal action to protect our intellectual property
+                        rights</li>
+                    <li>Pursuit of damages and injunctive relief</li>
+                    <li>Reporting to relevant authorities and service
+                        providers</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Contact Information</h2>
+                <p>If you have questions about this service policy or need to
+                    request permission for specific uses of our content, please
+                    contact us at:</p>
+                <p><strong>Email:</strong> hello@ahoyindie.com</p>
+                <p><strong>Address:</strong> New Haven, CT</p>
+            </section>
+
+            <section>
+                <h2>Updates to This Policy</h2>
+                <p>We reserve the right to update this service policy at any
+                    time. Changes will be posted on this page with an updated
+                    revision date. Your continued use of our services
+                    constitutes acceptance of any changes.</p>
+                <p><em>Last updated: {{ current_date }}</em></p>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

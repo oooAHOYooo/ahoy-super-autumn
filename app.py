@@ -88,6 +88,16 @@ def events():
 def download():
     return render_template('download.html')
 
+@app.route('/service-policy')
+def service_policy():
+    current_date = datetime.now().strftime('%B %d, %Y')
+    return render_template('service_policy.html', current_date=current_date)
+
+@app.route('/privacy-policy')
+def privacy_policy():
+    current_date = datetime.now().strftime('%B %d, %Y')
+    return render_template('privacy_policy.html', current_date=current_date)
+
 @app.route('/admin')
 def admin():
     events = load_events()['events']

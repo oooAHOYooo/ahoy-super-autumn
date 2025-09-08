@@ -48,17 +48,21 @@
                     </div>
                     <div class="newsletter-signup">
                         <h4>Stay Updated</h4>
-                        <form class="newsletter-form" action="/newsletter" method="POST">
-                            <input type="email" name="email" placeholder="Your email address" required>
-                            <button type="submit" class="btn btn-small">Subscribe</button>
+                        <form class="newsletter-form" action="/newsletter"
+                            method="POST">
+                            <input type="email" name="email"
+                                placeholder="Your email address" required>
+                            <button type="submit"
+                                class="btn btn-small">Subscribe</button>
                         </form>
                     </div>
-                    <div class="social-links">
-                        <h4>Follow Us</h4>
-                        <div class="social-icons">
-                            <a href="#" class="social-link">Instagram</a>
-                            <a href="#" class="social-link">Twitter</a>
-                            <a href="#" class="social-link">Facebook</a>
+                    <div class="policy-links">
+                        <h4>Legal</h4>
+                        <div class="policy-links-list">
+                            <a href="/service-policy"
+                                class="policy-link">Service Policy</a>
+                            <a href="/privacy-policy"
+                                class="policy-link">Privacy Policy</a>
                         </div>
                     </div>
                 </div>
@@ -68,8 +72,9 @@
         <!-- Lightbox -->
         <div class="lightbox" id="lightbox">
             <div class="lightbox-content">
-                <button class="lightbox-close" id="lightbox-close">&times;</button>
-                <img class="lightbox-image" id="lightbox-image" src="" alt="">
+                <button class="lightbox-close"
+                    id="lightbox-close">&times;</button>
+                <img class="lightbox-image" id="lightbox-image" src alt>
             </div>
         </div>
 
@@ -78,7 +83,8 @@
             <div class="rsvp-modal-content">
                 <div class="rsvp-modal-header">
                     <h3 id="rsvp-event-title">RSVP for Event</h3>
-                    <button class="rsvp-modal-close" id="rsvp-modal-close">&times;</button>
+                    <button class="rsvp-modal-close"
+                        id="rsvp-modal-close">&times;</button>
                 </div>
                 <form id="rsvp-form">
                     <div class="form-group">
@@ -87,15 +93,19 @@
                     </div>
                     <div class="form-group">
                         <label for="rsvp-email">Email *</label>
-                        <input type="email" id="rsvp-email" name="email" required>
+                        <input type="email" id="rsvp-email" name="email"
+                            required>
                     </div>
                     <div class="form-group">
                         <label for="rsvp-guests">Number of Guests</label>
-                        <input type="number" id="rsvp-guests" name="guests" value="1" min="1" max="10">
+                        <input type="number" id="rsvp-guests" name="guests"
+                            value="1" min="1" max="10">
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">RSVP</button>
-                        <button type="button" class="btn btn-secondary" id="rsvp-cancel">Cancel</button>
+                        <button type="submit"
+                            class="btn btn-primary">RSVP</button>
+                        <button type="button" class="btn btn-secondary"
+                            id="rsvp-cancel">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -104,7 +114,8 @@
         <!-- Congratulations Overlay -->
         <div class="congratulations-overlay" id="congratulations-overlay">
             <div class="congratulations-content">
-                <div class="congratulations-details" id="congratulations-details"></div>
+                <div class="congratulations-details"
+                    id="congratulations-details"></div>
             </div>
         </div>
 

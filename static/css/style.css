@@ -340,7 +340,8 @@ main {
 .events-compact .event-details {
     text-align: left;
     flex: 1;
-    padding-right: 6rem; /* Space for date */
+    padding-right: 6rem;
+    /* Space for date */
 }
 
 .events-compact .event-details h3 {
@@ -592,7 +593,7 @@ footer {
 }
 
 .contact-info h4,
-.social-links h4 {
+.policy-links h4 {
     color: var(--black);
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
@@ -603,19 +604,20 @@ footer {
     margin: 0.25rem 0;
 }
 
-.social-icons {
+.policy-links-list {
     display: flex;
-    gap: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.social-link {
+.policy-link {
     color: var(--black);
     text-decoration: none;
     font-weight: 500;
     transition: opacity 0.3s;
 }
 
-.social-link:hover {
+.policy-link:hover {
     opacity: 0.7;
 }
 
@@ -1066,7 +1068,7 @@ footer {
     font-size: 2rem;
     font-weight: 900;
     margin: 0 0 0.5rem 0;
-    text-shadow: 3px 3px 0 var(--yellow), 6px 6px 0 rgba(0,0,0,0.1);
+    text-shadow: 3px 3px 0 var(--yellow), 6px 6px 0 rgba(0, 0, 0, 0.1);
     animation: congratulationsZoom 0.1s ease-out;
     animation-delay: 0.1s;
     animation-fill-mode: both;
@@ -1110,10 +1112,12 @@ footer {
         background-position: 0% 50%;
         transform: scale(0.8) rotate(5deg);
     }
+
     50% {
         background-position: 100% 50%;
         transform: scale(1.05) rotate(-2deg);
     }
+
     100% {
         background-position: 0% 50%;
         transform: scale(1) rotate(0deg);
@@ -1125,10 +1129,12 @@ footer {
         transform: scale(0.1) rotate(-45deg);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.2) rotate(10deg);
         opacity: 1;
     }
+
     100% {
         transform: scale(1) rotate(0deg);
         opacity: 1;
@@ -1140,10 +1146,12 @@ footer {
         transform: scale(0) rotate(0deg);
         opacity: 0;
     }
+
     50% {
         transform: scale(1.5) rotate(180deg);
         opacity: 1;
     }
+
     100% {
         transform: scale(1) rotate(360deg);
         opacity: 1;
@@ -1155,6 +1163,7 @@ footer {
         transform: scale(0) translateY(50px);
         opacity: 0;
     }
+
     100% {
         transform: scale(1) translateY(0);
         opacity: 1;
@@ -1166,6 +1175,7 @@ footer {
         transform: translateX(-100px) scale(0.8);
         opacity: 0;
     }
+
     100% {
         transform: translateX(0) scale(1);
         opacity: 1;
@@ -1274,5 +1284,81 @@ footer {
     .event-image-container {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+/* Policy Pages */
+.policy-page {
+    padding: 4rem 0;
+    min-height: 80vh;
+}
+
+.policy-page h1 {
+    font-size: 3rem;
+    color: var(--black);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.policy-content {
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.8;
+}
+
+.policy-content section {
+    margin-bottom: 3rem;
+}
+
+.policy-content h2 {
+    font-size: 1.8rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+    border-bottom: 2px solid var(--yellow);
+    padding-bottom: 0.5rem;
+}
+
+.policy-content h3 {
+    font-size: 1.4rem;
+    color: var(--dark-gray);
+    margin: 1.5rem 0 1rem 0;
+}
+
+.policy-content p {
+    margin-bottom: 1rem;
+    color: var(--dark-gray);
+}
+
+.policy-content ul {
+    margin: 1rem 0;
+    padding-left: 2rem;
+}
+
+.policy-content li {
+    margin-bottom: 0.5rem;
+    color: var(--dark-gray);
+}
+
+.policy-content strong {
+    color: var(--black);
+    font-weight: 600;
+}
+
+.policy-content em {
+    color: var(--light-gray);
+    font-style: italic;
+}
+
+@media (max-width: 768px) {
+    .policy-page h1 {
+        font-size: 2.5rem;
+    }
+
+    .policy-content h2 {
+        font-size: 1.5rem;
+    }
+
+    .policy-content h3 {
+        font-size: 1.2rem;
     }
 }
