@@ -26,7 +26,7 @@
         <meta property="og:description"
             content="{% block og_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
         <meta property="og:image"
-            content="{% block og_image %}{{ url_for('static', filename='uploads/devPhoto_poets3.jpg', _external=True) }}{% endblock %}">
+            content="{% block og_image %}{{ url_for('static', filename='logos/ahoy indie media - main logo.png', _external=True) }}{% endblock %}">
         <meta property="og:site_name" content="AHOY Indie Media">
         <meta property="og:locale" content="en_US">
 
@@ -38,7 +38,7 @@
         <meta property="twitter:description"
             content="{% block twitter_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
         <meta property="twitter:image"
-            content="{% block twitter_image %}{{ url_for('static', filename='uploads/devPhoto_poets3.jpg', _external=True) }}{% endblock %}">
+            content="{% block twitter_image %}{{ url_for('static', filename='logos/ahoy indie media - main logo.png', _external=True) }}{% endblock %}">
 
         <!-- Additional SEO Meta Tags -->
         <meta name="theme-color" content="#f4c430">
@@ -62,7 +62,13 @@
     <body>
         <nav class="navbar">
             <div class="nav-container">
-                <a href="/" class="nav-logo">AHOY</a>
+                <a href="/" class="nav-logo">
+                    <img src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}" 
+                         alt="AHOY Indie Media" 
+                         class="logo-image"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-fallback" style="display: none;">AHOY</span>
+                </a>
                 <div class="nav-links">
                     <a href="/">Home</a>
                     <a href="/about">About</a>
@@ -89,8 +95,14 @@
         <footer>
             <div class="footer-content">
                 <div class="footer-brand">
-                    <div class="footer-logo">AHOY</div>
-                    <div class="footer-subtitle">INDIE MEDIA</div>
+                    <img src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}" 
+                         alt="AHOY Indie Media" 
+                         class="footer-logo-image"
+                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div class="footer-logo-fallback" style="display: none;">
+                        <div class="footer-logo">AHOY</div>
+                        <div class="footer-subtitle">INDIE MEDIA</div>
+                    </div>
                 </div>
                 <div class="footer-info">
                     <div class="contact-info">

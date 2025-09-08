@@ -31,6 +31,20 @@ def load_events():
     except FileNotFoundError:
         return {"events": []}
 
+def load_newsletter_data():
+    """Load newsletter signups from JSON file"""
+    try:
+        with open('data/newsletter.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"subscribers": []}
+
+def save_newsletter_data(newsletter_data):
+    """Save newsletter signups to JSON file"""
+    os.makedirs('data', exist_ok=True)
+    with open('data/newsletter.json', 'w') as f:
+        json.dump(newsletter_data, f, indent=2, cls=DateEncoder)
+
 def save_events(events_data):
     """Save events to JSON file"""
     os.makedirs('data', exist_ok=True)
@@ -39,9 +53,15 @@ def save_events(events_data):
 
 def get_default_event_image(event_type):
     """Get default image path based on event type"""
-    # For now, use the same image for all events
-    # Later this can be expanded to have different images per event type
-    return '/static/uploads/devPhoto_poets3.jpg'
+    import random
+    # Use real event photos from the event-imgs folder
+    image_map = {
+        'poetry': '/static/event-imgs/cabaret-1-2/1.jpg',
+        'music': '/static/event-imgs/cabaret-1-2/2.jpg',
+        'cabaret': '/static/event-imgs/cabaret-1-2/3.jpg',
+        'default': '/static/event-imgs/cabaret-1-2/4.jpg'
+    }
+    return image_map.get(event_type, image_map['default'])
 
 def get_upcoming_events():
     """Filter upcoming events"""
@@ -56,6 +76,31 @@ def get_past_events():
     today = datetime.now().date()
     past = [e for e in events if datetime.fromisoformat(e['date']).date() < today]
     return sorted(past, key=lambda x: x['date'], reverse=True)
+
+def get_gallery_images():
+    """Get all gallery images from event-imgs folder"""
+    import os
+    import glob
+    
+    gallery_path = 'static/event-imgs/cabaret-1-2'
+    if not os.path.exists(gallery_path):
+        return []
+    
+    # Get all jpg files and sort them numerically
+    image_files = glob.glob(os.path.join(gallery_path, '*.jpg'))
+    image_files.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
+    
+    # Convert to web paths
+    gallery_images = []
+    for img_path in image_files:
+        filename = os.path.basename(img_path)
+        gallery_images.append({
+            'src': f'/static/event-imgs/cabaret-1-2/{filename}',
+            'alt': f'Event Photo {filename.split(".")[0]}',
+            'thumbnail': f'/static/event-imgs/cabaret-1-2/{filename}'
+        })
+    
+    return gallery_images
 
 def find_available_port(start_port=5000, max_attempts=10):
     """Find an available port starting from start_port"""
@@ -82,7 +127,12 @@ def about():
 def events():
     upcoming = get_upcoming_events()
     past = get_past_events()
-    return render_template('events.html', upcoming=upcoming, past=past)
+    
+    # Get all gallery images
+    gallery_images = get_gallery_images()
+    print(f"DEBUG: Found {len(gallery_images)} gallery images")
+    
+    return render_template('events.html', upcoming=upcoming, past=past, gallery_images=gallery_images)
 
 @app.route('/download')
 def download():
@@ -101,7 +151,24 @@ def privacy_policy():
 @app.route('/admin')
 def admin():
     events = load_events()['events']
-    return render_template('admin.html', events=events)
+    newsletter_data = load_newsletter_data()
+    
+    # Get all RSVPs from all events
+    all_rsvps = []
+    for event in events:
+        if event.get('rsvps'):
+            for rsvp in event['rsvps']:
+                rsvp['event_title'] = event['title']
+                rsvp['event_date'] = event['date']
+                all_rsvps.append(rsvp)
+    
+    # Sort RSVPs by date (newest first)
+    all_rsvps.sort(key=lambda x: x['rsvp_date'], reverse=True)
+    
+    return render_template('admin.html', 
+                         events=events, 
+                         subscribers=newsletter_data['subscribers'],
+                         all_rsvps=all_rsvps)
 
 @app.route('/admin/event/new', methods=['GET', 'POST'])
 def new_event():
@@ -174,9 +241,24 @@ def delete_event(event_id):
 def newsletter_signup():
     email = request.form.get('email')
     if email:
-        # For now, just show a success message
-        # In a real app, you'd save this to a database
-        flash('Thanks for subscribing to our newsletter!', 'success')
+        # Load existing newsletter data
+        newsletter_data = load_newsletter_data()
+        
+        # Check if email already exists
+        existing_subscriber = next((s for s in newsletter_data['subscribers'] if s['email'] == email), None)
+        if existing_subscriber:
+            flash('This email is already subscribed to our newsletter!', 'info')
+        else:
+            # Add new subscriber
+            subscriber = {
+                'id': datetime.now().isoformat(),
+                'email': email,
+                'signup_date': datetime.now().isoformat(),
+                'status': 'active'
+            }
+            newsletter_data['subscribers'].append(subscriber)
+            save_newsletter_data(newsletter_data)
+            flash('Thanks for subscribing to our newsletter!', 'success')
     else:
         flash('Please enter a valid email address.', 'error')
     
@@ -281,3 +363,46 @@ def sitemap():
 @app.route('/robots.txt')
 def robots():
     return send_from_directory('static', 'robots.txt', mimetype='text/plain')
+
+# Data export routes
+@app.route('/admin/export/newsletter')
+def export_newsletter():
+    """Export newsletter subscribers as JSON"""
+    newsletter_data = load_newsletter_data()
+    return jsonify(newsletter_data)
+
+@app.route('/admin/export/rsvps')
+def export_rsvps():
+    """Export all RSVPs as JSON"""
+    events = load_events()['events']
+    all_rsvps = []
+    for event in events:
+        if event.get('rsvps'):
+            for rsvp in event['rsvps']:
+                rsvp['event_title'] = event['title']
+                rsvp['event_date'] = event['date']
+                all_rsvps.append(rsvp)
+    
+    return jsonify({"rsvps": all_rsvps})
+
+@app.route('/admin/export/all')
+def export_all_data():
+    """Export all data (events, newsletter, RSVPs) as JSON"""
+    events_data = load_events()
+    newsletter_data = load_newsletter_data()
+    
+    # Get all RSVPs
+    all_rsvps = []
+    for event in events_data['events']:
+        if event.get('rsvps'):
+            for rsvp in event['rsvps']:
+                rsvp['event_title'] = event['title']
+                rsvp['event_date'] = event['date']
+                all_rsvps.append(rsvp)
+    
+    return jsonify({
+        "events": events_data['events'],
+        "newsletter_subscribers": newsletter_data['subscribers'],
+        "rsvps": all_rsvps,
+        "export_date": datetime.now().isoformat()
+    })

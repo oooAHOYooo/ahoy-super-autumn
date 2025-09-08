@@ -5,8 +5,14 @@
 {% block content %}
 <div class="admin-header">
     <h1>Admin Panel</h1>
-    <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New
-        Event</a>
+    <div class="admin-actions">
+        <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New Event</a>
+        <div class="export-buttons">
+            <a href="{{ url_for('export_newsletter') }}" class="btn btn-secondary" target="_blank">Export Newsletter</a>
+            <a href="{{ url_for('export_rsvps') }}" class="btn btn-secondary" target="_blank">Export RSVPs</a>
+            <a href="{{ url_for('export_all_data') }}" class="btn btn-secondary" target="_blank">Export All Data</a>
+        </div>
+    </div>
 </div>
 
 <section class="admin-section">
@@ -51,6 +57,74 @@
         {% else %}
         <p>No events found. <a href="{{ url_for('new_event') }}">Add your first
                 event</a>.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Newsletter Subscribers Section -->
+<section class="admin-section">
+    <div class="container">
+        <h2>Newsletter Subscribers ({{ subscribers|length }})</h2>
+        {% if subscribers %}
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Signup Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscriber in subscribers %}
+                    <tr>
+                        <td>{{ subscriber.email }}</td>
+                        <td>{{ subscriber.signup_date[:10] }}</td>
+                        <td>{{ subscriber.status }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No newsletter subscribers yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- RSVPs Section -->
+<section class="admin-section">
+    <div class="container">
+        <h2>Event RSVPs ({{ all_rsvps|length }})</h2>
+        {% if all_rsvps %}
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Event</th>
+                        <th>Event Date</th>
+                        <th>Guests</th>
+                        <th>RSVP Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rsvp in all_rsvps %}
+                    <tr>
+                        <td>{{ rsvp.name }}</td>
+                        <td>{{ rsvp.email }}</td>
+                        <td>{{ rsvp.event_title }}</td>
+                        <td>{{ rsvp.event_date }}</td>
+                        <td>{{ rsvp.guests }}</td>
+                        <td>{{ rsvp.rsvp_date[:10] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No RSVPs yet.</p>
         {% endif %}
     </div>
 </section>
