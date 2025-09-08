@@ -3,9 +3,61 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}AHOY Indie Media{% endblock %}</title>
+
+        <!-- Primary Meta Tags -->
+        <title>{% block title %}AHOY Indie Media - New Haven Arts & Culture
+            Platform{% endblock %}</title>
+        <meta name="title"
+            content="{% block meta_title %}AHOY Indie Media - New Haven Arts & Culture Platform{% endblock %}">
+        <meta name="description"
+            content="{% block meta_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
+        <meta name="keywords"
+            content="{% block meta_keywords %}New Haven events, poetry readings, music shows, cabaret performances, local artists, indie media, Connecticut arts, live performances, cultural events{% endblock %}">
+        <meta name="author" content="AHOY Indie Media">
+        <meta name="robots" content="index, follow">
+        <meta name="language" content="English">
+        <meta name="revisit-after" content="7 days">
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.url }}">
+        <meta property="og:title"
+            content="{% block og_title %}AHOY Indie Media - New Haven Arts & Culture Platform{% endblock %}">
+        <meta property="og:description"
+            content="{% block og_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
+        <meta property="og:image"
+            content="{% block og_image %}{{ url_for('static', filename='uploads/devPhoto_poets3.jpg', _external=True) }}{% endblock %}">
+        <meta property="og:site_name" content="AHOY Indie Media">
+        <meta property="og:locale" content="en_US">
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image">
+        <meta property="twitter:url" content="{{ request.url }}">
+        <meta property="twitter:title"
+            content="{% block twitter_title %}AHOY Indie Media - New Haven Arts & Culture Platform{% endblock %}">
+        <meta property="twitter:description"
+            content="{% block twitter_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
+        <meta property="twitter:image"
+            content="{% block twitter_image %}{{ url_for('static', filename='uploads/devPhoto_poets3.jpg', _external=True) }}{% endblock %}">
+
+        <!-- Additional SEO Meta Tags -->
+        <meta name="theme-color" content="#f4c430">
+        <meta name="msapplication-TileColor" content="#f4c430">
+        <meta name="application-name" content="AHOY Indie Media">
+
+        <!-- Canonical URL -->
+        <link rel="canonical" href="{{ request.url }}">
+
+        <!-- Favicon -->
+        <link rel="icon" type="image/x-icon"
+            href="{{ url_for('static', filename='favicon.ico') }}">
+
+        <!-- Stylesheet -->
         <link rel="stylesheet"
             href="{{ url_for('static', filename='css/style.css') }}">
+
+        <!-- Structured Data -->
+        {% block structured_data %}{% endblock %}
     </head>
     <body>
         <nav class="navbar">
@@ -20,7 +72,7 @@
             </div>
         </nav>
 
-        <main>
+        <main id="main-content">
             {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
             <div class="flash-messages">
@@ -120,44 +172,8 @@
         </div>
 
         <script>
-        // Parallax scrolling functionality
-        function initParallax() {
-            const parallaxElements = document.querySelectorAll('.parallax-slow, .parallax-medium, .parallax-fast');
-            
-            function updateParallax() {
-                const scrolled = window.pageYOffset;
-                const rate = scrolled * -0.5;
-                
-                parallaxElements.forEach(element => {
-                    const speed = element.classList.contains('parallax-slow') ? 0.3 : 
-                                 element.classList.contains('parallax-medium') ? 0.5 : 0.7;
-                    const yPos = -(scrolled * speed);
-                    element.style.setProperty('--parallax-offset', yPos + 'px');
-                });
-            }
-            
-            // Throttle scroll events for better performance
-            let ticking = false;
-            function requestTick() {
-                if (!ticking) {
-                    requestAnimationFrame(updateParallax);
-                    ticking = true;
-                }
-            }
-            
-            function handleScroll() {
-                ticking = false;
-                requestTick();
-            }
-            
-            window.addEventListener('scroll', handleScroll, { passive: true });
-            updateParallax(); // Initial call
-        }
-        
         // Event filtering functionality
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize parallax
-            initParallax();
             const filterBtns = document.querySelectorAll('.filter-btn');
             const eventItems = document.querySelectorAll('.event-item');
             
@@ -301,6 +317,9 @@
                         
                         congratulationsOverlay.classList.add('active');
                         
+                        // Show toast notification
+                        showToast(`Successfully RSVP'd for ${eventTitle}!`, 'success');
+                        
                         // Auto-hide after 1.5 seconds (blink of an eye)
                         setTimeout(() => {
                             congratulationsOverlay.classList.remove('active');
@@ -310,32 +329,17 @@
                         const rsvpBtn = document.querySelector(`[data-event-id="${currentEventId}"]`);
                         if (rsvpBtn) {
                             const rsvpSection = rsvpBtn.parentElement;
-                            let rsvpCount = rsvpSection.querySelector('.rsvp-count');
-                            
-                            // Only create/show count if there are actual RSVPs
-                            if (data.rsvp_count > 0) {
-                                if (!rsvpCount) {
-                                    // Create RSVP count element if it doesn't exist
-                                    rsvpCount = document.createElement('div');
-                                    rsvpCount.className = 'rsvp-count';
-                                    rsvpSection.insertBefore(rsvpCount, rsvpBtn);
-                                }
-                                rsvpCount.textContent = `${data.rsvp_count} RSVP${data.rsvp_count !== 1 ? 's' : ''}`;
-                            } else if (rsvpCount) {
-                                // Hide count if no RSVPs
-                                rsvpCount.remove();
-                            }
                         }
                         
                         // Reset form
                         this.reset();
                     } else {
-                        alert(data.message);
+                        showToast(data.message, 'error');
                     }
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
+                    showToast('An error occurred. Please try again.', 'error');
                 });
             });
         });

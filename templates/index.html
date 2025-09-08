@@ -1,47 +1,83 @@
 {% extends "base.html" %}
 
+{% block title %}AHOY Indie Media - New Haven Arts & Culture Platform{% endblock
+%}
+
+{% block meta_description %}Discover upcoming poetry readings, music shows, and
+cabaret performances in New Haven. AHOY connects local artists, musicians, and
+performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "AHOY Indie Media",
+  "description": "Building a platform for local New Haven artists, musicians, and performers to share their craft across our little city.",
+  "url": "{{ request.url_root }}",
+  "logo": "{{ url_for('static', filename='uploads/devPhoto_poets3.jpg', _external=True) }}",
+  "foundingDate": "2024",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "New Haven",
+    "addressRegion": "CT",
+    "addressCountry": "US"
+  },
+  "sameAs": [
+    "https://ahoy.ooo/ahoyApp/www/index.html"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "info@ahoy.ooo"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="hero parallax-container">
-    <div class="parallax-content">
-        <h1 class="parallax-slow">AHOY</h1>
-        <p class="parallax-medium">Building a platform for local New Haven
-            artists, musicians, and
-            performers to share their craft across our little city.</p>
-        <div class="hero-actions parallax-fast">
-            <a href="/events" class="btn btn-primary">Upcoming Shows</a>
-            <a href="/download" class="btn btn-secondary">Launch Platform</a>
-        </div>
+<div class="hero">
+    <h1>AHOY Indie Media</h1>
+    <p>Building a platform for local New Haven
+        artists, musicians, and
+        performers to share their craft across our little city.</p>
+    <div class="hero-actions">
+        <a href="/events" class="btn btn-primary">Upcoming Shows</a>
+        <a href="/download" class="btn btn-secondary">Launch Platform</a>
     </div>
 </div>
 
 {% if latest_events %}
-<section class="latest-events">
+<section class="events-section">
     <div class="container">
         <h2>Upcoming Events</h2>
-        <div class="events-preview">
+
+        <div class="events-list events-compact">
             {% for event in latest_events %}
-            <div class="event-preview" data-event-id="{{ event.id }}">
+            <div class="event-item event-preview"
+                data-type="{{ event.event_type }}"
+                data-event-id="{{ event.id }}">
                 {% if event.image %}
-                <img src="{{ event.image }}" alt="{{ event.title }}"
+                <img src="{{ event.image }}"
+                    alt="{{ event.title }} - {{ event.venue or 'New Haven Event' }}"
                     class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
                 <div class="event-date">{{ event.date }}</div>
+                <!-- Countdown timer for upcoming events -->
+                <div class="countdown-timer"
+                    data-event-date="{{ event.date }}T{{ event.time or '19:00' }}"></div>
                 <div class="event-details">
                     <h3>{{ event.title }}</h3>
                     {% if event.venue %}<p class="venue">{{ event.venue }}</p>{%
                     endif %}
+                    {% if event.venue_address %}<p class="venue-address">{{
+                        event.venue_address }}</p>{% endif %}
                     {% if event.time %}<p class="time">{{ event.time }}</p>{%
                     endif %}
                     {% if event.description %}<p class="description">{{
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        {% if event.rsvps and event.rsvps|length > 0 %}
-                        <div class="rsvp-count">
-                            {{ event.rsvps|length }} RSVP{% if
-                            event.rsvps|length != 1 %}s{% endif %}
-                        </div>
-                        {% endif %}
                         <button class="btn btn-small rsvp-btn"
                             data-event-id="{{ event.id }}">
                             RSVP
@@ -52,6 +88,7 @@
             </div>
             {% endfor %}
         </div>
+
         <div class="events-actions">
             <a href="/events" class="btn btn-outline">View All Events</a>
         </div>
@@ -61,19 +98,19 @@
 
 <section class="features">
     <div class="container">
-        <h2 class="parallax-slow">What We Do</h2>
+        <h2 class="parallax-slow fade-in">What We Do</h2>
         <div class="feature-grid">
-            <div class="feature parallax-medium floating-element">
+            <div class="feature parallax-medium floating-element slide-in-left">
                 <h3>Cabaret Shows</h3>
                 <p>Intimate performances featuring local talent in unique New
                     Haven venues</p>
             </div>
-            <div class="feature parallax-slow floating-element">
+            <div class="feature parallax-slow floating-element fade-in">
                 <h3>Poets and Friends</h3>
                 <p>Regular poetry gatherings and spoken word events at
                     Koffee?</p>
             </div>
-            <div class="feature parallax-fast floating-element">
+            <div class="feature parallax-fast floating-element slide-in-right">
                 <h3>Indie Media Platform</h3>
                 <p>Supporting independent filmmakers, musicians, and creators
                     with ad-free content</p>

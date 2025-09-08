@@ -323,10 +323,11 @@ main {
 }
 
 .events-compact .event-image {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     flex-shrink: 0;
     margin-bottom: 0;
+    order: 2;
 }
 
 .events-compact .event-date {
@@ -342,6 +343,7 @@ main {
     text-align: left;
     flex: 1;
     padding-right: 6rem;
+    order: 1;
     /* Space for date */
 }
 
@@ -1372,99 +1374,54 @@ footer {
     }
 }
 
-/* Parallax Effects */
-.parallax-container {
+
+
+
+
+
+
+
+/* Smooth page transitions */
+.page-transition {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-out;
+}
+
+.page-transition.loaded {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Search functionality */
+.search-container {
     position: relative;
-    overflow: hidden;
+    margin-bottom: 2rem;
 }
 
-.parallax-bg {
-    position: absolute;
-    top: -20%;
-    left: -10%;
-    width: 120%;
-    height: 140%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    will-change: transform;
-    z-index: -1;
+.search-input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--yellow);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--white);
+    transition: all 0.3s ease;
 }
 
-.parallax-content {
-    position: relative;
-    z-index: 1;
+.search-input:focus {
+    outline: none;
+    border-color: var(--black);
+    box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.2);
 }
 
-.parallax-slow {
-    transform: translateY(var(--parallax-offset, 0px));
-    transition: transform 0.1s ease-out;
+.search-results {
+    margin-top: 1rem;
 }
 
-.parallax-medium {
-    transform: translateY(calc(var(--parallax-offset, 0px) * 0.5));
-    transition: transform 0.1s ease-out;
-}
-
-.parallax-fast {
-    transform: translateY(calc(var(--parallax-offset, 0px) * 1.5));
-    transition: transform 0.1s ease-out;
-}
-
-/* Floating Elements */
-.floating-element {
-    animation: float 6s ease-in-out infinite;
-}
-
-.floating-element:nth-child(2n) {
-    animation-delay: -2s;
-}
-
-.floating-element:nth-child(3n) {
-    animation-delay: -4s;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-/* Hero Parallax Background */
-.hero::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg,
-            rgba(244, 196, 48, 0.9) 0%,
-            rgba(244, 196, 48, 0.7) 25%,
-            rgba(244, 196, 48, 0.9) 50%,
-            rgba(244, 196, 48, 0.7) 75%,
-            rgba(244, 196, 48, 0.9) 100%);
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
-    z-index: -1;
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
-
-    100% {
-        background-position: 0% 50%;
-    }
+.no-results {
+    text-align: center;
+    color: var(--light-gray);
+    font-style: italic;
+    padding: 2rem;
 }

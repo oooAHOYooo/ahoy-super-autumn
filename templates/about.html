@@ -1,35 +1,71 @@
 {% extends "base.html" %}
 
+{% block title %}About AHOY Indie Media | New Haven Arts & Culture Platform{%
+endblock %}
+
+{% block meta_description %}Learn about AHOY Indie Media, a homemade media
+company born out of New Haven, CT. Discover our roadmap for live shows, mobile
+apps, and community platform development.{% endblock %}
+
+{% block meta_keywords %}AHOY Indie Media, New Haven media company, indie media
+platform, Connecticut arts, local artists, media technology, New Haven culture{%
+endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "name": "About AHOY Indie Media",
+  "description": "We are a homemade media company born out of New Haven, CT",
+  "url": "{{ request.url }}",
+  "mainEntity": {
+    "@type": "Organization",
+    "name": "AHOY Indie Media",
+    "description": "We are a homemade media company born out of New Haven, CT",
+    "foundingDate": "2024",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "New Haven",
+      "addressRegion": "CT",
+      "addressCountry": "US"
+    }
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="hero parallax-container">
-    <div class="parallax-content">
-        <h1 class="parallax-slow">About</h1>
-        <p class="parallax-medium">We are a homemade media company born out of
-            New Haven, CT</p>
-    </div>
+<div class="hero">
+    <h1>About</h1>
+    <p>We are a homemade media company born out of
+        New Haven, CT</p>
 </div>
 
 <section class="roadmap">
     <div class="container">
-        <h2 class="parallax-slow">OUR ROADMAP</h2>
+        <h2>OUR ROADMAP</h2>
         <div class="roadmap-items">
-            <div class="roadmap-item parallax-medium floating-element">
+            <div
+                class="roadmap-item">
                 <h3>Live Shows around New Haven</h3>
                 <span class="timeline">q3+ 2025</span>
             </div>
-            <div class="roadmap-item parallax-slow floating-element">
+            <div class="roadmap-item">
                 <h3>INDIE MEDIA APP FOR THE XBOX - WINDOWS 11 - MAC - LINUX</h3>
                 <span class="timeline">q4 2025</span>
             </div>
-            <div class="roadmap-item parallax-fast floating-element">
+            <div
+                class="roadmap-item">
                 <h3>Launch Online MERCH STORE</h3>
                 <span class="timeline">q1 2026</span>
             </div>
-            <div class="roadmap-item parallax-medium floating-element">
+            <div
+                class="roadmap-item">
                 <h3>PARTNER WITH LOCAL BROADCASTERS</h3>
                 <span class="timeline">q2 2026</span>
             </div>
-            <div class="roadmap-item parallax-slow floating-element">
+            <div class="roadmap-item">
                 <h3>MORE LIVE SHOWS AND CONTENT</h3>
                 <span class="timeline">q3 2026</span>
             </div>

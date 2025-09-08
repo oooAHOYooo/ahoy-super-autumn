@@ -1,29 +1,56 @@
 {% extends "base.html" %}
 
+{% block title %}Events - AHOY Indie Media | New Haven Poetry, Music & Cabaret
+Shows{% endblock %}
+
+{% block meta_description %}Discover upcoming poetry readings, music shows, and
+cabaret performances in New Haven. Find local artists, musicians, and performers
+at AHOY Indie Media events.{% endblock %}
+
+{% block meta_keywords %}New Haven events, poetry readings, music shows, cabaret
+performances, local artists, Connecticut arts, live performances, cultural
+events, indie media{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "AHOY Indie Media Events",
+  "description": "Discover upcoming poetry readings, music shows, and cabaret performances in New Haven",
+  "url": "{{ request.url }}",
+  "organizer": {
+    "@type": "Organization",
+    "name": "AHOY Indie Media",
+    "url": "{{ request.url_root }}"
+  },
+  "location": {
+    "@type": "Place",
+    "name": "New Haven, Connecticut",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "New Haven",
+      "addressRegion": "CT",
+      "addressCountry": "US"
+    }
+  },
+  "eventStatus": "https://schema.org/EventScheduled",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode"
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="hero parallax-container">
-    <div class="parallax-content">
-        <h1 class="parallax-slow">Events</h1>
-        <p class="parallax-medium">Discover upcoming poetry readings, music
-            shows, and cabaret performances
-            in New Haven</p>
-    </div>
+<div class="hero">
+    <h1>Events</h1>
+    <p>Discover upcoming poetry readings, music
+        shows, and cabaret performances
+        in New Haven</p>
 </div>
 
 <section class="events-section">
     <div class="container">
         <h2>Upcoming Events</h2>
-
-        <!-- Event Type Filters -->
-        <div class="event-filters">
-            <button class="filter-btn active" data-filter="all">All
-                Events</button>
-            <button class="filter-btn" data-filter="cabaret">Cabaret
-                Shows</button>
-            <button class="filter-btn" data-filter="poetry">Poets and
-                Friends</button>
-            <button class="filter-btn" data-filter="music">Music Shows</button>
-        </div>
 
         {% if upcoming %}
         <div class="events-list events-compact">
@@ -32,10 +59,14 @@
                 data-type="{{ event.event_type }}"
                 data-event-id="{{ event.id }}">
                 {% if event.image %}
-                <img src="{{ event.image }}" alt="{{ event.title }}"
+                <img src="{{ event.image }}"
+                    alt="{{ event.title }} - {{ event.venue or 'New Haven Event' }}"
                     class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
                 <div class="event-date">{{ event.date }}</div>
+                <!-- Countdown timer for upcoming events -->
+                <div class="countdown-timer"
+                    data-event-date="{{ event.date }}T{{ event.time or '19:00' }}"></div>
                 <div class="event-details">
                     <h3>{{ event.title }}</h3>
                     {% if event.venue %}<p class="venue">{{ event.venue }}</p>{%
@@ -48,12 +79,6 @@
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        {% if event.rsvps and event.rsvps|length > 0 %}
-                        <div class="rsvp-count">
-                            {{ event.rsvps|length }} RSVP{% if
-                            event.rsvps|length != 1 %}s{% endif %}
-                        </div>
-                        {% endif %}
                         <button class="btn btn-small rsvp-btn"
                             data-event-id="{{ event.id }}">
                             RSVP
@@ -80,7 +105,8 @@
                 data-type="{{ event.event_type }}"
                 data-event-id="{{ event.id }}">
                 {% if event.image %}
-                <img src="{{ event.image }}" alt="{{ event.title }}"
+                <img src="{{ event.image }}"
+                    alt="{{ event.title }} - {{ event.venue or 'New Haven Event' }}"
                     class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
                 <div class="event-date">{{ event.date }}</div>
@@ -96,12 +122,6 @@
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        {% if event.rsvps and event.rsvps|length > 0 %}
-                        <div class="rsvp-count">
-                            {{ event.rsvps|length }} RSVP{% if
-                            event.rsvps|length != 1 %}s{% endif %}
-                        </div>
-                        {% endif %}
                         <button class="btn btn-small rsvp-btn"
                             data-event-id="{{ event.id }}">
                             RSVP

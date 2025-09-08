@@ -1,18 +1,49 @@
 {% extends "base.html" %}
 
+{% block title %}Download AHOY App | New Haven Indie Media Platform{% endblock
+%}
+
+{% block meta_description %}Download the AHOY indie media app for New Haven arts
+and culture. Watch media, listen to music, and experience curated content and
+live performances.{% endblock %}
+
+{% block meta_keywords %}AHOY app download, New Haven indie media, music app,
+media platform, Connecticut arts app, indie media platform{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "AHOY Indie Media App",
+  "description": "Watch media and listen to music on our indie media platform with curated content and live performances",
+  "url": "{{ request.url }}",
+  "applicationCategory": "EntertainmentApplication",
+  "operatingSystem": "Web, iOS, Android, Windows, Mac, Linux, Xbox",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AHOY Indie Media"
+  }
+}
+</script>
+{% endblock %}
+
 {% block content %}
-<div class="hero parallax-container">
-    <div class="parallax-content">
-        <h1 class="parallax-slow">Launch Web App</h1>
-        <p class="parallax-medium">WATCH MEDIA + LISTEN MUSIC</p>
-        <p class="parallax-medium">Experience our indie media platform with
-            curated content and live
-            performances</p>
-        <div class="hero-actions parallax-fast">
-            <a href="https://ahoy.ooo/ahoyApp/www/index.html"
-                class="btn btn-primary btn-large" target="_blank">Launch Web
-                App</a>
-        </div>
+<div class="hero">
+    <h1>Launch Web App</h1>
+    <p>WATCH MEDIA + LISTEN MUSIC</p>
+    <p>Experience our indie media platform with
+        curated content and live
+        performances</p>
+    <div class="hero-actions">
+        <a href="https://ahoy.ooo/ahoyApp/www/index.html"
+            class="btn btn-primary btn-large" target="_blank">Launch Web
+            App</a>
     </div>
 </div>
 
