@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="events-header">
-    <h1>Events</h1>
-    <p>Discover upcoming poetry readings, music shows, and cabaret performances in New Haven</p>
+<div class="hero parallax-container">
+    <div class="parallax-content">
+        <h1 class="parallax-slow">Events</h1>
+        <p class="parallax-medium">Discover upcoming poetry readings, music
+            shows, and cabaret performances
+            in New Haven</p>
+    </div>
 </div>
 
 <section class="events-section">
@@ -24,9 +28,12 @@
         {% if upcoming %}
         <div class="events-list events-compact">
             {% for event in upcoming %}
-            <div class="event-item event-preview" data-type="{{ event.event_type }}" data-event-id="{{ event.id }}">
+            <div class="event-item event-preview"
+                data-type="{{ event.event_type }}"
+                data-event-id="{{ event.id }}">
                 {% if event.image %}
-                <img src="{{ event.image }}" alt="{{ event.title }}" class="event-image" data-lightbox="{{ event.image }}">
+                <img src="{{ event.image }}" alt="{{ event.title }}"
+                    class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
                 <div class="event-date">{{ event.date }}</div>
                 <div class="event-details">
@@ -43,10 +50,12 @@
                     <div class="rsvp-section">
                         {% if event.rsvps and event.rsvps|length > 0 %}
                         <div class="rsvp-count">
-                            {{ event.rsvps|length }} RSVP{% if event.rsvps|length != 1 %}s{% endif %}
+                            {{ event.rsvps|length }} RSVP{% if
+                            event.rsvps|length != 1 %}s{% endif %}
                         </div>
                         {% endif %}
-                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">
+                        <button class="btn btn-small rsvp-btn"
+                            data-event-id="{{ event.id }}">
                             RSVP
                         </button>
                     </div>
@@ -67,9 +76,12 @@
         {% if past %}
         <div class="events-list events-compact">
             {% for event in past %}
-            <div class="event-item event-preview past" data-type="{{ event.event_type }}" data-event-id="{{ event.id }}">
+            <div class="event-item event-preview past"
+                data-type="{{ event.event_type }}"
+                data-event-id="{{ event.id }}">
                 {% if event.image %}
-                <img src="{{ event.image }}" alt="{{ event.title }}" class="event-image" data-lightbox="{{ event.image }}">
+                <img src="{{ event.image }}" alt="{{ event.title }}"
+                    class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
                 <div class="event-date">{{ event.date }}</div>
                 <div class="event-details">
@@ -86,10 +98,12 @@
                     <div class="rsvp-section">
                         {% if event.rsvps and event.rsvps|length > 0 %}
                         <div class="rsvp-count">
-                            {{ event.rsvps|length }} RSVP{% if event.rsvps|length != 1 %}s{% endif %}
+                            {{ event.rsvps|length }} RSVP{% if
+                            event.rsvps|length != 1 %}s{% endif %}
                         </div>
                         {% endif %}
-                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">
+                        <button class="btn btn-small rsvp-btn"
+                            data-event-id="{{ event.id }}">
                             RSVP
                         </button>
                     </div>

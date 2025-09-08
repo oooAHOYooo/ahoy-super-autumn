@@ -120,8 +120,44 @@
         </div>
 
         <script>
+        // Parallax scrolling functionality
+        function initParallax() {
+            const parallaxElements = document.querySelectorAll('.parallax-slow, .parallax-medium, .parallax-fast');
+            
+            function updateParallax() {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                
+                parallaxElements.forEach(element => {
+                    const speed = element.classList.contains('parallax-slow') ? 0.3 : 
+                                 element.classList.contains('parallax-medium') ? 0.5 : 0.7;
+                    const yPos = -(scrolled * speed);
+                    element.style.setProperty('--parallax-offset', yPos + 'px');
+                });
+            }
+            
+            // Throttle scroll events for better performance
+            let ticking = false;
+            function requestTick() {
+                if (!ticking) {
+                    requestAnimationFrame(updateParallax);
+                    ticking = true;
+                }
+            }
+            
+            function handleScroll() {
+                ticking = false;
+                requestTick();
+            }
+            
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            updateParallax(); // Initial call
+        }
+        
         // Event filtering functionality
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize parallax
+            initParallax();
             const filterBtns = document.querySelectorAll('.filter-btn');
             const eventItems = document.querySelectorAll('.event-item');
             

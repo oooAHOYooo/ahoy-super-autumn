@@ -72,27 +72,48 @@ main {
 }
 
 /* Hero Section */
-.hero {
+/* Unified Hero Styles - All pages use this */
+.hero,
+.about-hero,
+.download-hero,
+.events-header,
+.policy-hero {
     background: var(--yellow);
-    padding: 4rem 2rem;
+    padding: 6rem 2rem;
     text-align: center;
-    min-height: 50vh;
+    min-height: 60vh;
+    max-height: 70vh;
+    height: 65vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
 }
 
-.hero h1 {
-    font-size: 4rem;
+.hero h1,
+.about-hero h1,
+.download-hero h1,
+.events-header h1,
+.policy-hero h1 {
+    font-size: 4.5rem;
     font-weight: bold;
     color: var(--black);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
 }
 
-.hero p {
-    font-size: 1.2rem;
+.hero p,
+.about-hero p,
+.download-hero p,
+.events-header p,
+.policy-hero p {
+    font-size: 1.4rem;
     color: var(--dark-gray);
     margin-bottom: 2rem;
+    max-width: 800px;
+    line-height: 1.6;
 }
 
 .hero-actions {
@@ -100,6 +121,7 @@ main {
     gap: 1rem;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
 /* Buttons */
@@ -183,17 +205,6 @@ main {
 }
 
 /* About Page */
-.about-hero {
-    background: var(--yellow);
-    padding: 4rem 2rem;
-    text-align: center;
-}
-
-.about-hero h1 {
-    font-size: 3rem;
-    color: var(--black);
-    margin-bottom: 1rem;
-}
 
 .roadmap {
     padding: 4rem 0;
@@ -234,16 +245,6 @@ main {
 }
 
 /* Events */
-.events-header {
-    background: var(--yellow);
-    padding: 4rem 2rem;
-    text-align: center;
-}
-
-.events-header h1 {
-    font-size: 3rem;
-    color: var(--black);
-}
 
 .events-section {
     padding: 3rem 0;
@@ -368,17 +369,6 @@ main {
 }
 
 /* Download Page */
-.download-hero {
-    background: var(--yellow);
-    padding: 4rem 2rem;
-    text-align: center;
-}
-
-.download-hero h1 {
-    font-size: 3rem;
-    color: var(--black);
-    margin-bottom: 1rem;
-}
 
 .download-section {
     padding: 4rem 0;
@@ -808,10 +798,6 @@ footer {
     margin-left: 0.5rem;
 }
 
-.download-hero .hero-actions {
-    margin-top: 2rem;
-    text-align: center;
-}
 
 /* Announcement Section - Removed */
 
@@ -1213,8 +1199,31 @@ footer {
         justify-content: center;
     }
 
-    .hero h1 {
-        font-size: 3rem;
+    .hero h1,
+    .about-hero h1,
+    .download-hero h1,
+    .events-header h1,
+    .policy-hero h1 {
+        font-size: 3.5rem;
+    }
+
+    .hero p,
+    .about-hero p,
+    .download-hero p,
+    .events-header p,
+    .policy-hero p {
+        font-size: 1.2rem;
+    }
+
+    .hero,
+    .about-hero,
+    .download-hero,
+    .events-header,
+    .policy-hero {
+        padding: 4rem 1rem;
+        min-height: 50vh;
+        max-height: 60vh;
+        height: 55vh;
     }
 
     .roadmap-item {
@@ -1360,5 +1369,102 @@ footer {
 
     .policy-content h3 {
         font-size: 1.2rem;
+    }
+}
+
+/* Parallax Effects */
+.parallax-container {
+    position: relative;
+    overflow: hidden;
+}
+
+.parallax-bg {
+    position: absolute;
+    top: -20%;
+    left: -10%;
+    width: 120%;
+    height: 140%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    will-change: transform;
+    z-index: -1;
+}
+
+.parallax-content {
+    position: relative;
+    z-index: 1;
+}
+
+.parallax-slow {
+    transform: translateY(var(--parallax-offset, 0px));
+    transition: transform 0.1s ease-out;
+}
+
+.parallax-medium {
+    transform: translateY(calc(var(--parallax-offset, 0px) * 0.5));
+    transition: transform 0.1s ease-out;
+}
+
+.parallax-fast {
+    transform: translateY(calc(var(--parallax-offset, 0px) * 1.5));
+    transition: transform 0.1s ease-out;
+}
+
+/* Floating Elements */
+.floating-element {
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-element:nth-child(2n) {
+    animation-delay: -2s;
+}
+
+.floating-element:nth-child(3n) {
+    animation-delay: -4s;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Hero Parallax Background */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+            rgba(244, 196, 48, 0.9) 0%,
+            rgba(244, 196, 48, 0.7) 25%,
+            rgba(244, 196, 48, 0.9) 50%,
+            rgba(244, 196, 48, 0.7) 75%,
+            rgba(244, 196, 48, 0.9) 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+    z-index: -1;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
     }
 }
