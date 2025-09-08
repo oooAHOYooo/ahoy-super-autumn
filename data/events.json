@@ -34,21 +34,22 @@
       "title": "Ahoy Cabaret #2",
       "date": "2025-02-22",
       "time": "7:00 PM",
-      "venue": "East Haven",
-      "venue_address": "East Haven, CT",
+      "venue": "Best Video",
+      "venue_address": "Hamden, CT",
       "event_type": "cabaret",
       "status": "past",
       "description": "Second installment of our popular cabaret series",
       "photos": [],
       "image": "/static/uploads/devPhoto_poets3.jpg"
+    }
     },
     {
       "id": "2024-12-15T20:00:00",
       "title": "Ahoy Cabaret #1",
-      "date": "2024-12-15",
+      "date": "2024-12-16",
       "time": "8:00 PM",
-      "venue": "Beach Haven",
-      "venue_address": "Beach Haven, CT",
+      "venue": "The Beach Haven",
+      "venue_address": "East Haven, CT",
       "event_type": "cabaret",
       "status": "past",
       "description": "Our first cabaret event - huge success!",
@@ -58,8 +59,8 @@
     {
       "id": "2025-09-24T19:00:00",
       "title": "Poets and Friends #3",
-      "date": "2025-09-24",
-      "time": "7:00 PM",
+      "date": "2025-09-26",
+      "time": "6:00 PM",
       "venue": "Koffee?",
       "venue_address": "104 Audubon Street, New Haven, CT 06511",
       "event_type": "poetry",
@@ -68,7 +69,7 @@
       "photos": [],
       "image": "/static/uploads/devPhoto_poets3.jpg",
       "rsvp_enabled": true,
-      "rsvp_limit": "30",
+      "rsvp_limit": "100",
       "rsvps": [
         {
           "id": "2025-09-06T08:35:38.181292",
