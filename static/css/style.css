@@ -628,13 +628,16 @@ footer {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
+    justify-content: center;
+    align-items: center;
     gap: 2rem;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .footer-brand {
-    text-align: left;
+    text-align: center;
+    flex: 0 0 auto;
 }
 
 .footer-logo {
@@ -661,24 +664,32 @@ footer {
 .footer-info {
     display: flex;
     gap: 3rem;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    text-align: center;
 }
 
 .contact-info h4,
-.policy-links h4 {
+.policy-links h4,
+.newsletter-signup h4 {
     color: var(--black);
     margin-bottom: 0.5rem;
     font-size: 1.1rem;
+    text-align: center;
 }
 
 .contact-info p {
     color: var(--black);
     margin: 0.25rem 0;
+    text-align: center;
 }
 
 .policy-links-list {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    align-items: center;
 }
 
 .policy-link {
@@ -1273,6 +1284,21 @@ footer {
     .nav-container {
         flex-direction: column;
         gap: 1rem;
+        padding: 1rem 0;
+    }
+    
+    .navbar {
+        padding: 1.5rem 0;
+        min-height: auto;
+    }
+    
+    .nav-logo {
+        margin-bottom: 0.5rem;
+    }
+    
+    .logo-image {
+        height: 45px;
+        max-width: 180px;
     }
 
     .nav-links {
@@ -1288,6 +1314,19 @@ footer {
     .footer-logo-image {
         height: 50px;
         max-width: 200px;
+    }
+    
+    /* Additional mobile header improvements */
+    .navbar {
+        padding: 2rem 0;
+    }
+    
+    .nav-container {
+        padding: 1.5rem 0;
+    }
+    
+    .nav-links {
+        margin-top: 0.5rem;
     }
 
     .hero h1,
@@ -1344,11 +1383,28 @@ footer {
     .export-buttons {
         flex-direction: column;
         width: 100%;
+        gap: 0.5rem;
     }
 
     .btn-secondary {
         width: 100%;
         text-align: center;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+    }
+    
+    .btn-small {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
     }
 
     .admin-table .actions {
@@ -1358,16 +1414,81 @@ footer {
     .form-actions {
         flex-direction: column;
     }
+    
+    .form-actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .rsvp-section .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .newsletter-form .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .admin-table .actions .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
 
     .footer-content {
         flex-direction: column;
         text-align: center;
         gap: 2rem;
     }
+    
+    .footer-brand {
+        text-align: center;
+    }
+    
+    .footer-info {
+        text-align: center;
+    }
+    
+    .footer-info > div {
+        text-align: center;
+    }
+    
+    .contact-info h4,
+    .newsletter-signup h4,
+    .policy-links h4 {
+        text-align: center;
+    }
+    
+    .policy-links-list {
+        justify-content: center;
+    }
 
     .footer-info {
         flex-direction: column;
         gap: 1.5rem;
+    }
+    
+    /* Mobile button consistency for tablets */
+    .btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    .btn-small {
+        min-height: 44px;
+    }
+    
+    /* Mobile form improvements for tablets */
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        min-height: 44px;
+        font-size: 16px;
+    }
+    
+    .newsletter-form input {
+        min-height: 44px;
+        font-size: 16px;
     }
 
     .events-preview {
@@ -1632,6 +1753,39 @@ footer {
     
     .gallery-section {
         padding: 2rem 0;
+    }
+    
+    /* Mobile button improvements */
+    .btn {
+        min-height: 44px;
+        touch-action: manipulation;
+    }
+    
+    .btn-small {
+        min-height: 44px;
+    }
+    
+    /* Mobile form improvements */
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        min-height: 44px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .newsletter-form input {
+        min-height: 44px;
+        font-size: 16px;
+    }
+    
+    /* Mobile table improvements */
+    .admin-table {
+        font-size: 0.9rem;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 0.75rem 0.5rem;
     }
 }
 
