@@ -19,6 +19,32 @@ body {
     background: var(--white);
 }
 
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--white);
+    border: 1px solid var(--black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--yellow);
+    border: 2px solid var(--black);
+    border-radius: 0;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #e6b52a;
+}
+
+/* Firefox scrollbar styling */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--yellow) var(--white);
+}
+
 /* Navigation */
 .navbar {
     background: var(--yellow);
@@ -993,6 +1019,11 @@ footer {
     position: relative;
     max-width: 90vw;
     max-height: 90vh;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .lightbox-image {
@@ -1498,17 +1529,47 @@ footer {
     .event-preview {
         flex-direction: column;
         text-align: center;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
     }
 
     .event-preview .event-date {
-        min-width: auto;
-        margin-bottom: 1rem;
+        position: static;
+        margin: 0 auto 1rem auto;
+        font-size: 0.9rem;
+        padding: 0.4rem 0.8rem;
     }
 
     .event-preview .event-image {
-        margin-right: 0;
-        margin-bottom: 1rem;
+        width: 100%;
+        max-width: 300px;
+        height: 200px;
+        margin: 0 auto 1rem auto;
         align-self: center;
+        object-fit: cover;
+    }
+
+    .event-preview .event-details {
+        text-align: center;
+        padding: 0;
+    }
+
+    .event-preview .event-details h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .event-preview .venue,
+    .event-preview .time,
+    .event-preview .venue-address {
+        font-size: 0.9rem;
+        margin: 0.25rem 0;
+    }
+
+    .event-preview .description {
+        font-size: 0.9rem;
+        margin: 0.5rem 0;
+        line-height: 1.4;
     }
 
     .event-item .event-image {
@@ -1520,6 +1581,38 @@ footer {
     .event-image-container {
         flex-direction: column;
         text-align: center;
+    }
+
+    /* Compact events layout mobile optimization */
+    .events-compact .event-item {
+        flex-direction: column;
+        padding: 1.5rem;
+        text-align: center;
+    }
+
+    .events-compact .event-image {
+        width: 100%;
+        max-width: 250px;
+        height: 180px;
+        margin: 0 auto 1rem auto;
+        order: 1;
+    }
+
+    .events-compact .event-date {
+        position: static;
+        margin: 0 auto 1rem auto;
+        order: 2;
+    }
+
+    .events-compact .event-details {
+        order: 3;
+        padding: 0;
+        text-align: center;
+    }
+
+    .events-compact .rsvp-section {
+        margin-top: 1rem;
+        justify-content: center;
     }
 }
 
@@ -1596,6 +1689,7 @@ footer {
     justify-content: center;
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
 }
 
 .gallery-item:hover .gallery-overlay {
@@ -1633,21 +1727,6 @@ footer {
     flex-direction: column;
 }
 
-.lightbox-close {
-    position: absolute;
-    top: 1rem;
-    right: 2rem;
-    color: white;
-    font-size: 3rem;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 10000;
-    transition: color 0.3s ease;
-}
-
-.lightbox-close:hover {
-    color: var(--yellow);
-}
 
 #lightbox-image {
     max-width: 100%;
@@ -1672,9 +1751,9 @@ footer {
 }
 
 .lightbox-btn {
-    background: rgba(255,255,255,0.2);
-    border: 2px solid white;
-    color: white;
+    background: rgba(0,0,0,0.8);
+    border: 3px solid var(--yellow);
+    color: var(--yellow);
     font-size: 2rem;
     width: 60px;
     height: 60px;
@@ -1687,6 +1766,7 @@ footer {
     pointer-events: all;
     z-index: 10003;
     position: relative;
+    font-weight: bold;
 }
 
 .lightbox-btn:hover {
@@ -1731,13 +1811,31 @@ footer {
     }
     
     .lightbox-nav {
-        padding: 0 1rem;
+        padding: 0 0.5rem;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
     
     .lightbox-btn {
-        width: 50px;
-        height: 50px;
-        font-size: 1.5rem;
+        width: 70px;
+        height: 70px;
+        font-size: 2.5rem;
+        background: rgba(0,0,0,0.9);
+        border: 4px solid var(--yellow);
+        color: var(--yellow);
+        font-weight: bold;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        z-index: 10004;
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
+    .lightbox-btn:hover {
+        background: var(--yellow);
+        color: var(--black);
+        transform: scale(1.1);
     }
     
     .lightbox-counter {

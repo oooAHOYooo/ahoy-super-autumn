@@ -147,10 +147,11 @@ events, indie media{% endblock %}
         {% if gallery_images %}
         <div class="instagram-gallery">
             {% for image in gallery_images %}
-            <div class="gallery-item" data-lightbox="gallery" data-src="{{ image.src }}">
+            <div class="gallery-item">
                 <img src="{{ image.thumbnail }}?v=1" 
                      alt="{{ image.alt }}" 
                      class="gallery-thumbnail"
+                     data-lightbox="{{ image.src }}"
                      loading="lazy">
                 <div class="gallery-overlay">
                     <div class="gallery-icon">🔍</div>
@@ -168,117 +169,4 @@ events, indie media{% endblock %}
     </div>
 </section>
 
-<!-- Lightbox Modal -->
-<div id="lightbox-modal" class="lightbox-modal">
-    <div class="lightbox-content">
-        <span class="lightbox-close">&times;</span>
-        <img id="lightbox-image" src="" alt="">
-        <div class="lightbox-nav">
-            <button id="lightbox-prev" class="lightbox-btn">‹</button>
-            <button id="lightbox-next" class="lightbox-btn">›</button>
-        </div>
-        <div class="lightbox-counter">
-            <span id="lightbox-current">1</span> / <span id="lightbox-total">{{ gallery_images|length }}</span>
-        </div>
-    </div>
-</div>
-
-<script>
-// Lightbox functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const modal = document.getElementById('lightbox-modal');
-    const lightboxImage = document.getElementById('lightbox-image');
-    const closeBtn = document.querySelector('.lightbox-close');
-    const prevBtn = document.getElementById('lightbox-prev');
-    const nextBtn = document.getElementById('lightbox-next');
-    const currentSpan = document.getElementById('lightbox-current');
-    const totalSpan = document.getElementById('lightbox-total');
-    
-    const galleryItems = document.querySelectorAll('.gallery-item');
-    let currentIndex = 0;
-    
-    console.log('Found gallery items:', galleryItems.length);
-    
-    // Open lightbox
-    galleryItems.forEach((item, index) => {
-        console.log(`Gallery item ${index}:`, item.dataset.src);
-        item.addEventListener('click', function() {
-            currentIndex = index;
-            console.log('Clicked gallery item:', index, 'src:', item.dataset.src);
-            openLightbox();
-        });
-    });
-    
-    // Close lightbox
-    closeBtn.addEventListener('click', closeLightbox);
-    modal.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            closeLightbox();
-        }
-    });
-    
-    // Navigation
-    prevBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-        updateLightboxImage();
-    });
-    
-    nextBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        currentIndex = (currentIndex + 1) % galleryItems.length;
-        updateLightboxImage();
-    });
-    
-    // Keyboard navigation
-    document.addEventListener('keydown', function(e) {
-        if (modal.style.display === 'block') {
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') prevBtn.click();
-            if (e.key === 'ArrowRight') nextBtn.click();
-        }
-    });
-    
-    function openLightbox() {
-        console.log('Opening lightbox, current index:', currentIndex);
-        console.log('Total gallery items:', galleryItems.length);
-        modal.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-        updateLightboxImage();
-    }
-    
-    function closeLightbox() {
-        modal.style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-    
-    function updateLightboxImage() {
-        const currentItem = galleryItems[currentIndex];
-        const imageSrc = currentItem.dataset.src;
-        console.log('Loading image:', imageSrc); // Debug log
-        console.log('Lightbox image element:', lightboxImage);
-        console.log('Current item:', currentItem);
-        
-        if (!lightboxImage) {
-            console.error('Lightbox image element not found!');
-            return;
-        }
-        
-        lightboxImage.src = imageSrc;
-        lightboxImage.alt = currentItem.querySelector('img').alt;
-        currentSpan.textContent = currentIndex + 1;
-        
-        // Add error handling
-        lightboxImage.onerror = function() {
-            console.error('Failed to load image:', imageSrc);
-            lightboxImage.src = currentItem.querySelector('img').src; // Fallback to thumbnail
-        };
-        
-        // Add success handler
-        lightboxImage.onload = function() {
-            console.log('Image loaded successfully:', imageSrc);
-        };
-    }
-});
-</script>
 {% endblock %}
