@@ -9,7 +9,7 @@ in New Haven.{% endblock %}
 {% block content %}
 <div class="artist-hero">
     <h1>Want to Perform?</h1>
-    <p>We're always looking for talented artists to join our events. Whether
+    <p>We're always looking for artists to join our events. Whether
         you're a musician, poet, cabaret performer, or have another creative
         act, we'd love to hear from you!</p>
 </div>
@@ -23,6 +23,7 @@ in New Haven.{% endblock %}
 
             <form class="artist-submission-form" action="/artist-submission"
                 method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                 <div class="form-group">
                     <label for="name">Your Name *</label>
                     <input type="text" id="name" name="name"

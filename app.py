@@ -1,13 +1,30 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import json
 import os
 import socket
+import re
+import html
 from datetime import datetime, date
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-change-this-in-production')
+app.secret_key = os.environ.get('SECRET_KEY', 'eeeELLENsoCUTE')
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+# Security configurations
+app.config['WTF_CSRF_ENABLED'] = True
+app.config['WTF_CSRF_TIME_LIMIT'] = 3600  # 1 hour
+
+# Initialize security extensions
+csrf = CSRFProtect(app)
+limiter = Limiter(
+    key_func=get_remote_address,
+    default_limits=["200 per day", "50 per hour"]
+)
+limiter.init_app(app)
 
 # Ensure upload folder exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -17,6 +34,63 @@ class DateEncoder(json.JSONEncoder):
         if isinstance(obj, date):
             return obj.isoformat()
         return super().default(obj)
+
+# Security helper functions
+def sanitize_input(text, max_length=1000):
+    """Sanitize user input to prevent XSS and limit length"""
+    if not text:
+        return ""
+    
+    # Limit length
+    text = text[:max_length]
+    
+    # HTML escape
+    text = html.escape(text)
+    
+    # Remove potentially dangerous characters
+    text = re.sub(r'[<>"\']', '', text)
+    
+    return text.strip()
+
+def validate_email(email):
+    """Enhanced email validation"""
+    if not email:
+        return False
+    
+    # Basic format check
+    email_pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    if not re.match(email_pattern, email):
+        return False
+    
+    # Length check
+    if len(email) > 254:
+        return False
+    
+    return True
+
+def validate_url(url):
+    """Validate URL format"""
+    if not url:
+        return True  # Optional field
+    
+    url_pattern = r'^https?://[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}(/.*)?$'
+    return bool(re.match(url_pattern, url))
+
+def is_suspicious_content(text):
+    """Basic content filtering for spam/suspicious submissions"""
+    suspicious_patterns = [
+        r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+        r'(?i)(buy|sell|cheap|free|money|cash|loan|credit)',
+        r'(?i)(viagra|cialis|pharmacy|drug)',
+        r'(?i)(click here|visit now|limited time)',
+        r'[^\w\s@.-]',  # Too many special characters
+    ]
+    
+    for pattern in suspicious_patterns:
+        if re.search(pattern, text):
+            return True
+    
+    return False
 
 def load_events():
     """Load events from JSON file"""
@@ -92,13 +166,27 @@ def get_past_events():
     return sorted(past, key=lambda x: x['date'], reverse=True)
 
 def get_gallery_images():
-    """Get all gallery images from event-imgs folders - poetry first, then cabaret"""
+    """Get all gallery images from event-imgs folders - community-sent first, then poetry, then cabaret"""
     import os
     import glob
     
     gallery_images = []
     
-    # Get images from poets1 folder FIRST
+    # Get images from community-sent folder FIRST (top priority)
+    community_path = 'static/event-imgs/community-sent'
+    if os.path.exists(community_path):
+        image_files = glob.glob(os.path.join(community_path, '*.jpg'))
+        image_files.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
+        
+        for img_path in image_files:
+            filename = os.path.basename(img_path)
+            gallery_images.append({
+                'src': f'/static/event-imgs/community-sent/{filename}',
+                'alt': f'Community Photo {filename.split(".")[0]}',
+                'thumbnail': f'/static/event-imgs/community-sent/{filename}'
+            })
+    
+    # Get images from poets1 folder SECOND
     poets_path = 'static/event-imgs/poets1'
     if os.path.exists(poets_path):
         image_files = glob.glob(os.path.join(poets_path, '*.jpg'))
@@ -112,7 +200,7 @@ def get_gallery_images():
                 'thumbnail': f'/static/event-imgs/poets1/{filename}'
             })
     
-    # Get images from cabaret-1-2 folder SECOND
+    # Get images from cabaret-1-2 folder THIRD
     cabaret_path = 'static/event-imgs/cabaret-1-2'
     if os.path.exists(cabaret_path):
         image_files = glob.glob(os.path.join(cabaret_path, '*.jpg'))
@@ -273,40 +361,117 @@ def delete_event(event_id):
     return redirect(url_for('admin'))
 
 @app.route('/newsletter', methods=['POST'])
+@limiter.limit("5 per minute")  # Rate limiting
 def newsletter_signup():
-    email = request.form.get('email')
-    if email:
-        # Load existing newsletter data
-        newsletter_data = load_newsletter_data()
-        
-        # Check if email already exists
-        existing_subscriber = next((s for s in newsletter_data['subscribers'] if s['email'] == email), None)
-        if existing_subscriber:
-            flash('This email is already subscribed to our newsletter!', 'info')
-        else:
-            # Add new subscriber
-            subscriber = {
-                'id': datetime.now().isoformat(),
-                'email': email,
-                'signup_date': datetime.now().isoformat(),
-                'status': 'active'
-            }
-            newsletter_data['subscribers'].append(subscriber)
-            save_newsletter_data(newsletter_data)
-            flash('Thanks for subscribing to our newsletter!', 'success')
-    else:
+    email = request.form.get('email', '').strip()
+    
+    # Enhanced validation
+    if not email:
         flash('Please enter a valid email address.', 'error')
+        return redirect(request.referrer or url_for('home'))
+    
+    # Validate email format
+    if not validate_email(email):
+        flash('Please enter a valid email address.', 'error')
+        return redirect(request.referrer or url_for('home'))
+    
+    # Sanitize email
+    email = sanitize_input(email, 254)
+    
+    # Check for suspicious content
+    if is_suspicious_content(email):
+        flash('Invalid email format.', 'error')
+        return redirect(request.referrer or url_for('home'))
+    
+    # Load existing newsletter data
+    newsletter_data = load_newsletter_data()
+    
+    # Check if email already exists
+    existing_subscriber = next((s for s in newsletter_data['subscribers'] if s['email'] == email), None)
+    if existing_subscriber:
+        flash('This email is already subscribed to our newsletter!', 'info')
+    else:
+        # Collect only essential business data
+        now = datetime.now()
+        user_agent = request.headers.get('User-Agent', '')
+        referrer = request.referrer or ''
+        ip_address = request.remote_addr
+        
+        # Simple device type detection
+        device_type = "Desktop"
+        if user_agent:
+            if "Mobile" in user_agent or "Android" in user_agent or "iPhone" in user_agent:
+                device_type = "Mobile"
+            elif "Tablet" in user_agent or "iPad" in user_agent:
+                device_type = "Tablet"
+        
+        # Extract domain from referrer
+        referrer_domain = ""
+        if referrer:
+            try:
+                from urllib.parse import urlparse
+                parsed_url = urlparse(referrer)
+                referrer_domain = parsed_url.netloc
+            except:
+                referrer_domain = referrer[:100]
+        
+        # Generate human-readable ID
+        timestamp_str = now.strftime("%Y%m%d_%H%M%S")
+        email_prefix = email.split('@')[0][:8] if '@' in email else 'user'
+        human_id = f"sub_{timestamp_str}_{email_prefix}"
+        
+        # Basic geographic data from IP (simplified)
+        region = "Unknown"
+        country = "Unknown"
+        if ip_address:
+            # Simple IP-based region detection (you could integrate with a real service)
+            if ip_address.startswith('127.') or ip_address.startswith('192.168.') or ip_address.startswith('10.'):
+                region = "Local"
+                country = "Local"
+            elif ip_address.startswith('172.'):
+                region = "Local"
+                country = "Local"
+            else:
+                # For demo purposes - in production, use a real geolocation service
+                region = "North America"  # Default assumption
+                country = "US"  # Default assumption
+        
+        # Add new subscriber with essential business data (enhanced with regional info)
+        subscriber = {
+            'id': human_id,
+            'email': email,
+            'signup_date': now.strftime("%Y-%m-%d %H:%M:%S"),
+            'signup_timestamp': now.timestamp(),
+            'status': 'active',
+            'device_type': device_type,
+            'referrer_domain': referrer_domain,
+            'campaign_source': request.args.get('utm_source', ''),
+            'campaign_medium': request.args.get('utm_medium', ''),
+            'email_domain': email.split('@')[1] if '@' in email else '',
+            'is_mobile': device_type == "Mobile",
+            'region': region,
+            'country': country,
+            'signup_hour': now.hour,
+            'signup_weekday': now.strftime('%A'),
+            'timezone': 'EST'  # Could be detected from IP in production
+        }
+        
+        newsletter_data['subscribers'].append(subscriber)
+        save_newsletter_data(newsletter_data)
+        flash('Thanks for subscribing to our newsletter!', 'success')
     
     # Redirect back to the previous page
     return redirect(request.referrer or url_for('home'))
 
 @app.route('/artist-submission', methods=['POST'])
+@limiter.limit("3 per hour")  # Rate limiting for artist submissions
 def artist_submission():
-    name = request.form.get('name', '').strip()
+    # Get and sanitize form data
+    name = sanitize_input(request.form.get('name', ''), 100)
     email = request.form.get('email', '').strip()
-    performance_type = request.form.get('performance_type', '').strip()
-    description = request.form.get('description', '').strip()
-    availability = request.form.get('availability', '').strip()
+    performance_type = sanitize_input(request.form.get('performance_type', ''), 50)
+    description = sanitize_input(request.form.get('description', ''), 2000)
+    availability = sanitize_input(request.form.get('availability', ''), 500)
     links = request.form.get('links', '').strip()
     
     # Validate required fields
@@ -314,10 +479,34 @@ def artist_submission():
         flash('Please fill in all required fields.', 'error')
         return redirect(request.referrer or url_for('artist_submission_page'))
     
-    # Basic email validation
-    if '@' not in email or '.' not in email.split('@')[-1]:
+    # Enhanced email validation
+    if not validate_email(email):
         flash('Please enter a valid email address.', 'error')
         return redirect(request.referrer or url_for('artist_submission_page'))
+    
+    # Sanitize email
+    email = sanitize_input(email, 254)
+    
+    # Validate performance type (whitelist approach)
+    valid_performance_types = ['music', 'poetry', 'cabaret', 'comedy', 'dance', 'theater', 'other']
+    if performance_type not in valid_performance_types:
+        flash('Please select a valid performance type.', 'error')
+        return redirect(request.referrer or url_for('artist_submission_page'))
+    
+    # Validate URL if provided
+    if links and not validate_url(links):
+        flash('Please enter a valid URL for your links.', 'error')
+        return redirect(request.referrer or url_for('artist_submission_page'))
+    
+    # Sanitize URL
+    links = sanitize_input(links, 500)
+    
+    # Check for suspicious content
+    suspicious_fields = [name, description, availability]
+    for field in suspicious_fields:
+        if is_suspicious_content(field):
+            flash('Your submission contains content that appears to be spam. Please review and resubmit.', 'error')
+            return redirect(request.referrer or url_for('artist_submission_page'))
     
     # Load existing artist submissions
     artist_data = load_artist_submissions()
@@ -337,7 +526,9 @@ def artist_submission():
             'availability': availability,
             'links': links,
             'submission_date': datetime.now().isoformat(),
-            'status': 'pending'
+            'status': 'pending',
+            'ip_address': request.remote_addr,
+            'user_agent': request.headers.get('User-Agent', '')[:200]
         }
         artist_data['submissions'].append(submission)
         save_artist_submissions(artist_data)

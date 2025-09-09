@@ -1,3 +1,26 @@
 {
-  "submissions": []
+  "submissions": [
+    {
+      "id": "2025-09-09T19:23:23.725091",
+      "name": "Alex Gonzalez",
+      "email": "alex@ahoy.ooo",
+      "performance_type": "music",
+      "description": "Musician",
+      "availability": "Friday Nights",
+      "links": "",
+      "submission_date": "2025-09-09T19:23:23.725107",
+      "status": "pending"
+    },
+    {
+      "id": "2025-09-09T19:32:46.801602",
+      "name": "Test McGee",
+      "email": "yoyo@mama.com",
+      "performance_type": "cabaret",
+      "description": "I juggle",
+      "availability": "",
+      "links": "",
+      "submission_date": "2025-09-09T19:32:46.801617",
+      "status": "pending"
+    }
+  ]
 }
