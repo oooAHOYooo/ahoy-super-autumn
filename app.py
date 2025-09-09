@@ -78,27 +78,39 @@ def get_past_events():
     return sorted(past, key=lambda x: x['date'], reverse=True)
 
 def get_gallery_images():
-    """Get all gallery images from event-imgs folder"""
+    """Get all gallery images from event-imgs folders - poetry first, then cabaret"""
     import os
     import glob
     
-    gallery_path = 'static/event-imgs/cabaret-1-2'
-    if not os.path.exists(gallery_path):
-        return []
-    
-    # Get all jpg files and sort them numerically
-    image_files = glob.glob(os.path.join(gallery_path, '*.jpg'))
-    image_files.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
-    
-    # Convert to web paths
     gallery_images = []
-    for img_path in image_files:
-        filename = os.path.basename(img_path)
-        gallery_images.append({
-            'src': f'/static/event-imgs/cabaret-1-2/{filename}',
-            'alt': f'Event Photo {filename.split(".")[0]}',
-            'thumbnail': f'/static/event-imgs/cabaret-1-2/{filename}'
-        })
+    
+    # Get images from poets1 folder FIRST
+    poets_path = 'static/event-imgs/poets1'
+    if os.path.exists(poets_path):
+        image_files = glob.glob(os.path.join(poets_path, '*.jpg'))
+        image_files.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
+        
+        for img_path in image_files:
+            filename = os.path.basename(img_path)
+            gallery_images.append({
+                'src': f'/static/event-imgs/poets1/{filename}',
+                'alt': f'Poets and Friends Photo {filename.split(".")[0]}',
+                'thumbnail': f'/static/event-imgs/poets1/{filename}'
+            })
+    
+    # Get images from cabaret-1-2 folder SECOND
+    cabaret_path = 'static/event-imgs/cabaret-1-2'
+    if os.path.exists(cabaret_path):
+        image_files = glob.glob(os.path.join(cabaret_path, '*.jpg'))
+        image_files.sort(key=lambda x: int(os.path.basename(x).split('.')[0]))
+        
+        for img_path in image_files:
+            filename = os.path.basename(img_path)
+            gallery_images.append({
+                'src': f'/static/event-imgs/cabaret-1-2/{filename}',
+                'alt': f'Cabaret Event Photo {filename.split(".")[0]}',
+                'thumbnail': f'/static/event-imgs/cabaret-1-2/{filename}'
+            })
     
     return gallery_images
 

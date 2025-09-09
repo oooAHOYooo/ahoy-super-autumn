@@ -62,6 +62,13 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
                     alt="{{ event.title }} - {{ event.venue or 'New Haven Event' }}"
                     class="event-image" data-lightbox="{{ event.image }}">
                 {% endif %}
+                {% if event.photos %}
+                <div class="event-photos" style="display: none;">
+                    {% for photo in event.photos %}
+                    <img src="{{ photo }}" alt="{{ event.title }} - Photo {{ loop.index }}" data-lightbox="{{ photo }}">
+                    {% endfor %}
+                </div>
+                {% endif %}
                 <div class="event-date">{{ event.date }}</div>
                 <!-- Countdown timer for upcoming events -->
                 <div class="countdown-timer"
