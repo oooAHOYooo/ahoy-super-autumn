@@ -63,11 +63,13 @@
         <nav class="navbar">
             <div class="nav-container">
                 <a href="/" class="nav-logo">
-                    <img src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}" 
-                         alt="AHOY Indie Media" 
-                         class="logo-image"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                    <span class="logo-fallback" style="display: none;">AHOY</span>
+                    <img
+                        src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}"
+                        alt="AHOY Indie Media"
+                        class="logo-image"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <span class="logo-fallback"
+                        style="display: none;">AHOY</span>
                 </a>
                 <div class="nav-links">
                     <a href="/">Home</a>
@@ -95,10 +97,11 @@
         <footer>
             <div class="footer-content">
                 <div class="footer-brand">
-                    <img src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}" 
-                         alt="AHOY Indie Media" 
-                         class="footer-logo-image"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img
+                        src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}"
+                        alt="AHOY Indie Media"
+                        class="footer-logo-image"
+                        onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div class="footer-logo-fallback" style="display: none;">
                         <div class="footer-logo">AHOY</div>
                         <div class="footer-subtitle">INDIE MEDIA</div>
@@ -119,6 +122,13 @@
                             <button type="submit"
                                 class="btn btn-small">Subscribe</button>
                         </form>
+                    </div>
+                    <div class="artist-submission">
+                        <h4>Want to Perform?</h4>
+                        <p>Submit your performance proposal and join our
+                            community of artists!</p>
+                        <a href="/artist-submission"
+                            class="btn btn-small">Submit Proposal</a>
                     </div>
                     <div class="policy-links">
                         <h4>Legal</h4>
@@ -144,7 +154,8 @@
                     <button id="lightbox-next" class="lightbox-btn">›</button>
                 </div>
                 <div class="lightbox-counter">
-                    <span id="lightbox-current">1</span> / <span id="lightbox-total">1</span>
+                    <span id="lightbox-current">1</span> / <span
+                        id="lightbox-total">1</span>
                 </div>
             </div>
         </div>

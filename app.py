@@ -45,6 +45,20 @@ def save_newsletter_data(newsletter_data):
     with open('data/newsletter.json', 'w') as f:
         json.dump(newsletter_data, f, indent=2, cls=DateEncoder)
 
+def load_artist_submissions():
+    """Load artist submissions from JSON file"""
+    try:
+        with open('data/artist_submissions.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"submissions": []}
+
+def save_artist_submissions(artist_data):
+    """Save artist submissions to JSON file"""
+    os.makedirs('data', exist_ok=True)
+    with open('data/artist_submissions.json', 'w') as f:
+        json.dump(artist_data, f, indent=2, cls=DateEncoder)
+
 def save_events(events_data):
     """Save events to JSON file"""
     os.makedirs('data', exist_ok=True)
@@ -150,6 +164,10 @@ def events():
 def download():
     return render_template('download.html')
 
+@app.route('/artist-submission')
+def artist_submission_page():
+    return render_template('artist_submission.html')
+
 @app.route('/service-policy')
 def service_policy():
     current_date = datetime.now().strftime('%B %d, %Y')
@@ -164,6 +182,7 @@ def privacy_policy():
 def admin():
     events = load_events()['events']
     newsletter_data = load_newsletter_data()
+    artist_data = load_artist_submissions()
     
     # Get all RSVPs from all events
     all_rsvps = []
@@ -177,10 +196,14 @@ def admin():
     # Sort RSVPs by date (newest first)
     all_rsvps.sort(key=lambda x: x['rsvp_date'], reverse=True)
     
+    # Sort artist submissions by date (newest first)
+    artist_submissions = sorted(artist_data['submissions'], key=lambda x: x['submission_date'], reverse=True)
+    
     return render_template('admin.html', 
                          events=events, 
                          subscribers=newsletter_data['subscribers'],
-                         all_rsvps=all_rsvps)
+                         all_rsvps=all_rsvps,
+                         artist_submissions=artist_submissions)
 
 @app.route('/admin/event/new', methods=['GET', 'POST'])
 def new_event():
@@ -276,6 +299,52 @@ def newsletter_signup():
     
     # Redirect back to the previous page
     return redirect(request.referrer or url_for('home'))
+
+@app.route('/artist-submission', methods=['POST'])
+def artist_submission():
+    name = request.form.get('name', '').strip()
+    email = request.form.get('email', '').strip()
+    performance_type = request.form.get('performance_type', '').strip()
+    description = request.form.get('description', '').strip()
+    availability = request.form.get('availability', '').strip()
+    links = request.form.get('links', '').strip()
+    
+    # Validate required fields
+    if not name or not email or not performance_type or not description:
+        flash('Please fill in all required fields.', 'error')
+        return redirect(request.referrer or url_for('artist_submission_page'))
+    
+    # Basic email validation
+    if '@' not in email or '.' not in email.split('@')[-1]:
+        flash('Please enter a valid email address.', 'error')
+        return redirect(request.referrer or url_for('artist_submission_page'))
+    
+    # Load existing artist submissions
+    artist_data = load_artist_submissions()
+    
+    # Check if email already exists
+    existing_submission = next((s for s in artist_data['submissions'] if s['email'] == email), None)
+    if existing_submission:
+        flash('We already have a submission from this email address. We\'ll be in touch soon!', 'info')
+    else:
+        # Add new artist submission
+        submission = {
+            'id': datetime.now().isoformat(),
+            'name': name,
+            'email': email,
+            'performance_type': performance_type,
+            'description': description,
+            'availability': availability,
+            'links': links,
+            'submission_date': datetime.now().isoformat(),
+            'status': 'pending'
+        }
+        artist_data['submissions'].append(submission)
+        save_artist_submissions(artist_data)
+        flash('Thanks for your submission! We\'ll review it and get back to you soon.', 'success')
+    
+    # Redirect back to the artist submission page
+    return redirect(url_for('artist_submission_page'))
 
 @app.route('/rsvp/<event_id>', methods=['POST'])
 def rsvp_event(event_id):
@@ -383,6 +452,12 @@ def export_newsletter():
     newsletter_data = load_newsletter_data()
     return jsonify(newsletter_data)
 
+@app.route('/admin/export/artist-submissions')
+def export_artist_submissions():
+    """Export artist submissions as JSON"""
+    artist_data = load_artist_submissions()
+    return jsonify(artist_data)
+
 @app.route('/admin/export/rsvps')
 def export_rsvps():
     """Export all RSVPs as JSON"""
@@ -399,9 +474,10 @@ def export_rsvps():
 
 @app.route('/admin/export/all')
 def export_all_data():
-    """Export all data (events, newsletter, RSVPs) as JSON"""
+    """Export all data (events, newsletter, artist submissions, RSVPs) as JSON"""
     events_data = load_events()
     newsletter_data = load_newsletter_data()
+    artist_data = load_artist_submissions()
     
     # Get all RSVPs
     all_rsvps = []
@@ -415,6 +491,7 @@ def export_all_data():
     return jsonify({
         "events": events_data['events'],
         "newsletter_subscribers": newsletter_data['subscribers'],
+        "artist_submissions": artist_data['submissions'],
         "rsvps": all_rsvps,
         "export_date": datetime.now().isoformat()
     })

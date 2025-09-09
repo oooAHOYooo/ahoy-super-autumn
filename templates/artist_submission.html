@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Artist Submission - AHOY Indie Media{% endblock %}
+
+{% block meta_description %}Submit your performance proposal to AHOY Indie
+Media. We're looking for musicians, poets, cabaret performers, and other artists
+in New Haven.{% endblock %}
+
+{% block content %}
+<div class="artist-hero">
+    <h1>Want to Perform?</h1>
+    <p>We're always looking for talented artists to join our events. Whether
+        you're a musician, poet, cabaret performer, or have another creative
+        act, we'd love to hear from you!</p>
+</div>
+
+<section class="artist-submission-section">
+    <div class="container">
+        <div class="submission-form-container">
+            <h2>Submit Your Performance Proposal</h2>
+            <p class="form-description">Tell us about yourself and your act.
+                We'll review your submission and get back to you soon!</p>
+
+            <form class="artist-submission-form" action="/artist-submission"
+                method="POST">
+                <div class="form-group">
+                    <label for="name">Your Name *</label>
+                    <input type="text" id="name" name="name"
+                        placeholder="Enter your full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input type="email" id="email" name="email"
+                        placeholder="your.email@example.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="performance_type">Performance Type *</label>
+                    <select id="performance_type" name="performance_type"
+                        required>
+                        <option value>Select your performance type</option>
+                        <option value="music">Music</option>
+                        <option value="poetry">Poetry/Spoken Word</option>
+                        <option value="cabaret">Cabaret</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="dance">Dance</option>
+                        <option value="theater">Theater</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Tell us about your act *</label>
+                    <textarea id="description" name="description"
+                        placeholder="Describe your performance, style, experience, and what makes you unique. Include any links to videos, recordings, or portfolios if available."
+                        rows="6" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="availability">Availability & Preferences</label>
+                    <textarea id="availability" name="availability"
+                        placeholder="When are you available to perform? Any venue preferences? Special requirements?"
+                        rows="3"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="links">Links (Optional)</label>
+                    <input type="url" id="links" name="links"
+                        placeholder="Website, social media, or portfolio links">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit"
+                        class="btn btn-primary btn-large">Submit
+                        Proposal</button>
+                    <a href="/" class="btn btn-secondary">Back to Home</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="submission-info">
+            <h3>What Happens Next?</h3>
+            <div class="info-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>Review</h4>
+                        <p>We'll review your submission within 3-5 business
+                            days</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>Contact</h4>
+                        <p>If we're interested, we'll reach out to discuss
+                            details</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>Perform</h4>
+                        <p>Join us for an amazing performance at one of our
+                            events!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="artist-guidelines">
+    <div class="container">
+        <h2>What We're Looking For</h2>
+        <div class="guidelines-grid">
+            <div class="guideline">
+                <h3>🎵 Music</h3>
+                <p>Original compositions, covers, or experimental sounds that
+                    fit our indie vibe</p>
+            </div>
+            <div class="guideline">
+                <h3>📝 Poetry & Spoken Word</h3>
+                <p>Thought-provoking poetry, storytelling, and spoken word
+                    performances</p>
+            </div>
+            <div class="guideline">
+                <h3>🎭 Cabaret</h3>
+                <p>Intimate performances, burlesque, drag, or theatrical
+                    acts</p>
+            </div>
+            <div class="guideline">
+                <h3>🎪 Other Creative Acts</h3>
+                <p>Comedy, dance, theater, or any unique performance art</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

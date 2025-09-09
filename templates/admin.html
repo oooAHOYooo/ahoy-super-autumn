@@ -6,11 +6,18 @@
 <div class="admin-header">
     <h1>Admin Panel</h1>
     <div class="admin-actions">
-        <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New Event</a>
+        <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New
+            Event</a>
         <div class="export-buttons">
-            <a href="{{ url_for('export_newsletter') }}" class="btn btn-secondary" target="_blank">Export Newsletter</a>
-            <a href="{{ url_for('export_rsvps') }}" class="btn btn-secondary" target="_blank">Export RSVPs</a>
-            <a href="{{ url_for('export_all_data') }}" class="btn btn-secondary" target="_blank">Export All Data</a>
+            <a href="{{ url_for('export_newsletter') }}"
+                class="btn btn-secondary" target="_blank">Export Newsletter</a>
+            <a href="{{ url_for('export_artist_submissions') }}"
+                class="btn btn-secondary" target="_blank">Export Artist
+                Submissions</a>
+            <a href="{{ url_for('export_rsvps') }}" class="btn btn-secondary"
+                target="_blank">Export RSVPs</a>
+            <a href="{{ url_for('export_all_data') }}" class="btn btn-secondary"
+                target="_blank">Export All Data</a>
         </div>
     </div>
 </div>
@@ -88,6 +95,63 @@
         </div>
         {% else %}
         <p>No newsletter subscribers yet.</p>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Artist Submissions Section -->
+<section class="admin-section">
+    <div class="container">
+        <h2>Artist Submissions ({{ artist_submissions|length }})</h2>
+        {% if artist_submissions %}
+        <div class="admin-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Performance Type</th>
+                        <th>Description</th>
+                        <th>Availability</th>
+                        <th>Links</th>
+                        <th>Submission Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for submission in artist_submissions %}
+                    <tr>
+                        <td>{{ submission.name }}</td>
+                        <td>{{ submission.email }}</td>
+                        <td>{{ submission.performance_type.title() }}</td>
+                        <td>{{ submission.description[:50] }}{% if
+                            submission.description|length > 50 %}...{% endif
+                            %}</td>
+                        <td>{{ submission.availability[:30] }}{% if
+                            submission.availability|length > 30 %}...{% endif
+                            %}</td>
+                        <td>
+                            {% if submission.links %}
+                            <a href="{{ submission.links }}" target="_blank"
+                                class="btn btn-small">View</a>
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>{{ submission.submission_date[:10] }}</td>
+                        <td>
+                            <span
+                                class="status-badge status-{{ submission.status }}">
+                                {{ submission.status.title() }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>No artist submissions yet.</p>
         {% endif %}
     </div>
 </section>

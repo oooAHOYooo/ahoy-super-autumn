@@ -756,6 +756,257 @@ footer {
     box-shadow: 0 0 0 2px rgba(244, 196, 48, 0.3);
 }
 
+/* Artist Submission Form - Footer */
+.artist-submission h4 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+}
+
+.artist-submission p {
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+/* Artist Submission Page */
+.artist-hero {
+    background: var(--yellow);
+    padding: 6rem 2rem;
+    text-align: center;
+    min-height: 60vh;
+    max-height: 70vh;
+    height: 65vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+}
+
+.artist-hero h1 {
+    font-size: 4.5rem;
+    font-weight: bold;
+    color: var(--black);
+    margin-bottom: 1.5rem;
+    line-height: 1.1;
+}
+
+.artist-hero p {
+    font-size: 1.4rem;
+    color: var(--dark-gray);
+    margin-bottom: 2rem;
+    max-width: 800px;
+    line-height: 1.6;
+}
+
+.artist-submission-section {
+    padding: 4rem 0;
+    background: var(--white);
+}
+
+.submission-form-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.submission-form-container h2 {
+    font-size: 2.5rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.form-description {
+    text-align: center;
+    color: var(--light-gray);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.artist-submission-form {
+    background: #f8f9fa;
+    padding: 3rem;
+    border: 3px solid var(--black);
+    border-radius: 8px;
+}
+
+.artist-submission-form .form-group {
+    margin-bottom: 2rem;
+}
+
+.artist-submission-form .form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: bold;
+    color: var(--black);
+    font-size: 1.1rem;
+}
+
+.artist-submission-form .form-group input,
+.artist-submission-form .form-group select,
+.artist-submission-form .form-group textarea {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--black);
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--white);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.artist-submission-form .form-group input:focus,
+.artist-submission-form .form-group select:focus,
+.artist-submission-form .form-group textarea:focus {
+    outline: none;
+    border-color: var(--yellow);
+    box-shadow: 0 0 0 3px rgba(244, 196, 48, 0.3);
+    transform: translateY(-2px);
+}
+
+.artist-submission-form .form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.artist-submission-form .form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.submission-info {
+    margin-top: 4rem;
+    text-align: center;
+}
+
+.submission-info h3 {
+    font-size: 2rem;
+    color: var(--black);
+    margin-bottom: 2rem;
+}
+
+.info-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    text-align: left;
+}
+
+.step-number {
+    background: var(--yellow);
+    color: var(--black);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    border: 2px solid var(--black);
+}
+
+.step-content h4 {
+    color: var(--black);
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+}
+
+.step-content p {
+    color: var(--dark-gray);
+    line-height: 1.5;
+}
+
+.artist-guidelines {
+    padding: 4rem 0;
+    background: #f8f9fa;
+}
+
+.artist-guidelines h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--black);
+    margin-bottom: 3rem;
+}
+
+.guidelines-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.guideline {
+    background: var(--white);
+    padding: 2rem;
+    border: 2px solid var(--black);
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.guideline:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.guideline h3 {
+    font-size: 1.5rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+}
+
+.guideline p {
+    color: var(--dark-gray);
+    line-height: 1.6;
+}
+
+/* Status Badge for Admin */
+.status-badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.status-active {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
 /* Events Preview Styles */
 .latest-events {
     padding: 3rem 0;
@@ -1364,7 +1615,8 @@ footer {
     .about-hero h1,
     .download-hero h1,
     .events-header h1,
-    .policy-hero h1 {
+    .policy-hero h1,
+    .artist-hero h1 {
         font-size: 3.5rem;
     }
 
@@ -1372,7 +1624,8 @@ footer {
     .about-hero p,
     .download-hero p,
     .events-header p,
-    .policy-hero p {
+    .policy-hero p,
+    .artist-hero p {
         font-size: 1.2rem;
     }
 
@@ -1380,11 +1633,62 @@ footer {
     .about-hero,
     .download-hero,
     .events-header,
-    .policy-hero {
+    .policy-hero,
+    .artist-hero {
         padding: 6rem 1.5rem;
         min-height: 65vh;
         max-height: 75vh;
         height: 70vh;
+    }
+
+    /* Artist Submission Page Mobile */
+    .submission-form-container h2 {
+        font-size: 2rem;
+    }
+
+    .artist-submission-form {
+        padding: 2rem 1.5rem;
+    }
+
+    .artist-submission-form .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .artist-submission-form .form-group input,
+    .artist-submission-form .form-group select,
+    .artist-submission-form .form-group textarea {
+        min-height: 44px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+    }
+
+    .artist-submission-form .form-actions {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .artist-submission-form .form-actions .btn {
+        width: 100%;
+    }
+
+    .info-steps {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .step {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.75rem;
+    }
+
+    .guidelines-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .guideline {
+        padding: 1.5rem;
     }
 
     .roadmap-item {
@@ -1459,6 +1763,19 @@ footer {
     .newsletter-form .btn {
         width: 100%;
         margin-top: 0.5rem;
+    }
+
+    .artist-form .btn {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .artist-form input,
+    .artist-form select,
+    .artist-form textarea {
+        min-height: 44px;
+        font-size: 16px;
+        /* Prevents zoom on iOS */
     }
 
     .admin-table .actions .btn {
