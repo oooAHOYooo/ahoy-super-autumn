@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify, send_from_directory, session
 from flask_wtf.csrf import CSRFProtect
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
@@ -7,8 +7,11 @@ import os
 import socket
 import re
 import html
-from datetime import datetime, date
+import hashlib
+from datetime import datetime, date, timedelta
+from collections import defaultdict, Counter
 from werkzeug.utils import secure_filename
+from user_agents import parse
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'eeeELLENsoCUTE')
@@ -91,6 +94,149 @@ def is_suspicious_content(text):
             return True
     
     return False
+
+# Analytics Functions
+def get_visitor_id(request):
+    """Create anonymous visitor ID"""
+    ip = request.environ.get('HTTP_X_FORWARDED_FOR', request.environ.get('REMOTE_ADDR', ''))
+    user_agent = request.headers.get('User-Agent', '')
+    # Create hash for privacy
+    visitor_string = f"{ip}_{user_agent}"
+    return hashlib.md5(visitor_string.encode()).hexdigest()[:12]
+
+def track_visit(request):
+    """Track page visit"""
+    try:
+        # Create analytics directory if it doesn't exist
+        os.makedirs('analytics', exist_ok=True)
+        
+        # Parse user agent for device info
+        user_agent = parse(request.headers.get('User-Agent', ''))
+        
+        visit_data = {
+            'timestamp': datetime.now().isoformat(),
+            'visitor_id': get_visitor_id(request),
+            'page': request.path,
+            'method': request.method,
+            'referrer': request.headers.get('Referer', ''),
+            'device': {
+                'is_mobile': user_agent.is_mobile,
+                'is_tablet': user_agent.is_tablet,
+                'is_pc': user_agent.is_pc,
+                'browser': user_agent.browser.family,
+                'os': user_agent.os.family
+            },
+            'query_params': dict(request.args)
+        }
+        
+        # Save to daily file
+        today = datetime.now().strftime('%Y-%m-%d')
+        filename = f'analytics/visits_{today}.json'
+        
+        with open(filename, 'a') as f:
+            f.write(json.dumps(visit_data) + '\n')
+            
+    except Exception as e:
+        # Don't break the site if analytics fails
+        print(f"Analytics error: {e}")
+
+def load_analytics_data(days=7):
+    """Load analytics data from the last N days"""
+    all_visits = []
+    
+    for i in range(days):
+        date = (datetime.now() - timedelta(days=i)).strftime('%Y-%m-%d')
+        filename = f'analytics/visits_{date}.json'
+        
+        if os.path.exists(filename):
+            try:
+                with open(filename, 'r') as f:
+                    for line in f:
+                        if line.strip():
+                            all_visits.append(json.loads(line))
+            except Exception as e:
+                print(f"Error loading {filename}: {e}")
+    
+    return all_visits
+
+def analyze_data(visits):
+    """Analyze visit data and return insights"""
+    if not visits:
+        return {}
+    
+    # Basic stats
+    total_visits = len(visits)
+    unique_visitors = len(set(visit['visitor_id'] for visit in visits))
+    
+    # Page popularity
+    page_views = Counter(visit['page'] for visit in visits)
+    
+    # Device breakdown
+    mobile_visits = sum(1 for visit in visits if visit['device']['is_mobile'])
+    tablet_visits = sum(1 for visit in visits if visit['device']['is_tablet'])
+    desktop_visits = sum(1 for visit in visits if visit['device']['is_pc'])
+    
+    # Browser stats
+    browsers = Counter(visit['device']['browser'] for visit in visits)
+    
+    # Hourly traffic
+    hourly_traffic = defaultdict(int)
+    for visit in visits:
+        hour = datetime.fromisoformat(visit['timestamp']).hour
+        hourly_traffic[hour] += 1
+    
+    # Daily traffic
+    daily_traffic = defaultdict(int)
+    for visit in visits:
+        date = datetime.fromisoformat(visit['timestamp']).strftime('%Y-%m-%d')
+        daily_traffic[date] += 1
+    
+    # Referrer analysis
+    referrers = []
+    for visit in visits:
+        ref = visit.get('referrer', '')
+        if ref:
+            if 'google' in ref.lower():
+                referrers.append('Google')
+            elif 'facebook' in ref.lower():
+                referrers.append('Facebook')
+            elif 'instagram' in ref.lower():
+                referrers.append('Instagram')
+            elif 'twitter' in ref.lower():
+                referrers.append('Twitter')
+            else:
+                referrers.append('Other')
+        else:
+            referrers.append('Direct')
+    
+    referrer_stats = Counter(referrers)
+    
+    return {
+        'total_visits': total_visits,
+        'unique_visitors': unique_visitors,
+        'page_views': dict(page_views.most_common(10)),
+        'device_breakdown': {
+            'mobile': mobile_visits,
+            'tablet': tablet_visits,
+            'desktop': desktop_visits
+        },
+        'browsers': dict(browsers.most_common(5)),
+        'hourly_traffic': dict(hourly_traffic),
+        'daily_traffic': dict(sorted(daily_traffic.items())),
+        'referrers': dict(referrer_stats)
+    }
+
+# Admin Authentication
+def require_admin_auth(f):
+    """Decorator to require admin authentication"""
+    from functools import wraps
+    
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session.get('admin_logged_in'):
+            return redirect(url_for('admin_login'))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def load_events():
     """Load events from JSON file"""
@@ -227,6 +373,39 @@ def find_available_port(start_port=5000, max_attempts=10):
             continue
     raise RuntimeError(f"Could not find an available port starting from {start_port}")
 
+# Before request handler for analytics
+@app.before_request
+def before_request():
+    """Track every request"""
+    # Skip tracking for static files and admin analytics
+    if (request.endpoint and 
+        not request.endpoint.startswith('static') and 
+        request.path != '/admin/analytics' and
+        request.path != '/admin/login'):
+        track_visit(request)
+
+# Admin Authentication Routes
+@app.route('/admin/login', methods=['GET', 'POST'])
+def admin_login():
+    """Admin login page"""
+    if request.method == 'POST':
+        password = request.form.get('password', '')
+        if password == 'eeeELLENsoCUTE':
+            session['admin_logged_in'] = True
+            flash('Successfully logged in!', 'success')
+            return redirect(url_for('admin'))
+        else:
+            flash('Invalid password!', 'error')
+    
+    return render_template('admin_login.html')
+
+@app.route('/admin/logout')
+def admin_logout():
+    """Admin logout"""
+    session.pop('admin_logged_in', None)
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('home'))
+
 # Routes
 @app.route('/')
 def home():
@@ -267,6 +446,7 @@ def privacy_policy():
     return render_template('privacy_policy.html', current_date=current_date)
 
 @app.route('/admin')
+@require_admin_auth
 def admin():
     events = load_events()['events']
     newsletter_data = load_newsletter_data()
@@ -292,6 +472,38 @@ def admin():
                          subscribers=newsletter_data['subscribers'],
                          all_rsvps=all_rsvps,
                          artist_submissions=artist_submissions)
+
+@app.route('/admin/analytics')
+@require_admin_auth
+def analytics_dashboard():
+    """Analytics dashboard for admins"""
+    days = request.args.get('days', 7, type=int)
+    visits = load_analytics_data(days)
+    stats = analyze_data(visits)
+    
+    return render_template('analytics.html', 
+                         stats=stats, 
+                         days=days,
+                         raw_visits=visits[-50:])  # Last 50 visits for recent activity
+
+@app.route('/admin/analytics/export')
+@require_admin_auth
+def export_analytics():
+    """Export analytics data as JSON"""
+    days = request.args.get('days', 30, type=int)
+    visits = load_analytics_data(days)
+    stats = analyze_data(visits)
+    
+    response = app.response_class(
+        response=json.dumps({
+            'stats': stats,
+            'visits': visits
+        }, indent=2),
+        status=200,
+        mimetype='application/json'
+    )
+    response.headers['Content-Disposition'] = f'attachment; filename=ahoy_analytics_{datetime.now().strftime("%Y%m%d")}.json'
+    return response
 
 @app.route('/admin/event/new', methods=['GET', 'POST'])
 def new_event():

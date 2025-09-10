@@ -1,0 +1,425 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics Dashboard - AHOY Indie Media{% endblock %}
+
+{% block content %}
+<div class="analytics-container">
+    <div class="analytics-header">
+        <h1>📊 Analytics Dashboard</h1>
+        <div class="analytics-actions">
+            <a href="{{ url_for('admin') }}" class="btn btn-secondary">Back to Admin</a>
+            <a href="{{ url_for('export_analytics') }}" class="btn btn-primary">Export Data</a>
+            <a href="{{ url_for('admin_logout') }}" class="btn btn-outline">Logout</a>
+        </div>
+    </div>
+
+    <div class="analytics-filters">
+        <form method="GET" class="filter-form">
+            <label for="days">Show last:</label>
+            <select name="days" id="days" onchange="this.form.submit()">
+                <option value="1" {% if days == 1 %}selected{% endif %}>1 day</option>
+                <option value="7" {% if days == 7 %}selected{% endif %}>7 days</option>
+                <option value="30" {% if days == 30 %}selected{% endif %}>30 days</option>
+                <option value="90" {% if days == 90 %}selected{% endif %}>90 days</option>
+            </select>
+        </form>
+    </div>
+
+    {% if stats %}
+    <div class="analytics-grid">
+        <!-- Overview Cards -->
+        <div class="stats-card">
+            <h3>📈 Overview</h3>
+            <div class="stat-item">
+                <span class="stat-label">Total Visits:</span>
+                <span class="stat-value">{{ stats.total_visits }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Unique Visitors:</span>
+                <span class="stat-value">{{ stats.unique_visitors }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Avg. Visits per Visitor:</span>
+                <span class="stat-value">{{ "%.1f"|format(stats.total_visits / stats.unique_visitors if stats.unique_visitors > 0 else 0) }}</span>
+            </div>
+        </div>
+
+        <!-- Device Breakdown -->
+        <div class="stats-card">
+            <h3>📱 Device Breakdown</h3>
+            <div class="stat-item">
+                <span class="stat-label">Mobile:</span>
+                <span class="stat-value">{{ stats.device_breakdown.mobile }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Desktop:</span>
+                <span class="stat-value">{{ stats.device_breakdown.desktop }}</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Tablet:</span>
+                <span class="stat-value">{{ stats.device_breakdown.tablet }}</span>
+            </div>
+        </div>
+
+        <!-- Top Pages -->
+        <div class="stats-card full-width">
+            <h3>🔥 Most Popular Pages</h3>
+            <div class="page-list">
+                {% for page, views in stats.page_views.items() %}
+                <div class="page-item">
+                    <span class="page-url">{{ page }}</span>
+                    <span class="page-views">{{ views }} views</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Traffic Sources -->
+        <div class="stats-card">
+            <h3>🌐 Traffic Sources</h3>
+            {% for source, count in stats.referrers.items() %}
+            <div class="stat-item">
+                <span class="stat-label">{{ source }}:</span>
+                <span class="stat-value">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Browser Stats -->
+        <div class="stats-card">
+            <h3>🌍 Browsers</h3>
+            {% for browser, count in stats.browsers.items() %}
+            <div class="stat-item">
+                <span class="stat-label">{{ browser }}:</span>
+                <span class="stat-value">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Hourly Traffic -->
+        <div class="stats-card full-width">
+            <h3>⏰ Peak Hours</h3>
+            <div class="hourly-chart">
+                {% for hour in range(24) %}
+                <div class="hour-bar">
+                    <div class="hour-label">{{ hour }}:00</div>
+                    <div class="hour-visits" style="height: {{ (stats.hourly_traffic.get(hour, 0) / stats.total_visits * 100) if stats.total_visits > 0 else 0 }}%"></div>
+                    <div class="hour-count">{{ stats.hourly_traffic.get(hour, 0) }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Daily Traffic -->
+        <div class="stats-card full-width">
+            <h3>📅 Daily Traffic</h3>
+            <div class="daily-chart">
+                {% for date, count in stats.daily_traffic.items() %}
+                <div class="day-item">
+                    <span class="day-date">{{ date }}</span>
+                    <div class="day-bar">
+                        <div class="day-visits" style="width: {{ (count / stats.total_visits * 100) if stats.total_visits > 0 else 0 }}%"></div>
+                    </div>
+                    <span class="day-count">{{ count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+        <h3>🕒 Recent Activity (Last 50 Visits)</h3>
+        <div class="activity-list">
+            {% for visit in raw_visits %}
+            <div class="activity-item">
+                <div class="activity-time">{{ visit.timestamp[:19] }}</div>
+                <div class="activity-page">{{ visit.page }}</div>
+                <div class="activity-device">
+                    {% if visit.device.is_mobile %}📱{% elif visit.device.is_tablet %}📱{% else %}💻{% endif %}
+                    {{ visit.device.browser }}
+                </div>
+                <div class="activity-visitor">{{ visit.visitor_id }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="no-data">
+        <h3>📊 No Data Available</h3>
+        <p>No analytics data found for the selected period. Check back after some visitors have accessed your site!</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.analytics-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.analytics-header h1 {
+    color: #f4c430;
+    margin: 0;
+}
+
+.analytics-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.analytics-filters {
+    margin-bottom: 2rem;
+}
+
+.filter-form {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filter-form select {
+    padding: 0.5rem;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    background: white;
+}
+
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stats-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.stats-card.full-width {
+    grid-column: 1 / -1;
+}
+
+.stats-card h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    border-bottom: 2px solid #f4c430;
+    padding-bottom: 0.5rem;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding: 0.25rem 0;
+}
+
+.stat-label {
+    color: #666;
+}
+
+.stat-value {
+    font-weight: bold;
+    color: #f4c430;
+}
+
+.page-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.page-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.page-url {
+    font-family: monospace;
+    color: #333;
+}
+
+.page-views {
+    color: #f4c430;
+    font-weight: bold;
+}
+
+.hourly-chart {
+    display: flex;
+    align-items: end;
+    gap: 2px;
+    height: 200px;
+    margin-top: 1rem;
+}
+
+.hour-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.hour-label {
+    font-size: 0.7rem;
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.hour-visits {
+    background: #f4c430;
+    width: 100%;
+    min-height: 2px;
+    border-radius: 2px 2px 0 0;
+    transition: all 0.3s;
+}
+
+.hour-count {
+    font-size: 0.7rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.daily-chart {
+    margin-top: 1rem;
+}
+
+.day-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    gap: 1rem;
+}
+
+.day-date {
+    min-width: 100px;
+    font-family: monospace;
+    color: #333;
+}
+
+.day-bar {
+    flex: 1;
+    height: 20px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.day-visits {
+    height: 100%;
+    background: #f4c430;
+    transition: width 0.3s;
+}
+
+.day-count {
+    min-width: 40px;
+    text-align: right;
+    color: #f4c430;
+    font-weight: bold;
+}
+
+.recent-activity {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    margin-top: 2rem;
+}
+
+.recent-activity h3 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    border-bottom: 2px solid #f4c430;
+    padding-bottom: 0.5rem;
+}
+
+.activity-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.activity-item {
+    display: grid;
+    grid-template-columns: 150px 1fr 100px 80px;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.activity-time {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.activity-page {
+    font-family: monospace;
+    color: #333;
+}
+
+.activity-device {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.activity-visitor {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.no-data h3 {
+    color: #f4c430;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .analytics-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .analytics-actions {
+        justify-content: center;
+    }
+    
+    .analytics-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .activity-item {
+        grid-template-columns: 1fr;
+        gap: 0.25rem;
+    }
+    
+    .hourly-chart {
+        height: 150px;
+    }
+}
+</style>
+{% endblock %}

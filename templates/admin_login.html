@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Login - AHOY Indie Media{% endblock %}
+
+{% block content %}
+<div class="admin-login-container">
+    <div class="admin-login-form">
+        <div class="login-header">
+            <h1>🔐 Admin Access</h1>
+            <p>Enter password to access admin panel</p>
+        </div>
+        
+        <form method="POST" class="login-form">
+            {{ csrf_token() }}
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Enter admin password" class="form-input">
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-large">Login</button>
+            </div>
+        </form>
+        
+        <div class="login-footer">
+            <a href="/" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+<style>
+.admin-login-container {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f4c430 0%, #000 100%);
+}
+
+.admin-login-form {
+    background: white;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.login-header h1 {
+    color: #000;
+    margin-bottom: 0.5rem;
+    font-size: 2rem;
+}
+
+.login-header p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.login-form {
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #f4c430;
+}
+
+.form-actions {
+    margin-top: 2rem;
+}
+
+.login-footer {
+    border-top: 1px solid #eee;
+    padding-top: 1.5rem;
+}
+
+@media (max-width: 480px) {
+    .admin-login-container {
+        padding: 1rem;
+    }
+    
+    .admin-login-form {
+        padding: 2rem;
+    }
+}
+</style>
+{% endblock %}

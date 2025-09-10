@@ -8,6 +8,7 @@
     <div class="admin-actions">
         <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New
             Event</a>
+        <a href="{{ url_for('analytics_dashboard') }}" class="btn btn-primary">📊 Analytics</a>
         <div class="export-buttons">
             <a href="{{ url_for('export_newsletter') }}"
                 class="btn btn-secondary" target="_blank">Export Newsletter</a>
@@ -19,6 +20,7 @@
             <a href="{{ url_for('export_all_data') }}" class="btn btn-secondary"
                 target="_blank">Export All Data</a>
         </div>
+        <a href="{{ url_for('admin_logout') }}" class="btn btn-outline">Logout</a>
     </div>
 </div>
 

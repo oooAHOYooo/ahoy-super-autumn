@@ -27,6 +27,7 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                 <ul>
                     <li>Subscribe to our newsletter</li>
                     <li>RSVP for events</li>
+                    <li>Submit artist performance proposals</li>
                     <li>Contact us through our website</li>
                     <li>Use our services</li>
                 </ul>
@@ -38,10 +39,14 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                         address, phone number</li>
                     <li><strong>Event Information:</strong> RSVP details, guest
                         count, event preferences</li>
+                    <li><strong>Artist Submissions:</strong> Performance proposals, 
+                        availability, portfolio links</li>
                     <li><strong>Communication Data:</strong> Messages you send
                         to us</li>
-                    <li><strong>Usage Data:</strong> Information about how you
-                        use our website</li>
+                    <li><strong>Newsletter Data:</strong> Email address, signup date, 
+                        device type, referrer domain, regional information</li>
+                    <li><strong>Usage Data:</strong> Anonymous analytics about how you
+                        use our website (see Analytics section below)</li>
                 </ul>
             </section>
 
@@ -52,8 +57,11 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                     <li>Provide and improve our services</li>
                     <li>Send you newsletters and event updates</li>
                     <li>Process RSVPs and manage events</li>
+                    <li>Review and respond to artist performance proposals</li>
                     <li>Respond to your inquiries and requests</li>
                     <li>Analyze website usage and improve user experience</li>
+                    <li>Understand our audience demographics and preferences</li>
+                    <li>Prevent spam and protect against security threats</li>
                     <li>Comply with legal obligations</li>
                 </ul>
             </section>
@@ -78,7 +86,7 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
 
             <section>
                 <h2>Data Security</h2>
-                <p>We implement appropriate security measures to protect your
+                <p>We implement comprehensive security measures to protect your
                     personal information against unauthorized access,
                     alteration, disclosure, or destruction. However, no method
                     of transmission over the internet or electronic storage is
@@ -86,27 +94,48 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
 
                 <h3>Security Measures Include:</h3>
                 <ul>
-                    <li>Encryption of sensitive data</li>
-                    <li>Regular security assessments</li>
-                    <li>Access controls and authentication</li>
-                    <li>Secure data storage practices</li>
+                    <li><strong>CSRF Protection:</strong> Cross-Site Request Forgery tokens on all forms</li>
+                    <li><strong>Rate Limiting:</strong> Protection against spam and DoS attacks</li>
+                    <li><strong>Input Validation:</strong> All user inputs are sanitized and validated</li>
+                    <li><strong>Content Filtering:</strong> Automatic spam detection and filtering</li>
+                    <li><strong>Security Headers:</strong> Content Security Policy, X-Frame-Options, and more</li>
+                    <li><strong>Session Management:</strong> Secure session handling for admin access</li>
+                    <li><strong>Data Encryption:</strong> Sensitive data is encrypted in transit and at rest</li>
+                    <li><strong>Access Controls:</strong> Password-protected admin areas</li>
+                    <li><strong>Regular Security Updates:</strong> Keeping all dependencies current</li>
                 </ul>
             </section>
 
             <section>
-                <h2>Cookies and Tracking</h2>
-                <p>Our website may use cookies and similar tracking technologies
-                    to enhance your experience. You can control cookie settings
-                    through your browser preferences.</p>
+                <h2>Analytics and Privacy-First Tracking</h2>
+                <p>We use a privacy-focused analytics system that respects your privacy while helping us understand how our website is used. Unlike traditional analytics services, we do not use third-party tracking or cookies.</p>
 
-                <h3>Types of Cookies We Use:</h3>
+                <h3>Our Analytics Approach:</h3>
                 <ul>
-                    <li><strong>Essential Cookies:</strong> Necessary for
-                        website functionality</li>
-                    <li><strong>Analytics Cookies:</strong> Help us understand
-                        website usage</li>
-                    <li><strong>Preference Cookies:</strong> Remember your
-                        settings and preferences</li>
+                    <li><strong>No Third-Party Tracking:</strong> We don't use Google Analytics or other external tracking services</li>
+                    <li><strong>Anonymous Data Only:</strong> All visitor data is anonymized using secure hashing</li>
+                    <li><strong>No Personal Information:</strong> We never collect names, emails, or personal details in our analytics</li>
+                    <li><strong>Local Storage Only:</strong> All analytics data is stored locally on our servers</li>
+                    <li><strong>No Cross-Site Tracking:</strong> We don't track you across other websites</li>
+                    <li><strong>No Data Selling:</strong> We never sell or share analytics data with third parties</li>
+                </ul>
+
+                <h3>What We Track (Anonymously):</h3>
+                <ul>
+                    <li><strong>Page Views:</strong> Which pages are visited most</li>
+                    <li><strong>Device Information:</strong> Mobile, tablet, or desktop usage</li>
+                    <li><strong>Browser Data:</strong> Browser type and version for compatibility</li>
+                    <li><strong>Traffic Sources:</strong> How visitors find our site (Google, social media, direct)</li>
+                    <li><strong>Time Patterns:</strong> Peak visiting hours and daily patterns</li>
+                    <li><strong>Geographic Region:</strong> General location (country/region level only)</li>
+                </ul>
+
+                <h3>What We DON'T Track:</h3>
+                <ul>
+                    <li>Your IP address (only used for anonymization)</li>
+                    <li>Personal identification information</li>
+                    <li>Individual browsing behavior across sessions</li>
+                    <li>Data that could identify you personally</li>
                 </ul>
             </section>
 
@@ -120,10 +149,12 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                     <li>Opt-out of marketing communications</li>
                     <li>Withdraw consent for data processing</li>
                     <li>Data portability</li>
+                    <li>Request analytics data deletion (though it's already anonymized)</li>
+                    <li>Opt-out of analytics tracking (contact us to request this)</li>
                 </ul>
 
                 <p>To exercise these rights, please contact us at
-                    hello@ahoyindie.com</p>
+                    hello@ahoyindie.com. We will respond to all requests within 30 days.</p>
             </section>
 
             <section>
@@ -139,8 +170,14 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                         unsubscribe</li>
                     <li><strong>Event RSVPs:</strong> Until the event is
                         completed plus 1 year</li>
+                    <li><strong>Artist Submissions:</strong> Until you request
+                        deletion or 2 years after submission</li>
                     <li><strong>Contact Information:</strong> Until you request
                         deletion</li>
+                    <li><strong>Analytics Data:</strong> Stored locally for up to 2 years, 
+                        then automatically deleted</li>
+                    <li><strong>Security Logs:</strong> Retained for 90 days for 
+                        security monitoring</li>
                 </ul>
             </section>
 
@@ -176,6 +213,28 @@ information, New Haven media privacy, Connecticut arts privacy{% endblock %}
                     page and updating the "Last updated" date. Your continued
                     use of our services after any changes constitutes acceptance
                     of the updated policy.</p>
+            </section>
+
+            <section>
+                <h2>Our Privacy Commitment</h2>
+                <p>At AHOY Indie Media, we believe privacy is a fundamental right. We've built our platform with privacy-first principles:</p>
+                
+                <h3>Privacy-First Features We've Implemented:</h3>
+                <ul>
+                    <li><strong>Self-Hosted Analytics:</strong> We built our own analytics system instead of using Google Analytics or other third-party trackers</li>
+                    <li><strong>No Tracking Cookies:</strong> We don't use tracking cookies or pixel tags</li>
+                    <li><strong>Minimal Data Collection:</strong> We only collect what's necessary to provide our services</li>
+                    <li><strong>Local Data Storage:</strong> All data stays on our servers - we don't share with third parties</li>
+                    <li><strong>Anonymized Analytics:</strong> Visitor data is hashed and anonymized before storage</li>
+                    <li><strong>Rate Limiting:</strong> We protect against spam and abuse without collecting personal data</li>
+                    <li><strong>Secure Forms:</strong> All forms use CSRF protection and input validation</li>
+                    <li><strong>No Data Selling:</strong> We never sell, rent, or trade your personal information</li>
+                </ul>
+
+                <h3>Why This Matters:</h3>
+                <p>Traditional analytics services like Google Analytics collect extensive personal data and track users across the web. We chose a different approach - one that respects your privacy while still helping us understand how to improve our platform for the New Haven arts community.</p>
+
+                <p>Our analytics help us answer questions like "Which events are most popular?" and "When do people visit our site?" without knowing who you are or tracking you elsewhere on the internet.</p>
             </section>
 
             <section>
