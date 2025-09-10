@@ -26,7 +26,7 @@
         <meta property="og:description"
             content="{% block og_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
         <meta property="og:image"
-            content="{% block og_image %}{{ url_for('static', filename='logos/ahoy indie media - main logo.png', _external=True) }}{% endblock %}">
+            content="{% block og_image %}{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}{% endblock %}">
         <meta property="og:site_name" content="AHOY Indie Media">
         <meta property="og:locale" content="en_US">
 
@@ -38,7 +38,7 @@
         <meta property="twitter:description"
             content="{% block twitter_description %}Discover upcoming poetry readings, music shows, and cabaret performances in New Haven. AHOY connects local artists, musicians, and performers with audiences.{% endblock %}">
         <meta property="twitter:image"
-            content="{% block twitter_image %}{{ url_for('static', filename='logos/ahoy indie media - main logo.png', _external=True) }}{% endblock %}">
+            content="{% block twitter_image %}{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}{% endblock %}">
 
         <!-- Additional SEO Meta Tags -->
         <meta name="theme-color" content="#f4c430">
@@ -48,9 +48,30 @@
         <!-- Canonical URL -->
         <link rel="canonical" href="{{ request.url }}">
 
-        <!-- Favicon -->
-        <link rel="icon" type="image/x-icon"
-            href="{{ url_for('static', filename='favicon.ico') }}">
+        <!-- Favicon - Multiple formats for optimal browser support -->
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="152x152" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="144x144" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="120x120" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="114x114" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="76x76" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="72x72" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="60x60" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="apple-touch-icon" sizes="57x57" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        <link rel="icon" href="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png') }}">
+        
+        <!-- Microsoft Tiles -->
+        <meta name="msapplication-TileImage" content="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}">
+        <meta name="msapplication-square70x70logo" content="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}">
+        <meta name="msapplication-square150x150logo" content="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}">
+        <meta name="msapplication-wide310x150logo" content="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}">
+        <meta name="msapplication-square310x310logo" content="{{ url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}">
+        
+        <!-- Android Chrome -->
+        <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
         <!-- Stylesheet -->
         <link rel="stylesheet"
@@ -132,8 +153,7 @@
                     </div>
                     <div class="artist-submission">
                         <h4>Want to Perform?</h4>
-                        <p>Submit your performance proposal and join our
-                            community of artists!</p>
+                        <p>Submit your performance proposal!</p>
                         <a href="/artist-submission"
                             class="btn btn-small">Submit Proposal</a>
                     </div>

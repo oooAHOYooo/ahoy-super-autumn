@@ -636,6 +636,10 @@ def sitemap():
 def robots():
     return send_from_directory('static', 'robots.txt', mimetype='text/plain')
 
+@app.route('/manifest.json')
+def manifest():
+    return send_from_directory('static', 'manifest.json', mimetype='application/json')
+
 # Data export routes
 @app.route('/admin/export/newsletter')
 def export_newsletter():
