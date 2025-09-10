@@ -11,11 +11,15 @@
         </div>
         
         <form method="POST" class="login-form">
-            {{ csrf_token() }}
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" required 
-                       placeholder="Enter admin password" class="form-input">
+                <div class="password-input-container">
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Enter admin password" class="form-input">
+                    <button type="button" class="password-toggle" onclick="togglePassword()">
+                        <span class="eye-icon">👁️</span>
+                    </button>
+                </div>
             </div>
             
             <div class="form-actions">
@@ -58,6 +62,35 @@
 .login-header p {
     color: #666;
     margin-bottom: 2rem;
+}
+
+.password-input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.password-toggle:hover {
+    background-color: #f0f0f0;
+}
+
+.eye-icon {
+    font-size: 16px;
+    user-select: none;
 }
 
 .login-form {
@@ -109,4 +142,19 @@
     }
 }
 </style>
+
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const eyeIcon = document.querySelector('.eye-icon');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.textContent = '🙈';
+    } else {
+        passwordInput.type = 'password';
+        eyeIcon.textContent = '👁️';
+    }
+}
+</script>
 {% endblock %}

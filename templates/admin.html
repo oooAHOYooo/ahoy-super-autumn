@@ -10,6 +10,7 @@
             Event</a>
         <a href="{{ url_for('analytics_dashboard') }}" class="btn btn-primary">📊 Analytics</a>
         <div class="export-buttons">
+            <a href="{{ url_for('export_pdf_report') }}" class="btn btn-primary" target="_blank">📄 Print Report (PDF)</a>
             <a href="{{ url_for('export_newsletter') }}"
                 class="btn btn-secondary" target="_blank">Export Newsletter</a>
             <a href="{{ url_for('export_artist_submissions') }}"
