@@ -9,17 +9,26 @@
         <a href="{{ url_for('new_event') }}" class="btn btn-primary">Add New
             Event</a>
         <a href="{{ url_for('analytics_dashboard') }}" class="btn btn-primary">📊 Analytics</a>
-        <div class="export-buttons">
-            <a href="{{ url_for('export_pdf_report') }}" class="btn btn-primary" target="_blank">📄 Print Report (PDF)</a>
-            <a href="{{ url_for('export_newsletter') }}"
-                class="btn btn-secondary" target="_blank">Export Newsletter</a>
-            <a href="{{ url_for('export_artist_submissions') }}"
-                class="btn btn-secondary" target="_blank">Export Artist
-                Submissions</a>
-            <a href="{{ url_for('export_rsvps') }}" class="btn btn-secondary"
-                target="_blank">Export RSVPs</a>
-            <a href="{{ url_for('export_all_data') }}" class="btn btn-secondary"
-                target="_blank">Export All Data</a>
+        <div class="export-section">
+            <h3>Export Data</h3>
+            <div class="export-options">
+                <div class="export-group">
+                    <label for="format-select">Choose Format:</label>
+                    <select id="format-select" class="format-selector">
+                        <option value="pdf">PDF</option>
+                        <option value="csv">CSV</option>
+                        <option value="json">JSON</option>
+                    </select>
+                </div>
+                <div class="export-buttons">
+                    <button onclick="exportData('newsletter')" class="btn btn-secondary">Export Newsletter</button>
+                    <button onclick="exportData('artist-submissions')" class="btn btn-secondary">Export Artist Submissions</button>
+                    <button onclick="exportData('rsvps')" class="btn btn-secondary">Export RSVPs</button>
+                    <button onclick="exportData('analytics')" class="btn btn-secondary">Export Analytics</button>
+                    <button onclick="exportData('all-data')" class="btn btn-secondary">Export All Data</button>
+                    <button onclick="exportData('report')" class="btn btn-primary">Generate Report</button>
+                </div>
+            </div>
         </div>
         <a href="{{ url_for('admin_logout') }}" class="btn btn-outline">Logout</a>
     </div>
@@ -195,4 +204,110 @@
         {% endif %}
     </div>
 </section>
+
+<script>
+function exportData(type) {
+    const format = document.getElementById('format-select').value;
+    let url = '';
+    
+    switch(type) {
+        case 'newsletter':
+            url = `/admin/export/newsletter?format=${format}`;
+            break;
+        case 'artist-submissions':
+            url = `/admin/export/artist-submissions?format=${format}`;
+            break;
+        case 'rsvps':
+            url = `/admin/export/rsvps?format=${format}`;
+            break;
+        case 'analytics':
+            url = `/admin/analytics/export?format=${format}`;
+            break;
+        case 'all-data':
+            url = `/admin/export/all-data?format=${format}`;
+            break;
+        case 'report':
+            url = `/admin/export/pdf-report?format=${format}`;
+            break;
+    }
+    
+    if (url) {
+        window.open(url, '_blank');
+    }
+}
+</script>
+
+<style>
+.export-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.export-section h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.export-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.export-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.export-group label {
+    font-weight: 600;
+    color: #555;
+}
+
+.format-selector {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: white;
+    font-size: 14px;
+}
+
+.export-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.export-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.export-buttons .btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.export-buttons .btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.export-buttons .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.export-buttons .btn-secondary:hover {
+    background-color: #545b62;
+}
+</style>
 {% endblock %}

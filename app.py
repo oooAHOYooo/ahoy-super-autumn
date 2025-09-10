@@ -18,6 +18,7 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.units import inch
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
+import csv
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'eeeELLENsoCUTE')
@@ -232,6 +233,48 @@ def analyze_data(visits):
         'referrers': dict(referrer_stats)
     }
 
+# CSV Export Functions
+def export_to_csv(data, filename):
+    """Export data to CSV format"""
+    from io import StringIO
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    if isinstance(data, list) and len(data) > 0:
+        # Write headers
+        writer.writerow(data[0].keys())
+        # Write data
+        for row in data:
+            writer.writerow(row.values())
+    
+    output.seek(0)
+    return output.getvalue()
+
+def export_events_to_csv(events_data):
+    """Export events to CSV format"""
+    from io import StringIO
+    output = StringIO()
+    writer = csv.writer(output)
+    
+    # Write headers
+    writer.writerow(['Title', 'Date', 'Time', 'Location', 'Description', 'Event Type', 'RSVP Count'])
+    
+    # Write data
+    for event in events_data.get('events', []):
+        rsvp_count = len(event.get('rsvps', []))
+        writer.writerow([
+            event.get('title', ''),
+            event.get('date', ''),
+            event.get('time', ''),
+            event.get('location', ''),
+            event.get('description', ''),
+            event.get('event_type', ''),
+            rsvp_count
+        ])
+    
+    output.seek(0)
+    return output.getvalue()
+
 # PDF Report Generation
 def generate_pdf_report():
     """Generate a comprehensive PDF report of all AHOY data with startup growth analysis"""
@@ -275,8 +318,8 @@ def generate_pdf_report():
         alignment=TA_CENTER,
         textColor=colors.HexColor('#f4c430')
     )
-    story.append(Paragraph("AHOY Indie Media - Executive Report", title_style))
-    story.append(Paragraph("Startup Growth Analysis & Financial Overview", styles['Heading2']))
+    story.append(Paragraph("AHOY Indie Media - Community Report", title_style))
+    story.append(Paragraph("Events, Artists & Community Overview", styles['Heading2']))
     story.append(Spacer(1, 12))
     
     # Report info
@@ -318,28 +361,8 @@ def generate_pdf_report():
     story.append(summary_table)
     story.append(PageBreak())
     
-    # Startup Growth Timeline
-    story.append(Paragraph("Startup Growth Timeline", styles['Heading2']))
-    story.append(Paragraph("AHOY Indie Media - Expected Growth Trajectory for Arts & Culture Startup", styles['Heading3']))
-    
-    # Growth phases
-    growth_phases = [
-        ("Phase 1: Foundation (Months 1-6)", "Establish brand, build initial audience, host 2-4 events", "Current Position"),
-        ("Phase 2: Growth (Months 7-18)", "Scale to 1-2 events/month, 500+ subscribers, venue partnerships", "Target: Next 12 months"),
-        ("Phase 3: Expansion (Months 19-36)", "Multiple venues, 1000+ subscribers, paid events, merchandise", "Target: Year 2-3"),
-        ("Phase 4: Maturity (Months 37+)", "Regional presence, 5000+ subscribers, multiple revenue streams", "Long-term vision")
-    ]
-    
-    for phase, description, timeline in growth_phases:
-        story.append(Paragraph(f"<b>{phase}</b>", styles['Normal']))
-        story.append(Paragraph(f"• {description}", styles['Normal']))
-        story.append(Paragraph(f"• Timeline: {timeline}", styles['Normal']))
-        story.append(Spacer(1, 10))
-    
-    story.append(PageBreak())
-    
-    # Current Position Analysis
-    story.append(Paragraph("Current Position Analysis", styles['Heading2']))
+    # Community Overview
+    story.append(Paragraph("Community Overview", styles['Heading2']))
     
     # Calculate current metrics
     current_month = datetime.now().month
@@ -349,36 +372,19 @@ def generate_pdf_report():
     
     story.append(Paragraph(f"<b>Events This Year:</b> {len(events_this_year)}", styles['Normal']))
     story.append(Paragraph(f"<b>Events This Month:</b> {len(events_this_month)}", styles['Normal']))
-    story.append(Paragraph(f"<b>Monthly Event Rate:</b> {len(events_this_year) / max(current_month, 1):.1f} events/month", styles['Normal']))
-    story.append(Paragraph(f"<b>Subscriber Growth Rate:</b> {len(newsletter_data.get('subscribers', []))} total subscribers", styles['Normal']))
-    
-    # Growth indicators
-    story.append(Paragraph("Growth Indicators:", styles['Heading3']))
-    if len(events_this_year) >= 6:
-        story.append(Paragraph("✅ On track for Phase 2 (1+ events/month)", styles['Normal']))
-    else:
-        story.append(Paragraph("⚠️ Below Phase 2 target (need 1+ events/month)", styles['Normal']))
-    
-    if len(newsletter_data.get('subscribers', [])) >= 100:
-        story.append(Paragraph("✅ Strong subscriber base established", styles['Normal']))
-    else:
-        story.append(Paragraph("⚠️ Building subscriber base (target: 100+ for Phase 2)", styles['Normal']))
-    
-    if len(artist_data.get('submissions', [])) >= 10:
-        story.append(Paragraph("✅ Active artist community engagement", styles['Normal']))
-    else:
-        story.append(Paragraph("⚠️ Building artist community (target: 10+ submissions)", styles['Normal']))
+    story.append(Paragraph(f"<b>Newsletter Subscribers:</b> {len(newsletter_data.get('subscribers', []))}", styles['Normal']))
+    story.append(Paragraph(f"<b>Artist Submissions:</b> {len(artist_data.get('submissions', []))}", styles['Normal']))
     
     story.append(Spacer(1, 20))
     
-    # Event Profit/Loss Analysis
-    story.append(Paragraph("Event Profit/Loss Analysis", styles['Heading2']))
-    story.append(Paragraph("Financial Performance by Event (Estimated)", styles['Heading3']))
+    # Event Attendance Analysis
+    story.append(Paragraph("Event Attendance Analysis", styles['Heading2']))
+    story.append(Paragraph("Event Performance Overview", styles['Heading3']))
     
     # Event financial analysis
     if events_data.get('events'):
-        # Create events financial table
-        events_financial = [['Event Title', 'Date', 'Type', 'RSVPs', 'Est. Revenue', 'Est. Costs', 'Est. Profit/Loss', 'Status']]
+        # Create events attendance table
+        events_financial = [['Event Title', 'Date', 'Type', 'RSVPs', 'Total Guests', 'Event Status']]
         
         for event in events_data['events']:
             # Get RSVPs for this event
@@ -388,43 +394,20 @@ def generate_pdf_report():
             # Calculate total guests (including guest counts)
             total_guests = sum(rsvp.get('guest_count', 1) for rsvp in event_rsvps)
             
-            # Estimate revenue and costs based on event type and attendance
-            event_type = event.get('event_type', '').lower()
+            # Determine if event is past or upcoming
             is_past = datetime.fromisoformat(event['date'].replace('Z', '+00:00')) < datetime.now()
-            
-            # Revenue estimation (ticket prices vary by event type)
-            if 'poetry' in event_type or 'poets' in event_type:
-                ticket_price = 15  # Poetry events typically lower cost
-            elif 'cabaret' in event_type:
-                ticket_price = 25  # Cabaret events mid-range
-            elif 'music' in event_type:
-                ticket_price = 20  # Music events mid-range
-            else:
-                ticket_price = 18  # Default price
-            
-            estimated_revenue = total_guests * ticket_price
-            
-            # Cost estimation (venue, staff, marketing, etc.)
-            base_costs = 200  # Base venue/staff costs
-            marketing_costs = 50  # Marketing per event
-            artist_fees = 100 if total_guests > 20 else 50  # Artist compensation
-            total_costs = base_costs + marketing_costs + artist_fees
-            
-            estimated_profit = estimated_revenue - total_costs
-            profit_status = "Profit" if estimated_profit > 0 else "Loss"
+            event_status = "Completed" if is_past else "Upcoming"
             
             events_financial.append([
                 event.get('title', 'N/A'),
                 event.get('date', 'N/A')[:10],  # Just date part
                 event.get('event_type', 'N/A'),
-                f"{rsvp_count} RSVPs\n{total_guests} guests",
-                f"${estimated_revenue}",
-                f"${total_costs}",
-                f"${estimated_profit}",
-                profit_status
+                str(rsvp_count),
+                str(total_guests),
+                event_status
             ])
         
-        events_table = Table(events_financial, colWidths=[1.5*inch, 0.8*inch, 0.8*inch, 0.5*inch, 0.8*inch, 0.8*inch, 0.8*inch, 0.6*inch])
+        events_table = Table(events_financial, colWidths=[2*inch, 1*inch, 1*inch, 0.8*inch, 0.8*inch, 1*inch])
         events_table.setStyle(TableStyle([
             ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f4c430')),
             ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
@@ -439,69 +422,53 @@ def generate_pdf_report():
         ]))
         story.append(events_table)
         
-        # Financial summary
-        total_revenue = sum(int(row[4].replace('$', '')) for row in events_financial[1:])
-        total_costs = sum(int(row[5].replace('$', '')) for row in events_financial[1:])
-        total_profit = total_revenue - total_costs
-        
-        # Calculate total guests across all events
+        # Attendance summary
         total_guests_all_events = sum(
             sum(rsvp.get('guest_count', 1) for rsvp in event.get('rsvps', []))
             for event in events_data['events']
         )
         
-        story.append(Spacer(1, 20))
-        story.append(Paragraph("Financial Summary:", styles['Heading3']))
-        story.append(Paragraph(f"<b>Total Events:</b> {len(events_data['events'])}", styles['Normal']))
-        story.append(Paragraph(f"<b>Total Guests Across All Events:</b> {total_guests_all_events}", styles['Normal']))
-        story.append(Paragraph(f"<b>Total Estimated Revenue:</b> ${total_revenue}", styles['Normal']))
-        story.append(Paragraph(f"<b>Total Estimated Costs:</b> ${total_costs}", styles['Normal']))
-        story.append(Paragraph(f"<b>Total Estimated Profit/Loss:</b> ${total_profit}", styles['Normal']))
-        story.append(Paragraph(f"<b>Average Profit per Event:</b> ${total_profit / len(events_data['events']):.2f}", styles['Normal']))
-        story.append(Paragraph(f"<b>Average Revenue per Guest:</b> ${total_revenue / max(total_guests_all_events, 1):.2f}", styles['Normal']))
+        completed_events = [e for e in events_data['events'] if datetime.fromisoformat(e['date'].replace('Z', '+00:00')) < datetime.now()]
+        upcoming_events = [e for e in events_data['events'] if datetime.fromisoformat(e['date'].replace('Z', '+00:00')) >= datetime.now()]
         
-        if total_profit > 0:
-            story.append(Paragraph("✅ Overall profitable operations", styles['Normal']))
-        else:
-            story.append(Paragraph("⚠️ Currently operating at a loss - focus on increasing attendance", styles['Normal']))
+        story.append(Spacer(1, 20))
+        story.append(Paragraph("Attendance Summary:", styles['Heading3']))
+        story.append(Paragraph(f"<b>Total Events:</b> {len(events_data['events'])}", styles['Normal']))
+        story.append(Paragraph(f"<b>Completed Events:</b> {len(completed_events)}", styles['Normal']))
+        story.append(Paragraph(f"<b>Upcoming Events:</b> {len(upcoming_events)}", styles['Normal']))
+        story.append(Paragraph(f"<b>Total Guests Across All Events:</b> {total_guests_all_events}", styles['Normal']))
+        story.append(Paragraph(f"<b>Average Guests per Event:</b> {total_guests_all_events / max(len(events_data['events']), 1):.1f}", styles['Normal']))
     
     story.append(PageBreak())
     
-    # Revenue Optimization Recommendations
-    story.append(Paragraph("Revenue Optimization Recommendations", styles['Heading2']))
+    # Community Insights
+    story.append(Paragraph("Community Insights", styles['Heading2']))
     
-    recommendations = [
-        "Increase ticket prices for high-demand events (cabaret, music)",
-        "Implement tiered pricing (VIP, general admission, student discounts)",
-        "Add merchandise sales at events (t-shirts, posters, recordings)",
-        "Partner with local businesses for sponsorships",
-        "Offer season passes or multi-event packages",
-        "Implement online ticket sales with processing fees",
-        "Create premium experiences (meet & greets, backstage access)",
-        "Develop recurring revenue streams (monthly memberships, patron programs)"
+    insights = [
+        "Our events bring together diverse artists and audiences in New Haven",
+        "The community continues to grow with each event we host",
+        "Artist submissions show the creative energy in our local arts scene",
+        "Newsletter subscribers stay engaged with our event updates",
+        "RSVPs help us plan better events and manage capacity"
     ]
     
-    for i, rec in enumerate(recommendations, 1):
-        story.append(Paragraph(f"{i}. {rec}", styles['Normal']))
+    for insight in insights:
+        story.append(Paragraph(f"• {insight}", styles['Normal']))
     
     story.append(Spacer(1, 20))
     
-    # Growth Strategy
-    story.append(Paragraph("Growth Strategy for Next 6 Months", styles['Heading2']))
+    # Looking Ahead
+    story.append(Paragraph("Looking Ahead", styles['Heading2']))
     
-    strategy_points = [
-        ("Event Frequency", "Increase to 1-2 events per month", "Target: 8-12 events in next 6 months"),
-        ("Audience Growth", "Reach 200+ newsletter subscribers", "Focus on social media and word-of-mouth"),
-        ("Artist Network", "Build database of 50+ local artists", "Regular submission calls and networking"),
-        ("Venue Partnerships", "Secure 2-3 reliable venue partners", "Negotiate better rates and terms"),
-        ("Revenue Diversification", "Add 2+ revenue streams", "Merchandise, sponsorships, premium events"),
-        ("Brand Recognition", "Increase local media coverage", "Press releases, social media presence")
+    future_plans = [
+        "Continue hosting regular events for our growing community",
+        "Support local artists by providing performance opportunities",
+        "Build connections between artists and audiences",
+        "Create memorable experiences that celebrate New Haven's creative scene"
     ]
     
-    for area, action, target in strategy_points:
-        story.append(Paragraph(f"<b>{area}:</b> {action}", styles['Normal']))
-        story.append(Paragraph(f"• Target: {target}", styles['Normal']))
-        story.append(Spacer(1, 8))
+    for plan in future_plans:
+        story.append(Paragraph(f"• {plan}", styles['Normal']))
     
     # Build PDF
     doc.build(story)
@@ -803,50 +770,72 @@ def export_analytics():
 @app.route('/admin/export/newsletter')
 @require_admin_auth
 def export_newsletter():
-    """Export newsletter subscribers as human-readable JSON"""
+    """Export newsletter subscribers in various formats"""
+    format_type = request.args.get('format', 'json')
     newsletter_data = load_newsletter_data()
+    subscribers = newsletter_data.get('subscribers', [])
     
-    # Format for better readability
-    formatted_data = {
-        "export_info": {
-            "export_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "total_subscribers": len(newsletter_data.get('subscribers', [])),
-            "data_type": "Newsletter Subscribers"
-        },
-        "subscribers": newsletter_data.get('subscribers', [])
-    }
-    
-    response = app.response_class(
-        response=json.dumps(formatted_data, indent=2),
-        status=200,
-        mimetype='application/json'
-    )
-    response.headers['Content-Disposition'] = f'attachment; filename=ahoy_newsletter_{datetime.now().strftime("%Y%m%d")}.json'
-    return response
+    if format_type == 'csv':
+        csv_data = export_to_csv(subscribers, 'newsletter_subscribers')
+        response = app.response_class(
+            response=csv_data,
+            status=200,
+            mimetype='text/csv'
+        )
+        response.headers['Content-Disposition'] = f'attachment; filename=ahoy_newsletter_{datetime.now().strftime("%Y%m%d")}.csv'
+        return response
+    else:  # JSON format
+        formatted_data = {
+            "export_info": {
+                "export_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "total_subscribers": len(subscribers),
+                "data_type": "Newsletter Subscribers"
+            },
+            "subscribers": subscribers
+        }
+        
+        response = app.response_class(
+            response=json.dumps(formatted_data, indent=2),
+            status=200,
+            mimetype='application/json'
+        )
+        response.headers['Content-Disposition'] = f'attachment; filename=ahoy_newsletter_{datetime.now().strftime("%Y%m%d")}.json'
+        return response
 
 @app.route('/admin/export/artist-submissions')
 @require_admin_auth
 def export_artist_submissions():
-    """Export artist submissions as human-readable JSON"""
+    """Export artist submissions in various formats"""
+    format_type = request.args.get('format', 'json')
     artist_data = load_artist_submissions()
+    submissions = artist_data.get('submissions', [])
     
-    # Format for better readability
-    formatted_data = {
-        "export_info": {
-            "export_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-            "total_submissions": len(artist_data.get('submissions', [])),
-            "data_type": "Artist Performance Submissions"
-        },
-        "submissions": artist_data.get('submissions', [])
-    }
-    
-    response = app.response_class(
-        response=json.dumps(formatted_data, indent=2),
-        status=200,
-        mimetype='application/json'
-    )
-    response.headers['Content-Disposition'] = f'attachment; filename=ahoy_artist_submissions_{datetime.now().strftime("%Y%m%d")}.json'
-    return response
+    if format_type == 'csv':
+        csv_data = export_to_csv(submissions, 'artist_submissions')
+        response = app.response_class(
+            response=csv_data,
+            status=200,
+            mimetype='text/csv'
+        )
+        response.headers['Content-Disposition'] = f'attachment; filename=ahoy_artist_submissions_{datetime.now().strftime("%Y%m%d")}.csv'
+        return response
+    else:  # JSON format
+        formatted_data = {
+            "export_info": {
+                "export_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                "total_submissions": len(submissions),
+                "data_type": "Artist Performance Submissions"
+            },
+            "submissions": submissions
+        }
+        
+        response = app.response_class(
+            response=json.dumps(formatted_data, indent=2),
+            status=200,
+            mimetype='application/json'
+        )
+        response.headers['Content-Disposition'] = f'attachment; filename=ahoy_artist_submissions_{datetime.now().strftime("%Y%m%d")}.json'
+        return response
 
 @app.route('/admin/export/rsvps')
 @require_admin_auth
@@ -951,17 +940,75 @@ def export_all_data():
 @app.route('/admin/export/pdf-report')
 @require_admin_auth
 def export_pdf_report():
-    """Export comprehensive PDF report"""
-    try:
-        pdf_buffer = generate_pdf_report()
-        
-        response = make_response(pdf_buffer.getvalue())
-        response.headers['Content-Type'] = 'application/pdf'
-        response.headers['Content-Disposition'] = f'attachment; filename=ahoy_executive_report_{datetime.now().strftime("%Y%m%d")}.pdf'
-        
-        return response
-    except Exception as e:
-        flash(f'Error generating PDF report: {str(e)}', 'error')
+    """Export comprehensive report in various formats"""
+    format_type = request.args.get('format', 'pdf')
+    
+    if format_type == 'pdf':
+        try:
+            pdf_buffer = generate_pdf_report()
+            
+            response = make_response(pdf_buffer.getvalue())
+            response.headers['Content-Type'] = 'application/pdf'
+            response.headers['Content-Disposition'] = f'attachment; filename=ahoy_community_report_{datetime.now().strftime("%Y%m%d")}.pdf'
+            
+            return response
+        except Exception as e:
+            flash(f'Error generating PDF report: {str(e)}', 'error')
+            return redirect(url_for('admin'))
+    else:
+        # For JSON format, return a simplified report
+        try:
+            events_data = load_events()
+            newsletter_data = load_newsletter_data()
+            artist_data = load_artist_submissions()
+            visits = load_analytics_data(30)
+            stats = analyze_data(visits)
+            
+            # Get all RSVPs
+            all_rsvps = []
+            for event in events_data['events']:
+                if 'rsvps' in event:
+                    for rsvp in event['rsvps']:
+                        clean_rsvp = {
+                            "name": rsvp.get('name', ''),
+                            "email": rsvp.get('email', ''),
+                            "guest_count": rsvp.get('guest_count', 0),
+                            "rsvp_date": rsvp.get('rsvp_date', ''),
+                            "event_title": event['title'],
+                            "event_date": event['date']
+                        }
+                        all_rsvps.append(clean_rsvp)
+            
+            report_data = {
+                "export_info": {
+                    "export_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "report_type": "Community Report",
+                    "format": "json"
+                },
+                "summary": {
+                    "total_events": len(events_data.get('events', [])),
+                    "newsletter_subscribers": len(newsletter_data.get('subscribers', [])),
+                    "artist_submissions": len(artist_data.get('submissions', [])),
+                    "total_rsvps": len(all_rsvps),
+                    "website_visits_30_days": stats.get('total_visits', 0),
+                    "unique_visitors_30_days": stats.get('unique_visitors', 0)
+                },
+                "events": events_data.get('events', []),
+                "newsletter_subscribers": newsletter_data.get('subscribers', []),
+                "artist_submissions": artist_data.get('submissions', []),
+                "rsvps": all_rsvps,
+                "analytics": stats
+            }
+            
+            response = app.response_class(
+                response=json.dumps(report_data, indent=2),
+                status=200,
+                mimetype='application/json'
+            )
+            response.headers['Content-Disposition'] = f'attachment; filename=ahoy_community_report_{datetime.now().strftime("%Y%m%d")}.json'
+            return response
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
         return redirect(url_for('admin'))
 
 @app.route('/admin/event/new', methods=['GET', 'POST'])
