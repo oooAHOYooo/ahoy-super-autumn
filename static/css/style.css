@@ -399,6 +399,12 @@ main {
     order: 2;
 }
 
+/* Poster images in compact events should also fit with white background */
+.events-compact .event-image[src*="posters/"] {
+    object-fit: contain;
+    background-color: white;
+}
+
 .events-compact .event-date {
     position: absolute;
     top: 1rem;
@@ -1218,10 +1224,22 @@ footer {
     flex-shrink: 0;
 }
 
+/* Poster images should fit with white background */
+.event-image[src*="posters/"] {
+    object-fit: contain;
+    background-color: white;
+}
+
 .event-preview .event-image {
     width: 80px;
     height: 80px;
     margin-right: 1rem;
+}
+
+/* Poster images in preview should also fit with white background */
+.event-preview .event-image[src*="posters/"] {
+    object-fit: contain;
+    background-color: white;
 }
 
 .event-item .event-image {
@@ -1230,6 +1248,12 @@ footer {
     object-fit: cover;
     border: 2px solid var(--black);
     margin-bottom: 1.5rem;
+}
+
+/* Poster images in event items should also fit with white background */
+.event-item .event-image[src*="posters/"] {
+    object-fit: contain;
+    background-color: white;
 }
 
 .event-item .event-content {
