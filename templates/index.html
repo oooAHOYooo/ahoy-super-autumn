@@ -24,7 +24,7 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
     "addressCountry": "US"
   },
   "sameAs": [
-    "https://ahoy.ooo/ahoyApp/www/index.html"
+    "https://app.ahoy.ooo"
   ],
   "contactPoint": {
     "@type": "ContactPoint",
@@ -65,7 +65,9 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
                 {% if event.photos %}
                 <div class="event-photos" style="display: none;">
                     {% for photo in event.photos %}
-                    <img src="{{ photo }}" alt="{{ event.title }} - Photo {{ loop.index }}" data-lightbox="{{ photo }}">
+                    <img src="{{ photo }}"
+                        alt="{{ event.title }} - Photo {{ loop.index }}"
+                        data-lightbox="{{ photo }}">
                     {% endfor %}
                 </div>
                 {% endif %}
