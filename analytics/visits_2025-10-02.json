@@ -1,0 +1,2 @@
+{"timestamp": "2025-10-02T00:00:16.541972", "visitor_id": "15d5b17fae3d", "page": "/", "method": "GET", "referrer": "", "device": {"is_mobile": false, "is_tablet": false, "is_pc": true, "browser": "Chrome", "os": "Mac OS X"}, "query_params": {}}
+{"timestamp": "2025-10-02T00:00:18.115708", "visitor_id": "15d5b17fae3d", "page": "/events", "method": "GET", "referrer": "http://127.0.0.1:5003/", "device": {"is_mobile": false, "is_tablet": false, "is_pc": true, "browser": "Chrome", "os": "Mac OS X"}, "query_params": {}}

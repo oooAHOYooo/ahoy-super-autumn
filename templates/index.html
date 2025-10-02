@@ -47,6 +47,7 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
     </div>
 </div>
 
+
 {% if latest_events %}
 <section class="events-section">
     <div class="container">
@@ -127,4 +128,53 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
         </div>
     </div>
 </section>
+
+{% if recent_past_events %}
+<section class="past-events-section">
+    <div class="container">
+        <h2>Recent Past Events</h2>
+        <p class="section-description">Catch up on what you missed from our recent shows</p>
+        
+        <div class="events-list events-compact">
+            {% for event in recent_past_events %}
+            <div class="event-item event-preview past"
+                data-type="{{ event.event_type }}"
+                data-event-id="{{ event.id }}">
+                {% if event.image %}
+                <img src="{{ event.image }}"
+                    alt="{{ event.title }} - {{ event.venue or 'New Haven Event' }}"
+                    class="event-image" data-lightbox="{{ event.image }}">
+                {% endif %}
+                {% if event.photos %}
+                <div class="event-photos" style="display: none;">
+                    {% for photo in event.photos %}
+                    <img src="{{ photo }}"
+                        alt="{{ event.title }} - Photo {{ loop.index }}"
+                        data-lightbox="{{ photo }}">
+                    {% endfor %}
+                </div>
+                {% endif %}
+                <div class="event-date">{{ event.date }}</div>
+                <div class="event-details">
+                    <h3>{{ event.title }}</h3>
+                    {% if event.venue %}<p class="venue">{{ event.venue }}</p>{%
+                    endif %}
+                    {% if event.venue_address %}<p class="venue-address">{{
+                        event.venue_address }}</p>{% endif %}
+                    {% if event.time %}<p class="time">{{ event.time }}</p>{%
+                    endif %}
+                    {% if event.description %}<p class="description">{{
+                        event.description }}</p>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="events-actions">
+            <a href="/events" class="btn btn-outline">View All Events</a>
+        </div>
+    </div>
+</section>
+{% endif %}
 {% endblock %}
+

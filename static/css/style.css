@@ -2350,3 +2350,88 @@ footer {
     font-style: italic;
     padding: 2rem;
 }
+
+/* Video Coming Soon Styles */
+.video-coming-soon-section {
+    background: var(--white);
+    color: var(--dark-gray);
+    padding: 1.5rem 0;
+    margin: 0;
+    border-top: 3px solid var(--yellow);
+    border-bottom: 3px solid var(--yellow);
+}
+
+.video-coming-soon-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.video-coming-soon-container h2 {
+    color: var(--dark-gray);
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 700;
+}
+
+.coming-soon-subtitle {
+    color: var(--light-gray);
+    font-size: 0.9rem;
+    font-style: italic;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+
+
+/* Past Events Section on Homepage */
+.past-events-section {
+    background: #f8f9fa;
+    padding: 4rem 0;
+    margin-top: 2rem;
+}
+
+.past-events-section h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: var(--dark-gray);
+}
+
+.section-description {
+    text-align: center;
+    color: var(--light-gray);
+    margin-bottom: 3rem;
+    font-size: 1.1rem;
+}
+
+.events-actions {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+/* Mobile responsive for video player */
+@media (max-width: 768px) {
+    .video-header h2 {
+        font-size: 1.2rem;
+    }
+    
+    .video-wrapper {
+        border-radius: 4px;
+    }
+    
+    .close-video-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 1.2rem;
+    }
+    
+    .past-events-section {
+        padding: 2rem 0;
+    }
+    
+    .section-description {
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+}

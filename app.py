@@ -664,7 +664,8 @@ def admin_logout():
 @app.route('/')
 def home():
     latest_events = get_upcoming_events()[:3]  # Show next 3 events
-    return render_template('index.html', latest_events=latest_events)
+    recent_past_events = get_past_events()[:3]  # Show 3 most recent past events
+    return render_template('index.html', latest_events=latest_events, recent_past_events=recent_past_events)
 
 @app.route('/about')
 def about():
