@@ -37,6 +37,7 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
 
 {% block content %}
 <div class="hero">
+    <canvas id="pixelHeader" class="pixel-hero-bg"></canvas>
     <h1>AHOY Indie Media</h1>
     <p>Building a platform for local New Haven
         artists, musicians, and
@@ -179,5 +180,9 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
     </div>
 </section>
 {% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/pixel-header.js') }}"></script>
 {% endblock %}
 
