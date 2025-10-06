@@ -128,58 +128,37 @@
       ]
     },
     {
-      "id": "2025-10-10T21:00:00",
-      "title": "Ahoy Show Jams",
-      "date": "2025-10-17",
-      "time": "TBD",
-      "venue": "Most Likely Koffee?",
-      "venue_address": "104 Audubon Street, New Haven, CT 06511",
-      "event_type": "music",
-      "status": "upcoming",
-      "description": "Live music showcase featuring Jake Custer and indie artists from New Haven",
-      "photos": [],
-      "image": "/static/event-imgs/cabaret-1-2/25.jpg",
-      "rsvp_enabled": true,
-      "rsvp_limit": "50",
-      "rsvps": [
-        {
-          "id": "2025-09-06T08:36:09.845912",
-          "name": "a",
-          "email": "a@a.com",
-          "guests": 1,
-          "rsvp_date": "2025-09-06T08:36:09.845935"
-        }
-      ]
-    },
-    {
-      "id": "2025-09-26T18:30:00",
-      "title": "Poets and Friends #3 - Live Show Recording",
-      "date": "2025-09-26",
+      "id": "2025-10-30T18:30:00",
+      "title": "Poets & Friends #4: Spooky Edition",
+      "date": "2025-10-30",
       "time": "6:30 PM",
       "venue": "Koffee?",
       "venue_address": "104 Audubon Street, New Haven, CT 06511",
       "event_type": "poetry",
-      "status": "past",
-      "description": "Live poetry + performance @ Koffee? featuring local poets. Watch the full recording of this amazing show!",
-      "video_url": "https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov",
-      "photos": [
-        "/static/event-imgs/poets1/1.jpg",
-        "/static/event-imgs/poets1/2.jpg",
-        "/static/event-imgs/poets1/3.jpg",
-        "/static/event-imgs/poets1/4.jpg",
-        "/static/event-imgs/poets1/5.jpg",
-        "/static/event-imgs/poets1/6.jpg",
-        "/static/event-imgs/poets1/7.jpg",
-        "/static/event-imgs/poets1/8.jpg",
-        "/static/event-imgs/poets1/9.jpg",
-        "/static/event-imgs/poets1/10.jpg",
-        "/static/event-imgs/poets1/11.jpg",
-        "/static/event-imgs/poets1/12.jpg",
-        "/static/event-imgs/poets1/13.jpg",
-        "/static/event-imgs/poets1/14.jpg",
-        "/static/event-imgs/poets1/15.jpg"
-      ],
-      "image": "/static/event-imgs/posters/Poets-3-Poster.jpg"
+      "status": "upcoming",
+      "description": " Poets & Friends #4 (Spooky Edition). Thursday, Oct 30, 2025. Doors 6:00 PM. Readings 6:30–8:00 PM. Koffee? — 104 Audubon St, New Haven, CT. Costumes encouraged. Food available at Koffee?. Bring friends.",
+      "photos": [],
+      "image": "/static/event-imgs/poets4/poets4.jpg",
+      "rsvp_external_url": "https://partiful.com/e/kXIMmkVKa7NPbE2ixLOZ?",
+      "rsvp_enabled": true,
+      "rsvp_limit": "100",
+      "rsvps": []
+    },
+    {
+      "id": "2025-11-07T19:00:00",
+      "title": "Live at Spruce: Jake Custer & Friends",
+      "date": "2025-11-07", 
+      "time": "7:00 PM",
+      "venue": "Spruce Coffeeshop",
+      "venue_address": "New Haven, CT",
+      "event_type": "music",
+      "status": "upcoming",
+      "description": "Join us for an intimate evening of music with Jake Custer and special guests at Spruce Coffeeshop. Friday night, 7:00–9:30 PM.",
+      "photos": [],
+      "image": "/static/event-imgs/cabaret-1-2/25.jpg",
+      "rsvp_enabled": true,
+      "rsvp_limit": "50",
+      "rsvps": []
     }
   ]
 }
