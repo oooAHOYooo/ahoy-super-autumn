@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block title %}{{ video.title }} - AHOY Indie Media{% endblock %}
+{% block meta_description %}{{ video.description or 'Event video' }}{% endblock %}
+{% block og_title %}{{ video.title }}{% endblock %}
+{% block og_description %}{{ video.description or 'Event video' }}{% endblock %}
+{% block og_image %}{{ (related_event and related_event.image) or video.thumbnail or url_for('static', filename='logos/ahoy-fall2025-favicon.png', _external=True) }}{% endblock %}
+
+{% block extra_css %}
+<style>
+.video-page-container {
+    max-width: 1200px;
+    margin: 1rem auto 0 auto; /* small top margin from header */
+}
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1200px; /* larger but still responsive */
+    margin: 0 auto;
+    background: #000;
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16 / 9; /* enforce 16:9 */
+}
+.main-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    object-fit: cover;
+}
+.video-meta {
+    margin-top: 1rem;
+    color: var(--gray);
+    font-style: italic;
+}
+
+/* Responsive padding and centering */
+@media (max-width: 768px) {
+    .video-page-container {
+        padding: 0 1rem 1.5rem 1rem;
+    }
+    .video-wrapper {
+        border-radius: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-page-container {
+        padding: 0 0.75rem 1rem 0.75rem;
+    }
+    .video-wrapper {
+        border-radius: 4px;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero" style="text-align: center;">
+    <h1>{{ video.title }}</h1>
+    {% if related_event %}
+    <p>{{ related_event.date }}{% if related_event.time %} • {{ related_event.time }}{% endif %} • {{ related_event.venue }}</p>
+    {% endif %}
+    <div style="margin-top: 0.5rem;">
+        <a class="btn btn-small" href="{{ url_for('events') }}">← Back to Events</a>
+    </div>
+</div>
+
+<div class="video-page-container container" style="display: flex; flex-direction: column; align-items: center;">
+    <div class="video-wrapper" style="margin-left: auto; margin-right: auto;">
+        <video id="main-video" class="main-video" controls preload="metadata">
+            <source src="{{ video.url }}" type="video/quicktime">
+            <source src="{{ video.url }}" type="video/mp4">
+            <source src="{{ video.url }}" type="video/x-m4v">
+            <source src="{{ video.url }}" type="application/octet-stream">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <div class="video-meta">
+        {% if video.duration %}Duration: {{ video.duration }}{% endif %}
+        {% if video.file_size %} • File Size: {{ video.file_size }}{% endif %}
+        {% if video.format %} • Format: {{ video.format }}{% endif %}
+    </div>
+
+    {% if video.description %}
+    <p style="margin-top: 1rem; text-align: center;">{{ video.description }}</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('main-video');
+    // Mirroring working logic from video_test.html
+    function logStatus(msg) { console.log('[video]', msg); }
+    video.addEventListener('loadstart', () => logStatus('Load started'));
+    video.addEventListener('loadedmetadata', () => logStatus('Metadata loaded - Duration: ' + video.duration + 's'));
+    video.addEventListener('canplay', () => logStatus('Can play - ready'));
+    video.addEventListener('error', (e) => console.error('Video error:', e, video.error));
+    video.load();
+});
+</script>
+{% endblock %}
+
+

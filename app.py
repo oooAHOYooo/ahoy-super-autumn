@@ -716,6 +716,24 @@ def privacy_policy():
     return render_template('privacy_policy.html', current_date=current_date)
 
 
+# Video routes
+@app.route('/video/<video_id>')
+def video_page(video_id):
+    """Dedicated video page for an event recording"""
+    videos_data = load_videos()
+    videos = videos_data.get('videos', [])
+    video = next((v for v in videos if v.get('id') == video_id and v.get('status') == 'available'), None)
+
+    if not video:
+        flash('Video not found or not available yet.', 'error')
+        return redirect(url_for('events'))
+
+    # Try to find the related event for context
+    events_data = load_events()
+    related_event = next((e for e in events_data.get('events', []) if e.get('id') == video.get('event_id')), None)
+
+    return render_template('video_event.html', video=video, related_event=related_event)
+
 @app.route('/admin')
 @require_admin_auth
 def admin():

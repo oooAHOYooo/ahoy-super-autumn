@@ -1704,6 +1704,8 @@ footer {
         max-height: 75vh;
         height: 70vh;
     }
+    /* Restore hero logo visibility on mobile */
+    .hero-logo { display: block; }
 
     /* Artist Submission Page Mobile */
     .submission-form-container h2 {

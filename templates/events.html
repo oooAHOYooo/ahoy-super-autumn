@@ -94,6 +94,16 @@ events, indie media{% endblock %}
             }
         }
 
+        /* Center the video CTA section */
+        .video-coming-soon-container {
+            text-align: center;
+        }
+
+        .video-coming-soon-section .container {
+            display: flex;
+            justify-content: center;
+        }
+
 </style>
 {% endblock %}
 
@@ -119,54 +129,10 @@ events, indie media{% endblock %}
                 video.file_size }}</p>
             {% endif %}
             <div style="margin-top: 1.5rem;">
-                <button class="watch-now-btn btn btn-primary"
-                    data-video-id="{{ video.id }}">Watch Now</button>
+                <a class="btn btn-primary" href="/video/{{ video.id }}">Watch Video</a>
             </div>
 
-            <!-- Video Player (hidden by default) -->
-            <div id="video-player-container-{{ video.id }}"
-                class="video-player-container"
-                style="display: none; margin-top: 2rem;">
-                <div class="video-wrapper">
-                            <video
-                                id="main-video-{{ video.id }}"
-                                class="main-video"
-                                controls
-                                preload="metadata"
-                                width="100%"
-                                height="100%">
-                        <source src="{{ video.url }}" type="video/quicktime">
-                        <source src="{{ video.url }}" type="video/mp4">
-                        <source src="{{ video.url }}" type="video/x-m4v">
-                        <source src="{{ video.url }}"
-                            type="application/octet-stream">
-                        Your browser does not support the video tag.
-                    </video>
-
-                    <!-- Fallback message -->
-                    <div id="video-fallback-{{ video.id }}"
-                        class="video-fallback"
-                        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; background: rgba(0,0,0,0.8); padding: 2rem; border-radius: 8px;">
-                        <h3>Video Loading Issue</h3>
-                        <p>The video file is very large ({{ video.file_size }})
-                            and may take time to load.</p>
-                        <p>If it doesn't load, try:</p>
-                        <ul style="text-align: left; margin: 1rem 0;">
-                            <li>Refreshing the page</li>
-                            <li>Using a different browser</li>
-                            <li>Checking your internet connection</li>
-                        </ul>
-                        <button
-                            onclick="document.getElementById('main-video-{{ video.id }}').load()"
-                            style="background: #F4C430; color: black; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Retry
-                            Loading</button>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 1rem;">
-                    <button class="close-video-btn btn btn-secondary"
-                        data-video-id="{{ video.id }}">Close Video</button>
-                </div>
-            </div>
+            <!-- Subpage handles playback now -->
         </div>
     </div>
 </section>
