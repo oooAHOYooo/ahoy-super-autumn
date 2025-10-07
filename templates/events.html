@@ -46,31 +46,15 @@ events, indie media{% endblock %}
 .video-wrapper {
     position: relative;
     width: 100%;
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
-    background: var(--black);
-    border-radius: 12px;
+    background: #000;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    border: 3px solid var(--black);
-    aspect-ratio: 16 / 9; /* Modern 16:9 aspect ratio */
+    aspect-ratio: 16 / 9;
 }
 
-/* Fallback for older browsers */
-.video-wrapper::before {
-    content: '';
-    display: block;
-    padding-top: 56.25%; /* 16:9 aspect ratio fallback */
-}
-
-/* Modern browsers with aspect-ratio support */
-@supports (aspect-ratio: 16 / 9) {
-    .video-wrapper::before {
-        display: none;
-    }
-}
-
-#main-video {
+.main-video {
     position: absolute;
     top: 0;
     left: 0;
@@ -78,6 +62,7 @@ events, indie media{% endblock %}
     height: 100%;
     border: none;
     outline: none;
+    object-fit: cover;
 }
 
         /* Video Info Styling */
