@@ -35,9 +35,17 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
 </script>
 {% endblock %}
 
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/hero-parallax.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="hero">
-    <h1>AHOY Indie Media</h1>
+    <img
+        src="{{ url_for('static', filename='logos/ahoy indie media - main logo.png') }}"
+        alt="AHOY Indie Media"
+        class="logo-image hero-logo"
+        onerror="this.style.display='none';">
     <p>Building a platform for local New Haven
         artists, musicians, and
         performers to share their craft across our little city.</p>

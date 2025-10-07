@@ -139,6 +139,14 @@ main {
     position: relative;
 }
 
+/* Pixel parallax header canvas layered behind hero content */
+.pixel-hero-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+.hero > * { position: relative; z-index: 1; }
+
 .hero h1,
 .about-hero h1,
 .download-hero h1,
@@ -149,6 +157,29 @@ main {
     color: var(--black);
     margin-bottom: 1.5rem;
     line-height: 1.1;
+}
+
+/* Bigger hero logo using same filter as nav */
+.hero-logo {
+    height: 160px;
+    width: auto;
+    max-width: 560px;
+    object-fit: contain;
+    filter: invert(1);
+    margin-bottom: 1rem;
+    will-change: transform, opacity;
+}
+
+/* Parallax helpers */
+.hero.parallax-enabled {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-logo {
+        height: 120px;
+        max-width: 420px;
+    }
 }
 
 .hero p,
