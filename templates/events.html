@@ -40,6 +40,69 @@ events, indie media{% endblock %}
 </script>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+/* Video Player Styles */
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    background: var(--black);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--black);
+    aspect-ratio: 16 / 9; /* Modern 16:9 aspect ratio */
+}
+
+/* Fallback for older browsers */
+.video-wrapper::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%; /* 16:9 aspect ratio fallback */
+}
+
+/* Modern browsers with aspect-ratio support */
+@supports (aspect-ratio: 16 / 9) {
+    .video-wrapper::before {
+        display: none;
+    }
+}
+
+#main-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .video-wrapper {
+        border-radius: 8px;
+        max-width: 100%;
+        margin: 0 1rem;
+    }
+    
+    #video-player-container {
+        margin: 1rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .video-wrapper {
+        margin: 0 0.5rem;
+        border-radius: 6px;
+    }
+}
+
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="hero">
     <h1>Events</h1>
@@ -48,12 +111,40 @@ events, indie media{% endblock %}
         in New Haven</p>
 </div>
 
-<!-- Video Coming Soon Section -->
+<!-- Video Player Section -->
 <section class="video-coming-soon-section">
     <div class="container">
         <div class="video-coming-soon-container">
             <h2>Poets and Friends #3 - Live Show Recording</h2>
-            <p class="coming-soon-subtitle">Coming Soon</p>
+            <p class="coming-soon-subtitle">Now Available</p>
+            <div style="margin-top: 1.5rem;">
+                <button id="watch-now-btn" class="btn btn-primary">Watch
+                    Now</button>
+            </div>
+
+            <!-- Video Player (hidden by default) -->
+            <div id="video-player-container"
+                style="display: none; margin-top: 2rem;">
+                <div class="video-wrapper">
+                    <video
+                        id="main-video"
+                        controls
+                        preload="metadata"
+                        poster="{{ url_for('static', filename='uploads/devPhoto_poets3.jpg') }}">
+                        <source
+                            src="https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov"
+                            type="video/mp4">
+                        <source
+                            src="https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov"
+                            type="video/quicktime">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <button id="close-video-btn" class="btn btn-secondary">Close
+                        Video</button>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -76,7 +167,9 @@ events, indie media{% endblock %}
                 {% if event.photos %}
                 <div class="event-photos" style="display: none;">
                     {% for photo in event.photos %}
-                    <img src="{{ photo }}" alt="{{ event.title }} - Photo {{ loop.index }}" data-lightbox="{{ photo }}">
+                    <img src="{{ photo }}"
+                        alt="{{ event.title }} - Photo {{ loop.index }}"
+                        data-lightbox="{{ photo }}">
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -96,11 +189,14 @@ events, indie media{% endblock %}
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_external_url %}
                     <div class="rsvp-section">
-                        <a class="btn btn-small" href="{{ event.rsvp_external_url }}" target="_blank" rel="noopener">RSVP</a>
+                        <a class="btn btn-small"
+                            href="{{ event.rsvp_external_url }}" target="_blank"
+                            rel="noopener">RSVP</a>
                     </div>
                     {% elif event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">RSVP</button>
+                        <button class="btn btn-small rsvp-btn"
+                            data-event-id="{{ event.id }}">RSVP</button>
                     </div>
                     {% endif %}
                 </div>
@@ -130,7 +226,9 @@ events, indie media{% endblock %}
                 {% if event.photos %}
                 <div class="event-photos" style="display: none;">
                     {% for photo in event.photos %}
-                    <img src="{{ photo }}" alt="{{ event.title }} - Photo {{ loop.index }}" data-lightbox="{{ photo }}">
+                    <img src="{{ photo }}"
+                        alt="{{ event.title }} - Photo {{ loop.index }}"
+                        data-lightbox="{{ photo }}">
                     {% endfor %}
                 </div>
                 {% endif %}
@@ -147,11 +245,14 @@ events, indie media{% endblock %}
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_external_url %}
                     <div class="rsvp-section">
-                        <a class="btn btn-small" href="{{ event.rsvp_external_url }}" target="_blank" rel="noopener">RSVP</a>
+                        <a class="btn btn-small"
+                            href="{{ event.rsvp_external_url }}" target="_blank"
+                            rel="noopener">RSVP</a>
                     </div>
                     {% elif event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">RSVP</button>
+                        <button class="btn btn-small rsvp-btn"
+                            data-event-id="{{ event.id }}">RSVP</button>
                     </div>
                     {% endif %}
                 </div>
@@ -169,16 +270,16 @@ events, indie media{% endblock %}
     <div class="container">
         <h2>Event Gallery</h2>
         <p class="gallery-description">Past performances </p>
-        
+
         {% if gallery_images %}
         <div class="instagram-gallery">
             {% for image in gallery_images %}
             <div class="gallery-item">
-                <img src="{{ image.thumbnail }}?v=1" 
-                     alt="{{ image.alt }}" 
-                     class="gallery-thumbnail"
-                     data-lightbox="{{ image.src }}"
-                     loading="lazy">
+                <img src="{{ image.thumbnail }}?v=1"
+                    alt="{{ image.alt }}"
+                    class="gallery-thumbnail"
+                    data-lightbox="{{ image.src }}"
+                    loading="lazy">
                 <div class="gallery-overlay">
                     <div class="gallery-icon">🔍</div>
                 </div>
@@ -190,10 +291,49 @@ events, indie media{% endblock %}
         </p>
         {% else %}
         <p>No gallery images available at the moment.</p>
-        <p style="color: #999; font-size: 0.9rem;">Debug: gallery_images is empty or not passed to template</p>
+        <p style="color: #999; font-size: 0.9rem;">Debug: gallery_images is
+            empty or not passed to template</p>
         {% endif %}
     </div>
 </section>
 
 {% endblock %}
 
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const watchBtn = document.getElementById('watch-now-btn');
+    const videoContainer = document.getElementById('video-player-container');
+    const closeBtn = document.getElementById('close-video-btn');
+    const video = document.getElementById('main-video');
+    
+    // Show video when "Watch Now" is clicked
+    watchBtn.addEventListener('click', function() {
+        videoContainer.style.display = 'block';
+        watchBtn.style.display = 'none';
+        
+        // Scroll to video
+        videoContainer.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Hide video when "Close Video" is clicked
+    closeBtn.addEventListener('click', function() {
+        videoContainer.style.display = 'none';
+        watchBtn.style.display = 'inline-block';
+        
+        // Pause video
+        video.pause();
+        
+        // Scroll back to button
+        watchBtn.scrollIntoView({ behavior: 'smooth' });
+    });
+    
+    // Hide video when clicking outside of it
+    videoContainer.addEventListener('click', function(e) {
+        if (e.target === videoContainer) {
+            closeBtn.click();
+        }
+    });
+});
+</script>
+{% endblock %}

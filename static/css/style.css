@@ -77,12 +77,12 @@ body {
     width: auto;
     max-width: 200px;
     object-fit: contain;
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
     filter: invert(1);
 }
 
 .logo-image:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
 }
 
 .logo-fallback {
@@ -167,7 +167,6 @@ main {
     object-fit: contain;
     filter: invert(1);
     margin-bottom: 1rem;
-    will-change: transform, opacity;
 }
 
 /* Parallax helpers */

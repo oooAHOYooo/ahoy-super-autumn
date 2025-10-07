@@ -700,6 +700,7 @@ def privacy_policy():
     current_date = datetime.now().strftime('%B %d, %Y')
     return render_template('privacy_policy.html', current_date=current_date)
 
+
 @app.route('/admin')
 @require_admin_auth
 def admin():
