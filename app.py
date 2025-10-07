@@ -508,6 +508,14 @@ def load_newsletter_data():
     except FileNotFoundError:
         return {"subscribers": []}
 
+def load_videos():
+    """Load videos from JSON file"""
+    try:
+        with open('data/videos.json', 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {"videos": []}
+
 def save_newsletter_data(newsletter_data):
     """Save newsletter signups to JSON file"""
     os.makedirs('data', exist_ok=True)
@@ -680,7 +688,14 @@ def events():
     gallery_images = get_gallery_images()
     print(f"DEBUG: Found {len(gallery_images)} gallery images")
     
-    return render_template('events.html', upcoming=upcoming, past=past, gallery_images=gallery_images)
+    # Get video data
+    videos_data = load_videos()
+    videos = videos_data.get('videos', [])
+    
+    # Create a mapping of event_id to video for easy lookup
+    video_map = {video['event_id']: video for video in videos if video.get('event_id')}
+    
+    return render_template('events.html', upcoming=upcoming, past=past, gallery_images=gallery_images, video_map=video_map)
 
 @app.route('/download')
 def download():

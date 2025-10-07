@@ -80,25 +80,38 @@ events, indie media{% endblock %}
     outline: none;
 }
 
-/* Mobile Responsive */
-@media (max-width: 768px) {
-    .video-wrapper {
-        border-radius: 8px;
-        max-width: 100%;
-        margin: 0 1rem;
-    }
-    
-    #video-player-container {
-        margin: 1rem 0;
-    }
-}
+        /* Video Info Styling */
+        .video-info {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            font-style: italic;
+        }
 
-@media (max-width: 480px) {
-    .video-wrapper {
-        margin: 0 0.5rem;
-        border-radius: 6px;
-    }
-}
+        /* Hide video elements by default */
+        .main-video {
+            display: none;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .video-wrapper {
+                border-radius: 8px;
+                max-width: 100%;
+                margin: 0 1rem;
+            }
+            
+            .video-player-container {
+                margin: 1rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .video-wrapper {
+                margin: 0 0.5rem;
+                border-radius: 6px;
+            }
+        }
 
 </style>
 {% endblock %}
@@ -112,46 +125,73 @@ events, indie media{% endblock %}
 </div>
 
 <!-- Video Player Section -->
+{% for event in past %}
+{% if video_map.get(event.id) and video_map[event.id].status == 'available' %}
+{% set video = video_map[event.id] %}
 <section class="video-coming-soon-section">
     <div class="container">
         <div class="video-coming-soon-container">
-            <h2>Poets and Friends #3 - Live Show Recording</h2>
-            <p class="coming-soon-subtitle">Now Available</p>
+            <h2>{{ video.title }}</h2>
+            <p class="coming-soon-subtitle">{{ video.description }}</p>
+            {% if video.duration %}
+            <p class="video-info">Duration: {{ video.duration }} | File Size: {{
+                video.file_size }}</p>
+            {% endif %}
             <div style="margin-top: 1.5rem;">
-                <button id="watch-now-btn" class="btn btn-primary">Watch
-                    Now</button>
+                <button class="watch-now-btn btn btn-primary"
+                    data-video-id="{{ video.id }}">Watch Now</button>
             </div>
 
             <!-- Video Player (hidden by default) -->
-            <div id="video-player-container"
+            <div id="video-player-container-{{ video.id }}"
+                class="video-player-container"
                 style="display: none; margin-top: 2rem;">
                 <div class="video-wrapper">
                     <video
-                        id="main-video"
+                        id="main-video-{{ video.id }}"
+                        class="main-video"
                         controls
-                        preload="auto"
+                        preload="none"
                         width="100%"
-                        height="100%">
-                        <source
-                            src="https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov"
-                            type="video/quicktime">
-                        <source
-                            src="https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov"
-                            type="video/mp4">
-                        <source
-                            src="https://storage.googleapis.com/ahoy-videos/live/poets/Ahoy_poets%20and%20friends%20-%203%20-%20ready.mov"
-                            type="video/x-m4v">
+                        height="100%"
+                        style="display: none;">
+                        <source src="{{ video.url }}" type="video/quicktime">
+                        <source src="{{ video.url }}" type="video/mp4">
+                        <source src="{{ video.url }}" type="video/x-m4v">
+                        <source src="{{ video.url }}"
+                            type="application/octet-stream">
                         Your browser does not support the video tag.
                     </video>
+
+                    <!-- Fallback message -->
+                    <div id="video-fallback-{{ video.id }}"
+                        class="video-fallback"
+                        style="display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; background: rgba(0,0,0,0.8); padding: 2rem; border-radius: 8px;">
+                        <h3>Video Loading Issue</h3>
+                        <p>The video file is very large ({{ video.file_size }})
+                            and may take time to load.</p>
+                        <p>If it doesn't load, try:</p>
+                        <ul style="text-align: left; margin: 1rem 0;">
+                            <li>Refreshing the page</li>
+                            <li>Using a different browser</li>
+                            <li>Checking your internet connection</li>
+                        </ul>
+                        <button
+                            onclick="document.getElementById('main-video-{{ video.id }}').load()"
+                            style="background: #F4C430; color: black; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer;">Retry
+                            Loading</button>
+                    </div>
                 </div>
                 <div style="text-align: center; margin-top: 1rem;">
-                    <button id="close-video-btn" class="btn btn-secondary">Close
-                        Video</button>
+                    <button class="close-video-btn btn btn-secondary"
+                        data-video-id="{{ video.id }}">Close Video</button>
                 </div>
             </div>
         </div>
     </div>
 </section>
+{% endif %}
+{% endfor %}
 
 <section class="events-section">
     <div class="container">
@@ -306,63 +346,69 @@ events, indie media{% endblock %}
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const watchBtn = document.getElementById('watch-now-btn');
-    const videoContainer = document.getElementById('video-player-container');
-    const closeBtn = document.getElementById('close-video-btn');
-    const video = document.getElementById('main-video');
-    
-    // Show video when "Watch Now" is clicked
-    watchBtn.addEventListener('click', function() {
-        videoContainer.style.display = 'block';
-        watchBtn.style.display = 'none';
+    // Handle all watch now buttons
+    document.querySelectorAll('.watch-now-btn').forEach(function(watchBtn) {
+        const videoId = watchBtn.getAttribute('data-video-id');
+        const videoContainer = document.getElementById('video-player-container-' + videoId);
+        const closeBtn = document.querySelector('.close-video-btn[data-video-id="' + videoId + '"]');
+        const video = document.getElementById('main-video-' + videoId);
+        const videoFallback = document.getElementById('video-fallback-' + videoId);
         
-        // Scroll to video
-        videoContainer.scrollIntoView({ behavior: 'smooth' });
-        
-        // Force video to load and play
-        video.load();
-        
-        // Add debugging
-        video.addEventListener('loadstart', function() {
-            console.log('Video load started');
+        // Show video when "Watch Now" is clicked
+        watchBtn.addEventListener('click', function() {
+            videoContainer.style.display = 'block';
+            watchBtn.style.display = 'none';
+            
+            // Show the video element
+            video.style.display = 'block';
+            
+            // Scroll to video
+            videoContainer.scrollIntoView({ behavior: 'smooth' });
+            
+            // Simple load approach that worked in test 1
+            video.load();
+            
+            // Add debugging
+            video.addEventListener('loadstart', function() {
+                console.log('Video load started for', videoId);
+                videoFallback.style.display = 'none';
+            });
+            
+            video.addEventListener('loadedmetadata', function() {
+                console.log('Video metadata loaded, duration:', video.duration);
+                videoFallback.style.display = 'none';
+            });
+            
+            video.addEventListener('canplay', function() {
+                console.log('Video can play');
+                videoFallback.style.display = 'none';
+            });
+            
+            video.addEventListener('error', function(e) {
+                console.error('Video error:', e);
+                console.error('Video error details:', video.error);
+                videoFallback.style.display = 'block';
+            });
         });
         
-        video.addEventListener('loadedmetadata', function() {
-            console.log('Video metadata loaded, duration:', video.duration);
+        // Hide video when "Close Video" is clicked
+        closeBtn.addEventListener('click', function() {
+            videoContainer.style.display = 'none';
+            watchBtn.style.display = 'inline-block';
+            
+            // Pause video
+            video.pause();
+            
+            // Scroll back to button
+            watchBtn.scrollIntoView({ behavior: 'smooth' });
         });
         
-        video.addEventListener('canplay', function() {
-            console.log('Video can play');
+        // Hide video when clicking outside of it
+        videoContainer.addEventListener('click', function(e) {
+            if (e.target === videoContainer) {
+                closeBtn.click();
+            }
         });
-        
-        video.addEventListener('error', function(e) {
-            console.error('Video error:', e);
-            console.error('Video error details:', video.error);
-        });
-        
-        // Try to play the video
-        video.play().catch(function(error) {
-            console.log('Autoplay prevented:', error);
-        });
-    });
-    
-    // Hide video when "Close Video" is clicked
-    closeBtn.addEventListener('click', function() {
-        videoContainer.style.display = 'none';
-        watchBtn.style.display = 'inline-block';
-        
-        // Pause video
-        video.pause();
-        
-        // Scroll back to button
-        watchBtn.scrollIntoView({ behavior: 'smooth' });
-    });
-    
-    // Hide video when clicking outside of it
-    videoContainer.addEventListener('click', function(e) {
-        if (e.target === videoContainer) {
-            closeBtn.click();
-        }
     });
 });
 </script>
