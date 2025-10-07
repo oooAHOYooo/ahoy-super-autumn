@@ -210,7 +210,7 @@ main {
 }
 
 .hero-actions .btn-secondary {
-    background: var(--dark-gray);
+    background: var(--black);
     color: var(--white);
     border: none;
 }
