@@ -159,6 +159,16 @@ main {
     line-height: 1.1;
 }
 
+/* Bigger hero logo using same filter as nav */
+.hero-logo {
+    height: 120px;
+    width: auto;
+    max-width: 420px;
+    object-fit: contain;
+    filter: invert(1);
+    margin-bottom: 1rem;
+}
+
 .hero p,
 .about-hero p,
 .download-hero p,
