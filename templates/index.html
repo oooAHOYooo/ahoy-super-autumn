@@ -55,7 +55,6 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
     </div>
 </div>
 
-
 {% if latest_events %}
 <section class="events-section">
     <div class="container">
@@ -96,13 +95,16 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
                         event.description }}</p>{% endif %}
                     {% if event.rsvp_external_url %}
                     <div class="rsvp-section">
-                        <a class="btn btn-small" href="{{ event.rsvp_external_url }}" target="_blank" rel="noopener">
+                        <a class="btn btn-small"
+                            href="{{ event.rsvp_external_url }}" target="_blank"
+                            rel="noopener">
                             RSVP
                         </a>
                     </div>
                     {% elif event.rsvp_enabled %}
                     <div class="rsvp-section">
-                        <button class="btn btn-small rsvp-btn" data-event-id="{{ event.id }}">RSVP</button>
+                        <button class="btn btn-small rsvp-btn"
+                            data-event-id="{{ event.id }}">RSVP</button>
                     </div>
                     {% endif %}
                 </div>
@@ -144,8 +146,9 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
 <section class="past-events-section">
     <div class="container">
         <h2>Recent Past Events</h2>
-        <p class="section-description">Catch up on what you missed from our recent shows</p>
-        
+        <p class="section-description">Catch up on what you missed from our
+            recent shows</p>
+
         <div class="events-list events-compact">
             {% for event in recent_past_events %}
             <div class="event-item event-preview past"
@@ -188,4 +191,3 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
 </section>
 {% endif %}
 {% endblock %}
-
