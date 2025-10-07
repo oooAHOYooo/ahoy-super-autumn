@@ -209,13 +209,6 @@ main {
     vertical-align: middle;
 }
 
-.hero-actions .btn,
-.hero-actions .btn-primary,
-.hero-actions .btn-secondary {
-    background: var(--black);
-    color: var(--white);
-    border: none;
-}
 
 /* Buttons */
 .btn {
