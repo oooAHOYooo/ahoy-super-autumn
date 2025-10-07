@@ -161,12 +161,25 @@ main {
 
 /* Bigger hero logo using same filter as nav */
 .hero-logo {
-    height: 120px;
+    height: 160px;
     width: auto;
-    max-width: 420px;
+    max-width: 560px;
     object-fit: contain;
     filter: invert(1);
     margin-bottom: 1rem;
+    will-change: transform, opacity;
+}
+
+/* Parallax helpers */
+.hero.parallax-enabled {
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+    .hero-logo {
+        height: 120px;
+        max-width: 420px;
+    }
 }
 
 .hero p,

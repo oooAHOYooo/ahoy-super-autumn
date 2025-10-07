@@ -35,6 +35,10 @@ performers with audiences in Connecticut's vibrant arts scene.{% endblock %}
 </script>
 {% endblock %}
 
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/hero-parallax.js') }}"></script>
+{% endblock %}
+
 {% block content %}
 <div class="hero">
     <img
