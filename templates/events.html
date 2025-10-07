@@ -88,10 +88,6 @@ events, indie media{% endblock %}
             font-style: italic;
         }
 
-        /* Hide video elements by default */
-        .main-video {
-            display: none;
-        }
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
@@ -147,14 +143,13 @@ events, indie media{% endblock %}
                 class="video-player-container"
                 style="display: none; margin-top: 2rem;">
                 <div class="video-wrapper">
-                    <video
-                        id="main-video-{{ video.id }}"
-                        class="main-video"
-                        controls
-                        preload="none"
-                        width="100%"
-                        height="100%"
-                        style="display: none;">
+                            <video
+                                id="main-video-{{ video.id }}"
+                                class="main-video"
+                                controls
+                                preload="metadata"
+                                width="100%"
+                                height="100%">
                         <source src="{{ video.url }}" type="video/quicktime">
                         <source src="{{ video.url }}" type="video/mp4">
                         <source src="{{ video.url }}" type="video/x-m4v">
@@ -359,13 +354,10 @@ document.addEventListener('DOMContentLoaded', function() {
             videoContainer.style.display = 'block';
             watchBtn.style.display = 'none';
             
-            // Show the video element
-            video.style.display = 'block';
-            
             // Scroll to video
             videoContainer.scrollIntoView({ behavior: 'smooth' });
             
-            // Simple load approach that worked in test 1
+            // Load the video (same as working test)
             video.load();
             
             // Add debugging

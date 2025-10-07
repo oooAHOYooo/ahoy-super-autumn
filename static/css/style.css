@@ -198,6 +198,21 @@ main {
     justify-content: center;
     flex-wrap: wrap;
     margin-top: 1rem;
+    align-items: center;
+}
+
+.hero-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    vertical-align: middle;
+}
+
+.hero-actions .btn-secondary {
+    background: var(--dark-gray);
+    color: var(--white);
+    border: none;
 }
 
 /* Buttons */
