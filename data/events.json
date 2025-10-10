@@ -62,6 +62,19 @@
       "image": "/static/event-imgs/poets1/12.jpg"
     },
     {
+      "id": "2025-02-19T19:00:00",
+      "title": "Ahoy Cabaret #3",
+      "date": "2025-02-19",
+      "time": "7:00 PM",
+      "venue": "Koffee?",
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "cabaret",
+      "status": "upcoming",
+      "description": "Third installment of our cabaret series - this time at Koffee?",
+      "photos": [],
+      "image": "/static/event-imgs/cabaret-1-2/10.jpg"
+    },
+    {
       "id": "2025-02-22T19:00:00",
       "title": "Ahoy Cabaret #2",
       "date": "2025-02-22",
@@ -70,9 +83,9 @@
       "venue_address": "Hamden, CT",
       "event_type": "cabaret",
       "status": "past",
-      "description": "Second installment of our popular cabaret series",
+      "description": "Second installment of our cabaret series - this time at best video!",
       "photos": [],
-      "image": "/static/event-imgs/cabaret-1-2/2.jpg"
+      "image": "/static/event-imgs/cabaret-1-2/18.jpg"
     },
     {
       "id": "2024-12-15T20:00:00",
@@ -83,7 +96,7 @@
       "venue_address": "East Haven, CT",
       "event_type": "cabaret",
       "status": "past",
-      "description": "Our first cabaret event - huge success!",
+      "description": "Our first public cabaret event",
       "photos": [],
       "image": "/static/event-imgs/cabaret-1-2/47.jpg"
     },
