@@ -1,6 +1,23 @@
 {
   "events": [
     {
+      "id": "2025-11-20T18:15:00",
+      "title": "Poets and Friends #5: Gratitude Edition",
+      "date": "2025-11-20",
+      "time": "6:15 PM",
+      "venue": "Koffee?",
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "poetry",
+      "status": "upcoming",
+      "description": "Hey hey - we are going to have another Poets and Friends event - the Thursday before thanksgiving! 11.20.25 - more details to follow - save the date! To learn more and to see past events visit newhaven.ahoy.ooo and check out our beta platform @ app.ahoy.ooo",
+      "photos": [],
+      "image": "/static/event-imgs/posters/gobble-head.jpg",
+      "rsvp_external_url": "https://partiful.com/e/a3h7j8KzxULoP6VdvMXd",
+      "rsvp_enabled": true,
+      "rsvp_limit": "100",
+      "rsvps": []
+    },
+    {
       "id": "2025-05-21T20:00:00",
       "title": "Poets and Friends #2",
       "date": "2025-05-21",
