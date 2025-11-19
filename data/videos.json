@@ -1,6 +1,19 @@
 {
   "videos": [
     {
+      "id": "poets-and-friends-4",
+      "event_id": "2025-10-30T18:30:00",
+      "title": "Poets & Friends #4: Spooky Edition - Live Show Recording",
+      "description": "Full recording of the Spooky Edition poetry and performance event",
+      "url": "https://storage.googleapis.com/ahoy-videos/live/poets/Poets4Total.mp4",
+      "duration": null,
+      "file_size": null,
+      "format": "MP4",
+      "status": "available",
+      "upload_date": "2025-11-18",
+      "thumbnail": "/static/event-imgs/poets4/poets4.jpg"
+    },
+    {
       "id": "poets-and-friends-3",
       "event_id": "2025-09-24T19:00:00",
       "title": "Poets and Friends #3 - Live Show Recording",
