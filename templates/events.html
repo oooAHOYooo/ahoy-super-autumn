@@ -115,6 +115,38 @@ events, indie media{% endblock %}
         in New Haven</p>
 </div>
 
+<!-- Event Gallery Section -->
+<section class="gallery-section">
+    <div class="container">
+        <h2>Event Gallery</h2>
+        <p class="gallery-description">Past performances </p>
+
+        {% if gallery_images %}
+        <div class="instagram-gallery">
+            {% for image in gallery_images %}
+            <div class="gallery-item">
+                <img src="{{ image.thumbnail }}?v=1"
+                    alt="{{ image.alt }}"
+                    class="gallery-thumbnail"
+                    data-lightbox="{{ image.src }}"
+                    loading="lazy">
+                <div class="gallery-overlay">
+                    <div class="gallery-icon">🔍</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <p style="text-align: center; margin-top: 1rem; color: #666;">
+            Showing {{ gallery_images|length }} photos from our events
+        </p>
+        {% else %}
+        <p>No gallery images available at the moment.</p>
+        <p style="color: #999; font-size: 0.9rem;">Debug: gallery_images is
+            empty or not passed to template</p>
+        {% endif %}
+    </div>
+</section>
+
 <!-- Video Player Section -->
 {% for event in past %}
 {% if video_map.get(event.id) and video_map[event.id].status == 'available' %}
@@ -251,38 +283,6 @@ events, indie media{% endblock %}
         </div>
         {% else %}
         <p>No past events to display.</p>
-        {% endif %}
-    </div>
-</section>
-
-<!-- Event Gallery Section -->
-<section class="gallery-section">
-    <div class="container">
-        <h2>Event Gallery</h2>
-        <p class="gallery-description">Past performances </p>
-
-        {% if gallery_images %}
-        <div class="instagram-gallery">
-            {% for image in gallery_images %}
-            <div class="gallery-item">
-                <img src="{{ image.thumbnail }}?v=1"
-                    alt="{{ image.alt }}"
-                    class="gallery-thumbnail"
-                    data-lightbox="{{ image.src }}"
-                    loading="lazy">
-                <div class="gallery-overlay">
-                    <div class="gallery-icon">🔍</div>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        <p style="text-align: center; margin-top: 1rem; color: #666;">
-            Showing {{ gallery_images|length }} photos from our events
-        </p>
-        {% else %}
-        <p>No gallery images available at the moment.</p>
-        <p style="color: #999; font-size: 0.9rem;">Debug: gallery_images is
-            empty or not passed to template</p>
         {% endif %}
     </div>
 </section>

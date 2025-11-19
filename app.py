@@ -569,13 +569,21 @@ def get_past_events():
     return sorted(past, key=lambda x: x['date'], reverse=True)
 
 def get_gallery_images():
-    """Get all gallery images from event-imgs folders - community-sent first, then poetry, then cabaret"""
+    """Get all gallery images from event-imgs folders - Poets 4 first, then community-sent, then poetry, then cabaret"""
     import os
     import glob
     
     gallery_images = []
     
-    # Get images from community-sent folder FIRST (top priority)
+    # Get images from Poets 4 (Google Cloud Storage) FIRST (top priority)
+    for i in range(1, 11):
+        gallery_images.append({
+            'src': f'https://storage.googleapis.com/ahoy-dynamic-content/images/ahoyPoet4/{i}.jpg',
+            'alt': f'Poets & Friends #4 - Photo {i}',
+            'thumbnail': f'https://storage.googleapis.com/ahoy-dynamic-content/images/ahoyPoet4/{i}.jpg'
+        })
+    
+    # Get images from community-sent folder SECOND
     community_path = 'static/event-imgs/community-sent'
     if os.path.exists(community_path):
         image_files = glob.glob(os.path.join(community_path, '*.jpg'))
@@ -589,7 +597,7 @@ def get_gallery_images():
                 'thumbnail': f'/static/event-imgs/community-sent/{filename}'
             })
     
-    # Get images from poets1 folder SECOND
+    # Get images from poets1 folder THIRD
     poets_path = 'static/event-imgs/poets1'
     if os.path.exists(poets_path):
         image_files = glob.glob(os.path.join(poets_path, '*.jpg'))
@@ -603,7 +611,7 @@ def get_gallery_images():
                 'thumbnail': f'/static/event-imgs/poets1/{filename}'
             })
     
-    # Get images from cabaret-1-2 folder THIRD
+    # Get images from cabaret-1-2 folder FOURTH
     cabaret_path = 'static/event-imgs/cabaret-1-2'
     if os.path.exists(cabaret_path):
         image_files = glob.glob(os.path.join(cabaret_path, '*.jpg'))
@@ -619,8 +627,9 @@ def get_gallery_images():
     
     return gallery_images
 
-def find_available_port(start_port=5000, max_attempts=10):
+def find_available_port(start_port=5000, max_attempts=100):
     """Find an available port starting from start_port"""
+    # Try ports starting from start_port
     for port in range(start_port, start_port + max_attempts):
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -628,7 +637,31 @@ def find_available_port(start_port=5000, max_attempts=10):
                 return port
         except OSError:
             continue
-    raise RuntimeError(f"Could not find an available port starting from {start_port}")
+    
+    # If no port found in the first range, try a different range (8000-8099)
+    if start_port == 5000:
+        print(f"Ports {start_port}-{start_port + max_attempts - 1} are in use. Trying ports 8000-8099...")
+        for port in range(8000, 8100):
+            try:
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    s.bind(('', port))
+                    return port
+            except OSError:
+                continue
+    
+    # Last resort: try random ports in the ephemeral range (49152-65535)
+    import random
+    print(f"Trying random ports in ephemeral range (49152-65535)...")
+    for _ in range(50):
+        port = random.randint(49152, 65535)
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('', port))
+                return port
+        except OSError:
+            continue
+    
+    raise RuntimeError(f"Could not find an available port after trying multiple ranges")
 
 # Before request handler for analytics
 @app.before_request
@@ -1367,15 +1400,33 @@ def cancel_rsvp(event_id):
 if __name__ == '__main__':
     import os
     # Try to use the PORT environment variable first, then find an available port
-    try:
-        port = int(os.environ.get('PORT', 5000))
-        # Test if the port is available
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind(('', port))
-    except (ValueError, OSError):
-        # If PORT env var is invalid or port is in use, find an available port
-        port = find_available_port()
-        print(f"Port 5000 is in use. Using port {port} instead.")
+    port_env = os.environ.get('PORT')
+    if port_env:
+        try:
+            port = int(port_env)
+            # Test if the port is available
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('', port))
+        except (ValueError, OSError) as e:
+            # Invalid PORT env var or port in use, find an available port
+            if isinstance(e, ValueError):
+                print(f"Invalid PORT environment variable '{port_env}'. Finding available port...")
+            else:
+                print(f"Port {port_env} from environment is in use. Finding available port...")
+            port = find_available_port()
+            print(f"Using port {port} instead.")
+    else:
+        # No PORT env var, try 5000 first, then find available port
+        try:
+            port = 5000
+            # Test if the port is available
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.bind(('', port))
+        except OSError:
+            # Port 5000 is in use, find an available port
+            print(f"Port 5000 is in use. Finding available port...")
+            port = find_available_port()
+            print(f"Using port {port} instead.")
     
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
     print(f"Starting Flask app on port {port}")
