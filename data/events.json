@@ -1,6 +1,22 @@
 {
   "events": [
     {
+      "id": "2025-12-17T18:30:00",
+      "title": "Poets and Friends #6: Christmas Holiday Edition",
+      "date": "2025-12-17",
+      "time": "6:30 PM",
+      "venue": "Koffee?",
+      "venue_address": "104 Audubon Street, New Haven, CT 06511",
+      "event_type": "poetry",
+      "status": "upcoming",
+      "description": "Poets & Friends #6 (Christmas Holiday Edition). Wednesday, Dec 17, 2025. Doors 6:00 PM. Readings 6:30–8:00 PM. Koffee? — 104 Audubon St, New Haven, CT. Festive vibes encouraged. Food available at Koffee?. Bring friends.",
+      "photos": [],
+      "image": "/static/event-imgs/posters/Poets6-poster.jpg",
+      "rsvp_enabled": true,
+      "rsvp_limit": "100",
+      "rsvps": []
+    },
+    {
       "id": "2025-11-20T18:15:00",
       "title": "Poets and Friends #5: Gratitude Edition",
       "date": "2025-11-20",
